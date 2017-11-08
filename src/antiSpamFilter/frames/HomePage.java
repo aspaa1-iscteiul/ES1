@@ -130,6 +130,7 @@ public class HomePage {
 		fc.setMultiSelectionEnabled(false);
 		String extension = string.substring(string.lastIndexOf('.') + 1);
 		fc.setFileFilter(new FileNameExtensionFilter(extension.toUpperCase() + " File", extension));
+		fc.setAcceptAllFileFilterUsed(false);
 		if (fc.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION)
 			return fc.getSelectedFile().getAbsolutePath();
 		return null;
