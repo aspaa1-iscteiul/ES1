@@ -140,9 +140,18 @@ public class HomePage {
 	}
 
 	private void checkConfigFiles() {
-		if (rules_path == "?" || spam_path == "?" || ham_path == "?")
-			JOptionPane.showMessageDialog(frame,
-					"Antes de poder realizar esta operação, é necessário selecionar os ficheiros de configuração");
+		String newLine = System.getProperty("line.separator");
+		if (rules_path == "?" || spam_path == "?" || ham_path == "?") {
+			String message = new String(
+					"Antes de poder realizar esta operação, é necessário selecionar todos os ficheiros de configuração."
+							+ newLine + newLine + "O ficheiro rules.cf está configurado?             "
+							+ String.valueOf(rules_path != "?") + newLine
+							+ "O ficheiro spam.log está configurado?          "
+							+ String.valueOf(spam_path != "?") + newLine
+							+ "O ficheiro ham.log está configurado?            "
+							+ String.valueOf(ham_path != "?"));
+			JOptionPane.showMessageDialog(frame, message);
+		}
 	}
 
 	private String choose(String string) {
