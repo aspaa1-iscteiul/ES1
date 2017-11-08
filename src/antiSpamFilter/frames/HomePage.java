@@ -36,7 +36,7 @@ public class HomePage {
 	private String ham_path = new String();
 	private String[] options = { "Selecionar ficheiro rules.cf", "Selecionar ficheiro spam.log",
 			"Selecionar ficheiro ham.log", "Geração automática de uma configuração",
-			"Afinação Manual do filtro anti-spam", "Otimização do filtro anti-spam" };
+			"Afinação manual do filtro anti-spam", "Otimização do filtro anti-spam" };
 
 	public HomePage() {
 		frame = new JFrame();
@@ -101,25 +101,21 @@ public class HomePage {
 			ham_path = choose("ham.log");
 			break;
 		case 3:
-			if (rules_path.length() == 0 || spam_path.length()==0 || ham_path.length()==0)
-				noConfigFiles();
+			checkConfigFiles();
 			break;
 		case 4:
-			if (rules_path.length() == 0 || spam_path.length()==0 || ham_path.length()==0)
-				noConfigFiles();
+			checkConfigFiles();
 			break;
 		case 5:
-			if (rules_path.length() == 0 || spam_path.length()==0 || ham_path.length()==0)
-				noConfigFiles();
-			break;
-		default:
+			checkConfigFiles();
 			break;
 		}
 	}
 
-	private void noConfigFiles() {
-		JOptionPane.showMessageDialog(frame,
-				"Antes de poder realizar esta operação, é necessário selecionar os ficheiros de configuração");
+	private void checkConfigFiles() {
+		if (rules_path.length() == 0 || spam_path.length() == 0 || ham_path.length() == 0)
+			JOptionPane.showMessageDialog(frame,
+					"Antes de poder realizar esta operação, é necessário selecionar os ficheiros de configuração");
 	}
 
 	private String choose(String string) {
