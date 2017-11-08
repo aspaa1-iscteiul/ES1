@@ -7,9 +7,10 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -35,10 +36,12 @@ public class HomePage {
 	private JList<String> list;
 	private Map<String, ImageIcon> images;
 	private JButton select, cancel;
-	private String rules_path = "?", spam_path = "?", ham_path = "?";
+	private String newLine = System.getProperty("line.separator");
 	private String[] options = { "Selecionar ficheiro rules.cf", "Selecionar ficheiro spam.log",
 			"Selecionar ficheiro ham.log", "Geração automática de uma configuração",
-			"Afinação manual do filtro anti-spam", "Otimização do filtro anti-spam" };
+			"Afinação manual do filtro anti-spam", "Otimização do filtro anti-spam" },
+			config_files_path = { "?", "?", "?" }, config_files_names = { "rules.cf", "spam.log", "ham.log" };
+	private File configs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
 
 	public HomePage() {
 		frame = new JFrame();
@@ -55,20 +58,25 @@ public class HomePage {
 
 	private void configFiles() {
 		try {
-			if (!new File("./src/antiSpamFilter/frames/config_files_path.txt").createNewFile()) {
-				Scanner scn = new Scanner(new File("./src/antiSpamFilter/frames/config_files_path.txt"));
-				String[] line = scn.nextLine().split(":");
-				if (line[0] != "?" && new File(line[0]).exists() && new File(line[0]).isFile())
-					rules_path = line[0];
-				if (line[1] != "?" && new File(line[1]).exists() && new File(line[1]).isFile())
-					spam_path = line[1];
-				if (line[2] != "?" && new File(line[2]).exists() && new File(line[2]).isFile())
-					ham_path = line[2];
+			if (!configs.createNewFile()) {
+				Scanner scn = new Scanner(configs);
+				String[] line = scn.nextLine().split("<");
+				String message = "";
+				boolean config = false;
+				for (int i = 0; i < line.length; i++) {
+					if (line[i] != "?" && new File(line[i]).exists() && new File(line[i]).isFile()) {
+						config_files_path[i] = line[i];
+						message += config_files_names[i] + " - " + line[i] + newLine;
+						config = true;
+					}
+				}
+				if (config && (JOptionPane.showConfirmDialog(frame, "Os seguintes ficheiros encontram-se configurados:"
+						+ newLine + message + newLine + "Quer manter estes ficheiros de configuração?") == 1))
+					for (int i = 0; i < config_files_path.length; i++)
+						config_files_path[i] = "?";
 				scn.close();
 			} else {
-				PrintWriter scn = new PrintWriter(new File("./src/antiSpamFilter/frames/config_files_path.txt"));
-				scn.write("?:?:?");
-				scn.close();
+				saveConfigFilesPath();
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -109,6 +117,37 @@ public class HomePage {
 				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 			}
 		});
+		frame.addWindowListener(new WindowListener() {
+
+			@Override
+			public void windowOpened(WindowEvent e) {
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				saveConfigFilesPath();
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+			}
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+			}
+		});
 		buttons_panel.add(select);
 		buttons_panel.add(cancel);
 		panel.add(buttons_panel, BorderLayout.SOUTH);
@@ -116,16 +155,31 @@ public class HomePage {
 		frame.add(panel);
 	}
 
+	private void saveConfigFilesPath() {
+		try {
+			FileWriter w = new FileWriter(configs, false);
+			for (int i = 0; i < config_files_path.length; i++) {
+				w.write(config_files_path[i]);
+				if (i < config_files_path.length - 1)
+					w.write("<");
+			}
+			w.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	private void selectOptions() {
 		switch (list.getSelectedIndex()) {
 		case 0:
-			rules_path = choose("rules.cf");
+			config_files_path[0] = choose(config_files_names[0]);
 			break;
 		case 1:
-			spam_path = choose("spam.log");
+			config_files_path[1] = choose(config_files_names[1]);
 			break;
 		case 2:
-			ham_path = choose("ham.log");
+			config_files_path[2] = choose(config_files_names[2]);
 			break;
 		case 3:
 			checkConfigFiles();
@@ -140,16 +194,19 @@ public class HomePage {
 	}
 
 	private void checkConfigFiles() {
-		String newLine = System.getProperty("line.separator");
-		if (rules_path == "?" || spam_path == "?" || ham_path == "?") {
+		boolean noFile = false;
+		for (int i = 0; i < config_files_path.length; i++)
+			noFile = noFile || config_files_path[i] == "?";
+
+		if (noFile) {
 			String message = new String(
 					"Antes de poder realizar esta operação, é necessário selecionar todos os ficheiros de configuração."
 							+ newLine + newLine + "O ficheiro rules.cf está configurado?             "
-							+ String.valueOf(rules_path != "?") + newLine
+							+ String.valueOf(config_files_path[0] != "?") + newLine
 							+ "O ficheiro spam.log está configurado?          "
-							+ String.valueOf(spam_path != "?") + newLine
+							+ String.valueOf(config_files_path[1] != "?") + newLine
 							+ "O ficheiro ham.log está configurado?            "
-							+ String.valueOf(ham_path != "?"));
+							+ String.valueOf(config_files_path[2] != "?"));
 			JOptionPane.showMessageDialog(frame, message);
 		}
 	}
