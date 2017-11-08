@@ -113,9 +113,18 @@ public class HomePage {
 	}
 
 	private void checkConfigFiles() {
-		if (rules_path.length() == 0 || spam_path.length() == 0 || ham_path.length() == 0)
-			JOptionPane.showMessageDialog(frame,
-					"Antes de poder realizar esta operação, é necessário selecionar os ficheiros de configuração");
+		String newLine = System.getProperty("line.separator");
+		if (rules_path.length() == 0 || spam_path.length() == 0 || ham_path.length() == 0) {
+			String message = new String(
+					"Antes de poder realizar esta operação, é necessário selecionar todos os ficheiros de configuração."
+							+ newLine + newLine + "O ficheiro rules.cf está configurado?             "
+							+ String.valueOf(rules_path.length() != 0) + newLine
+							+ "O ficheiro spam.log está configurado?          "
+							+ String.valueOf(spam_path.length() != 0) + newLine
+							+ "O ficheiro ham.log está configurado?            "
+							+ String.valueOf(ham_path.length() != 0));
+			JOptionPane.showMessageDialog(frame, message);
+		}
 	}
 
 	private String choose(String string) {
