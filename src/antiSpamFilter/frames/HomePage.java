@@ -209,6 +209,12 @@ public class HomePage {
 		}
 	}
 
+	/**
+	 * Baseado FileChooser do jSwing
+	 * 
+	 * @param string Nome do ficheiro cujo path queremos configurar
+	 * @return Path do ficheiro selecionado
+	 */
 	private String getFileChosen(String string) {
 		JFileChooser fc = new JFileChooser();
 		// Inicia a GUI na diretoria do projeto
