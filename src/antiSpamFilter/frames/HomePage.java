@@ -217,6 +217,8 @@ public class HomePage {
 	 */
 	private void selectOptions() {
 		int index = list.getSelectedIndex();
+		if (index == -1) // não foi selecionada nenhuma opção
+			return;
 		if (index >= 0 && index <= 2) {
 			String file_path = getFileChosen(config_files_names[index]);
 			if (file_path == null)
@@ -235,12 +237,11 @@ public class HomePage {
 				}
 			config_files_path[index] = file_path;
 
-		} else if (index == 3) {
-			checkConfigFiles();
-		} else if (index == 4) {
-			checkConfigFiles();
-		} else if (index == 5) {
-			checkConfigFiles();
+		} else if (checkConfigFiles()) {
+			if (index == 3) {
+			} else if (index == 4) {
+			} else if (index == 5) {
+			}
 		}
 	}
 
@@ -249,22 +250,23 @@ public class HomePage {
 	 * expressa os resultados numa janela JOptionPane.showMessageDialog para o
 	 * utilizador consultar.
 	 */
-	private void checkConfigFiles() {
+	private boolean checkConfigFiles() {
 		boolean noFile = false;
-		for (int i = 0; i < config_files_path.length; i++)
-			noFile = noFile || config_files_path[i] == "?";
-
-		if (noFile) {
-			String message = new String(
-					"Antes de poder realizar esta operação, é necessário selecionar todos os ficheiros de configuração."
-							+ newLine + newLine + "O ficheiro rules.cf está configurado?             "
-							+ String.valueOf(config_files_path[0] != "?") + newLine
-							+ "O ficheiro spam.log está configurado?          "
-							+ String.valueOf(config_files_path[1] != "?") + newLine
-							+ "O ficheiro ham.log está configurado?            "
-							+ String.valueOf(config_files_path[2] != "?"));
-			JOptionPane.showMessageDialog(frame, message);
+		String message = "Antes de poder realizar esta operação, é necessário selecionar todos os ficheiros de configuração."
+				+ newLine + newLine;
+		for (int i = 0; i < config_files_path.length; i++) {
+			message += "O ficheiro " + config_files_names[i];
+			if (config_files_path[i] == "?") {
+				message += " não está configurado";
+				noFile = true;
+			} else
+				message += " está configurado em " + config_files_path[i];
+			message += newLine;
 		}
+
+		if (noFile)
+			JOptionPane.showMessageDialog(frame, message);
+		return !noFile;
 	}
 
 	/**
