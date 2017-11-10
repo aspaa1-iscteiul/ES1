@@ -43,19 +43,35 @@ public class HomePage {
 			"Afinação manual do filtro anti-spam", "Otimização do filtro anti-spam" },
 			config_files_path = { "?", "?", "?" }, config_files_names = { "rules.cf", "spam.log", "ham.log" };
 
+	/**
+	 * Construtor da Home Page
+	 */
 	public HomePage() {
 		frame = new JFrame();
 		frame.setTitle("Home page");
-		frame.setResizable(false);
 
 		configFiles();
 
 		addContents();
 
+		/*
+		 * Define o fecho da janela ao clicar no "Fechar" do canto superior
+		 * direito
+		 */
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+		/*
+		 * Define o tamanho base da janela e impede que esta seja redimensionada
+		 */
 		frame.setSize(450, 450);
+		frame.setResizable(false);
 	}
 
+	/**
+	 * Recupera, caso existam, os ficheiros de configuração selecionados durante
+	 * a última sessão e oferece ao utilizador a possibilidade de os manter ou
+	 * descartar.
+	 */
 	private void configFiles() {
 		try {
 			if (!configs.createNewFile()) {
@@ -63,6 +79,10 @@ public class HomePage {
 				String[] line = scn.nextLine().split("<");
 				String message = "";
 				boolean config = false;
+				/*
+				 * Recupera os paths dos ficheiros configurados durante a última
+				 * sessão.
+				 */
 				for (int i = 0; i < line.length; i++) {
 					if (line[i] != "?" && new File(line[i]).exists() && new File(line[i]).isFile()) {
 						config_files_path[i] = line[i];
@@ -70,12 +90,22 @@ public class HomePage {
 						config = true;
 					}
 				}
+				/*
+				 * Abre uma janela JOptionPane.showConfirmDialog que permite ao
+				 * utilizador escolher manter a configuração dos ficheiros
+				 * selecionados durante a última sessão ou descartá-los.
+				 */
 				if (config && (JOptionPane.showConfirmDialog(frame, "Os seguintes ficheiros encontram-se configurados:"
 						+ newLine + message + newLine + "Quer manter estes ficheiros de configuração?") == 1))
 					for (int i = 0; i < config_files_path.length; i++)
 						config_files_path[i] = "?";
 				scn.close();
 			} else {
+				/*
+				 * Caso o ficheiro onde são guardados os paths não exista,
+				 * cria-o com os valores por defeito para a falta de
+				 * configurações (?)
+				 */
 				saveConfigFilesPath();
 			}
 		} catch (IOException e) {
@@ -83,6 +113,9 @@ public class HomePage {
 		}
 	}
 
+	/**
+	 * Adiciona os conteúdos à janela da Home Page
+	 */
 	private void addContents() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
@@ -92,6 +125,7 @@ public class HomePage {
 		label.setFont(new Font("Arial", Font.BOLD, 28));
 		panel.add(label, BorderLayout.NORTH);
 
+		// Adiciona as opções do menu
 		images = createImages();
 		list = new JList<>(options);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -100,6 +134,7 @@ public class HomePage {
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panel.add(s, BorderLayout.CENTER);
 
+		// Adiciona o botão de "Selecionar" uma opção do menu
 		JPanel buttons_panel = new JPanel();
 		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		select = new JButton("Selecionar");
@@ -109,6 +144,10 @@ public class HomePage {
 				selectOptions();
 			}
 		});
+		/*
+		 * Adiciona o botão de "Cancelar" e, caso o mesmo seja pressionado,
+		 * define a sentinela para o fecho da janela
+		 */
 		cancel = new JButton("Cancelar");
 		cancel.addActionListener(new ActionListener() {
 			@Override
@@ -154,6 +193,10 @@ public class HomePage {
 		frame.add(panel);
 	}
 
+	/**
+	 * Guarda o path dos ficheiros de configuração escolhidos num ficheiro.
+	 * Permite que sejam mantidas as configurações para sessões seguintes.
+	 */
 	private void saveConfigFilesPath() {
 		try {
 			FileWriter w = new FileWriter(configs, false);
@@ -178,6 +221,12 @@ public class HomePage {
 			String file_path = getFileChosen(config_files_names[index]);
 			if (file_path == null)
 				return;
+			/*
+			 * Verifica se o ficheiro escolhido tinha sido previamente
+			 * selecionado como outro ficheiro de configuração. Evita que o
+			 * mesmo ficheiro seja escolhido como ham.log e spam.log
+			 * simultaneamente.
+			 */
 			for (int i = 0; i < config_files_names.length; i++)
 				if (i != index && config_files_path[i].equals(file_path)) {
 					JOptionPane.showMessageDialog(frame,
@@ -185,6 +234,7 @@ public class HomePage {
 					return;
 				}
 			config_files_path[index] = file_path;
+
 		} else if (index == 3) {
 			checkConfigFiles();
 		} else if (index == 4) {
@@ -243,7 +293,14 @@ public class HomePage {
 		return null;
 	}
 
+	/**
+	 * Associa uma String a uma imagem.
+	 * 
+	 * @return HashMap resultante da associação
+	 */
 	private HashMap<String, ImageIcon> createImages() {
+		// Associa uma opção do menu ao respetivo icon, de acordo com os mockups
+		// desenhados
 		HashMap<String, ImageIcon> m = new HashMap<>();
 		m.put(options[0], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
 		m.put(options[1], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
