@@ -226,7 +226,7 @@ public class HomePage {
 		fc.setAcceptAllFileFilterUsed(false);
 		if (fc.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION)
 			return fc.getSelectedFile().getAbsolutePath();
-		return null;
+		return "?";
 	}
 
 	private HashMap<String, ImageIcon> createImages() {
