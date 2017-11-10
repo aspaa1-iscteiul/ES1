@@ -173,25 +173,24 @@ public class HomePage {
 	 * Page.
 	 */
 	private void selectOptions() {
-		switch (list.getSelectedIndex()) {
-		case 0:
-			config_files_path[0] = getFileChosen(config_files_names[0]);
-			break;
-		case 1:
-			config_files_path[1] = getFileChosen(config_files_names[1]);
-			break;
-		case 2:
-			config_files_path[2] = getFileChosen(config_files_names[2]);
-			break;
-		case 3:
+		int index = list.getSelectedIndex();
+		if (index >= 0 && index <= 2) {
+			String file_path = getFileChosen(config_files_names[index]);
+			if (file_path == null)
+				return;
+			for (int i = 0; i < config_files_names.length; i++)
+				if (i != index && config_files_path[i].equals(file_path)) {
+					JOptionPane.showMessageDialog(frame,
+							"O ficheiro selecionado já foi configurado para " + config_files_names[i]);
+					return;
+				}
+			config_files_path[index] = file_path;
+		} else if (index == 3) {
 			checkConfigFiles();
-			break;
-		case 4:
+		} else if (index == 4) {
 			checkConfigFiles();
-			break;
-		case 5:
+		} else if (index == 5) {
 			checkConfigFiles();
-			break;
 		}
 	}
 
@@ -241,7 +240,7 @@ public class HomePage {
 		// Retorna o path do ficheiro selecionado
 		if (fc.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION)
 			return fc.getSelectedFile().getAbsolutePath();
-		return "?";
+		return null;
 	}
 
 	private HashMap<String, ImageIcon> createImages() {
