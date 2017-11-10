@@ -168,6 +168,10 @@ public class HomePage {
 		}
 	}
 
+	/**
+	 * Determina que ações executar consoante a opção escolhida no menu da Home
+	 * Page.
+	 */
 	private void selectOptions() {
 		switch (list.getSelectedIndex()) {
 		case 0:
@@ -191,6 +195,11 @@ public class HomePage {
 		}
 	}
 
+	/**
+	 * Verifica se já estão atribuídos paths aos ficheiros de configuração e
+	 * expressa os resultados numa janela JOptionPane.showMessageDialog para o
+	 * utilizador consultar.
+	 */
 	private void checkConfigFiles() {
 		boolean noFile = false;
 		for (int i = 0; i < config_files_path.length; i++)
@@ -210,20 +219,26 @@ public class HomePage {
 	}
 
 	/**
-	 * Baseado FileChooser do jSwing
+	 * Baseado JFileChooser do java Swing providencia um mecanismo simples para
+	 * que o utilizador escolha um ficheiro.
 	 * 
-	 * @param string Nome do ficheiro cujo path queremos configurar
+	 * @param string
+	 *            Nome do ficheiro cujo path queremos configurar
 	 * @return Path do ficheiro selecionado
 	 */
 	private String getFileChosen(String string) {
 		JFileChooser fc = new JFileChooser();
 		// Inicia a GUI na diretoria do projeto
 		fc.setCurrentDirectory(new java.io.File("."));
+		// Inclui no título da janela o nome do ficheiro a selecionar
 		fc.setDialogTitle("Selecionar ficheiro " + string);
+		// Impede a seleção de múltiplas opções
 		fc.setMultiSelectionEnabled(false);
+		// Apenas os ficheiros com extensão correta são visíveis
 		String extension = string.substring(string.lastIndexOf('.') + 1);
 		fc.setFileFilter(new FileNameExtensionFilter(extension.toUpperCase() + " File", extension));
 		fc.setAcceptAllFileFilterUsed(false);
+		// Retorna o path do ficheiro selecionado
 		if (fc.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION)
 			return fc.getSelectedFile().getAbsolutePath();
 		return "?";
