@@ -34,14 +34,14 @@ public class HomePage {
 
 	private JFrame frame;
 	private JList<String> list;
-	private Map<String, ImageIcon> images;
 	private JButton select, cancel;
+	private Map<String, ImageIcon> images;
+	private File configs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
 	private String newLine = System.getProperty("line.separator");
 	private String[] options = { "Selecionar ficheiro rules.cf", "Selecionar ficheiro spam.log",
 			"Selecionar ficheiro ham.log", "Geração automática de uma configuração",
 			"Afinação manual do filtro anti-spam", "Otimização do filtro anti-spam" },
 			config_files_path = { "?", "?", "?" }, config_files_names = { "rules.cf", "spam.log", "ham.log" };
-	private File configs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
 
 	public HomePage() {
 		frame = new JFrame();
@@ -79,7 +79,6 @@ public class HomePage {
 				saveConfigFilesPath();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -165,7 +164,6 @@ public class HomePage {
 			}
 			w.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -173,13 +171,13 @@ public class HomePage {
 	private void selectOptions() {
 		switch (list.getSelectedIndex()) {
 		case 0:
-			config_files_path[0] = choose(config_files_names[0]);
+			config_files_path[0] = getFileChosen(config_files_names[0]);
 			break;
 		case 1:
-			config_files_path[1] = choose(config_files_names[1]);
+			config_files_path[1] = getFileChosen(config_files_names[1]);
 			break;
 		case 2:
-			config_files_path[2] = choose(config_files_names[2]);
+			config_files_path[2] = getFileChosen(config_files_names[2]);
 			break;
 		case 3:
 			checkConfigFiles();
@@ -211,7 +209,7 @@ public class HomePage {
 		}
 	}
 
-	private String choose(String string) {
+	private String getFileChosen(String string) {
 		JFileChooser fc = new JFileChooser();
 		// Inicia a GUI na diretoria do projeto
 		fc.setCurrentDirectory(new java.io.File("."));
