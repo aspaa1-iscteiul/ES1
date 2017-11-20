@@ -48,7 +48,7 @@ public class HomePage {
 	 */
 	public HomePage() {
 		frame = new JFrame();
-		frame.setTitle("Home page");
+		frame.setTitle("Home Page");
 
 		configFiles();
 
@@ -232,13 +232,16 @@ public class HomePage {
 			for (int i = 0; i < config_files_names.length; i++)
 				if (i != index && config_files_path[i].equals(file_path)) {
 					JOptionPane.showMessageDialog(frame,
-							"O ficheiro selecionado já foi configurado para " + config_files_names[i]);
+							"O ficheiro selecionado já foi configurado para " + config_files_names[i],
+							"Selecionar ficheiro " + config_files_names[index],
+							JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 			config_files_path[index] = file_path;
 
 		} else if (checkConfigFiles()) {
 			if (index == 3) {
+				AfinacaoAutomatica.launch(config_files_path[0]);
 			} else if (index == 4) {
 			} else if (index == 5) {
 			}
@@ -265,7 +268,7 @@ public class HomePage {
 		}
 
 		if (noFile)
-			JOptionPane.showMessageDialog(frame, message);
+			JOptionPane.showMessageDialog(frame, message, "Configuração dos ficheiros", JOptionPane.INFORMATION_MESSAGE);
 		return !noFile;
 	}
 
