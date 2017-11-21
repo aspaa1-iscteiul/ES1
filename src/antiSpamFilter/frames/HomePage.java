@@ -233,18 +233,20 @@ public class HomePage {
 				if (i != index && config_files_path[i].equals(file_path)) {
 					JOptionPane.showMessageDialog(frame,
 							"O ficheiro selecionado já foi configurado para " + config_files_names[i],
-							"Selecionar ficheiro " + config_files_names[index],
-							JOptionPane.WARNING_MESSAGE);
+							"Selecionar ficheiro " + config_files_names[index], JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 			config_files_path[index] = file_path;
 
 		} else if (checkConfigFiles()) {
+			frame.setEnabled(false);
 			if (index == 3) {
 				AfinacaoAutomatica.launch(config_files_path[0]);
+				System.out.println("exit...");
 			} else if (index == 4) {
 			} else if (index == 5) {
 			}
+			frame.setEnabled(true);
 		}
 	}
 
@@ -268,7 +270,8 @@ public class HomePage {
 		}
 
 		if (noFile)
-			JOptionPane.showMessageDialog(frame, message, "Configuração dos ficheiros", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(frame, message, "Configuração dos ficheiros",
+					JOptionPane.INFORMATION_MESSAGE);
 		return !noFile;
 	}
 

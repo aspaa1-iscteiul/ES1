@@ -1,4 +1,4 @@
-package antiSpamFilter.afinação_automática;
+package antiSpamFilter.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Afinação {
+public class Utils {
 
 	public static String[] rules(String rules_path) {
 		List<String> rules = new ArrayList<>();
