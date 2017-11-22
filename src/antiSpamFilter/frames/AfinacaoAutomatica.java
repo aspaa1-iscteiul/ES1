@@ -120,7 +120,7 @@ public class AfinacaoAutomatica {
 		help_panel_1.add(help1, BorderLayout.WEST);
 		help_panel_1.add(new JLabel("  Falsos Positivos (FP): FP/Total"), BorderLayout.CENTER);
 		help_text1 = myTextArea(Utils.newLine
-				+ "Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam                   ");
+				+ "Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam.                   ");
 		help_panel_1.add(help_text1, BorderLayout.SOUTH);
 
 		help_panels.add(help_panel_1);
@@ -138,7 +138,7 @@ public class AfinacaoAutomatica {
 		help_panel_2.add(help2, BorderLayout.WEST);
 		help_panel_2.add(new JLabel("  Falsos Negativos (FN): FN/Total"), BorderLayout.CENTER);
 		help_text2 = myTextArea(Utils.newLine
-				+ "Um Falso Negativo (FN) ocorre quando uma mensagem spam é classificada como mensagem legítima");
+				+ "Um Falso Negativo (FN) ocorre quando uma mensagem spam é classificada como mensagem legítima.");
 		help_panel_2.add(help_text2, BorderLayout.SOUTH);
 
 		help_panels.add(help_panel_2);
