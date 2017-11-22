@@ -62,7 +62,6 @@ public class AfinacaoAutomatica {
 					System.exit(1);
 				}
 		}
-		System.out.println(rules);
 	}
 
 	private void changeWeights() {

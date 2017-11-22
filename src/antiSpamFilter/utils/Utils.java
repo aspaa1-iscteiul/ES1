@@ -15,8 +15,10 @@ import java.util.Scanner;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 import antiSpamFilter.frames.AfinacaoAutomatica;
 import antiSpamFilter.frames.HomePage;
@@ -24,7 +26,7 @@ import antiSpamFilter.frames.HomePage;
 public class Utils {
 
 	public static String newLine = System.getProperty("line.separator");
-	
+
 	public static String[] rules(String rules_path) {
 		List<String> rules = new ArrayList<>();
 		try {
@@ -36,6 +38,8 @@ public class Utils {
 			}
 			scn.close();
 		} catch (FileNotFoundException e) { // if is not a file
+			JOptionPane.showMessageDialog(new JFrame(), "O ficheiro rules.cf já não está na diretoria indicada");
+			System.exit(1);
 		}
 		return rules.toArray(new String[0]);
 	}
@@ -86,7 +90,7 @@ public class Utils {
 	public static class WindowClose implements WindowListener {
 
 		private boolean home_page;
-		
+
 		public WindowClose(boolean home_page) {
 			this.home_page = home_page;
 		}
