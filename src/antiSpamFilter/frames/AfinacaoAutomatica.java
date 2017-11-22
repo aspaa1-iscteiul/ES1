@@ -29,11 +29,11 @@ public class AfinacaoAutomatica {
 	private JTextArea help_text1, help_text2;
 	private HashMap<String, Double> rules = new HashMap<String, Double>();
 
-	public AfinacaoAutomatica(String path) {
+	public AfinacaoAutomatica() {
 		frame = new JFrame();
 		frame.setTitle("Afinação automática do filtro anti-spam");
 
-		mapRules(path);
+		mapRules(HomePage.config_files_path[0]);
 
 		addContents();
 
@@ -249,7 +249,7 @@ public class AfinacaoAutomatica {
 		frame.setVisible(true);
 	}
 
-	public static void launch(String path) {
-		new AfinacaoAutomatica(path).open();
+	public static void launch() {
+		new AfinacaoAutomatica().open();
 	}
 }
