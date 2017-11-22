@@ -6,6 +6,10 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -95,10 +99,28 @@ public class HomePage {
 				 * utilizador escolher manter a configuração dos ficheiros
 				 * selecionados durante a última sessão ou descartá-los.
 				 */
-				if (config && (JOptionPane.showConfirmDialog(frame, "Os seguintes ficheiros encontram-se configurados:"
-						+ newLine + message + newLine + "Quer manter estes ficheiros de configuração?") == 1))
-					for (int i = 0; i < config_files_path.length; i++)
-						config_files_path[i] = "?";
+
+				if (config) {
+					int n = (JOptionPane.showConfirmDialog(frame,
+							"Os seguintes ficheiros encontram-se configurados:" + newLine + newLine + message + newLine
+									+ newLine + "Quer manter estes ficheiros de configuração?" + newLine + newLine));
+					// Escolher a opção 'No' resulta na perda das configurações
+					if (n == JOptionPane.NO_OPTION) {
+						for (int i = 0; i < config_files_path.length; i++)
+							config_files_path[i] = "?";
+						// Escolher a opção 'Cancel' resulta no término do
+						// processo
+					} else if (n == JOptionPane.CANCEL_OPTION) {
+						System.exit(0);
+					}
+				}
+
+				// if (config && (JOptionPane.showConfirmDialog(frame, "Os
+				// seguintes ficheiros encontram-se configurados:"
+				// + newLine + message + newLine + "Quer manter estes ficheiros
+				// de configuração?") == 1))
+				// for (int i = 0; i < config_files_path.length; i++)
+				// config_files_path[i] = "?";
 				scn.close();
 			} else {
 				/*
@@ -144,6 +166,25 @@ public class HomePage {
 				selectOptions();
 			}
 		});
+
+		// Reagir a eventos double-click na lista do menu
+		list.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent me) {
+				if (me.getClickCount() == 2) {
+					selectOptions();
+				}
+			}
+		});
+
+		// Reagir a eventos key-enter na lista do menu
+		list.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent ke) {
+				if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+					selectOptions();
+				}
+			}
+		});
+
 		/*
 		 * Adiciona o botão de "Cancelar" e, caso o mesmo seja pressionado,
 		 * define a sentinela para o fecho da janela
@@ -241,8 +282,7 @@ public class HomePage {
 		} else if (checkConfigFiles()) {
 			frame.setEnabled(false);
 			if (index == 3) {
-				AfinacaoAutomatica.launch(config_files_path[0]);
-				System.out.println("exit...");
+				AfinacaoAutomatica.launch(config_files_path);
 			} else if (index == 4) {
 			} else if (index == 5) {
 			}

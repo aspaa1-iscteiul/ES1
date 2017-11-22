@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -27,11 +28,11 @@ public class AfinacaoAutomatica {
 	private JLabel help_label1, help_label2;
 	private HashMap<String, Double> rules = new HashMap<String, Double>();
 
-	public AfinacaoAutomatica(String path) {
+	public AfinacaoAutomatica(String[] config_files_paths) {
 		frame = new JFrame();
 		frame.setTitle("Afinação automática do filtro anti-spam");
 
-		mapRules(path);
+		mapRules(config_files_paths[0]);
 
 		addContents();
 
@@ -227,7 +228,7 @@ public class AfinacaoAutomatica {
 		frame.setVisible(true);
 	}
 
-	public static void launch(String path) {
-		new AfinacaoAutomatica(path).open();
+	public static void launch(String[] config_files_path) {
+		new AfinacaoAutomatica(config_files_path).open();
 	}
 }
