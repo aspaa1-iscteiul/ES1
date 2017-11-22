@@ -20,7 +20,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import antiSpamFilter.utils.Utils;
@@ -42,7 +41,6 @@ public class AfinacaoAutomatica {
 
 		addContents();
 
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setSize(750, 600);
 		frame.setResizable(false);
@@ -188,7 +186,7 @@ public class AfinacaoAutomatica {
 				backHome();
 			}
 		});
-		frame.addWindowListener(new Utils.WindowClose());
+		frame.addWindowListener(new Utils.WindowClose(false));
 		buttons_panel.add(generate);
 		buttons_panel.add(save);
 		buttons_panel.add(cancel);
@@ -197,7 +195,7 @@ public class AfinacaoAutomatica {
 		frame.add(panel);
 	}
 
-	public void backHome() {
+	public static void backHome() {
 		frame.dispose();
 		HomePage.visible(true);
 	}
@@ -242,12 +240,10 @@ public class AfinacaoAutomatica {
 		return b;
 	}
 
-	public static void visible(boolean open) {
-		if (frame != null)
-			frame.setVisible(open);
+	public void visible(boolean open) {
+		frame.setVisible(open);
 	}
 
-	@SuppressWarnings("static-access")
 	public static void launch() {
 		new AfinacaoAutomatica().visible(true);
 	}

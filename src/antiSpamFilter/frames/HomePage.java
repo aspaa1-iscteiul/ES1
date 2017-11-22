@@ -26,7 +26,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -56,12 +55,6 @@ public class HomePage {
 		configFiles();
 
 		addContents();
-
-		/*
-		 * Define o fecho da janela ao clicar no "Fechar" do canto superior
-		 * direito
-		 */
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		/*
 		 * Define o tamanho base da janela e impede que esta seja redimensionada
@@ -190,7 +183,7 @@ public class HomePage {
 				closeWindow();
 			}
 		});
-		frame.addWindowListener(new Utils.WindowClose());
+		frame.addWindowListener(new Utils.WindowClose(true));
 		buttons_panel.add(select);
 		buttons_panel.add(cancel);
 		panel.add(buttons_panel, BorderLayout.SOUTH);

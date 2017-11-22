@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
+import antiSpamFilter.frames.AfinacaoAutomatica;
 import antiSpamFilter.frames.HomePage;
 
 public class Utils {
@@ -84,13 +85,22 @@ public class Utils {
 
 	public static class WindowClose implements WindowListener {
 
+		private boolean home_page;
+		
+		public WindowClose(boolean home_page) {
+			this.home_page = home_page;
+		}
+
 		@Override
 		public void windowOpened(WindowEvent e) {
 		}
 
 		@Override
 		public void windowClosing(WindowEvent e) {
-			saveConfigFilesPath();
+			if (home_page)
+				saveConfigFilesPath();
+			else
+				AfinacaoAutomatica.backHome();
 		}
 
 		@Override
