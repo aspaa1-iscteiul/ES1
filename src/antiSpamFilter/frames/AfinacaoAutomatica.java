@@ -37,8 +37,8 @@ public class AfinacaoAutomatica {
 
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.pack();
-		// frame.setSize(565, 459);
-		// frame.setResizable(false);
+		frame.setSize(750, 600);
+		frame.setResizable(false);
 
 	}
 
