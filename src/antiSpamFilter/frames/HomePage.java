@@ -34,11 +34,10 @@ import antiSpamFilter.utils.Utils;
 
 public class HomePage {
 
-	private JFrame frame;
+	private static JFrame frame;
 	private JList<String> list;
 	private JButton select, cancel;
 	private Map<String, ImageIcon> images;
-	private String newLine = System.getProperty("line.separator");
 	private String[] options = { "Selecionar ficheiro rules.cf", "Selecionar ficheiro spam.log",
 			"Selecionar ficheiro ham.log", "Geração automática de uma configuração",
 			"Afinação manual do filtro anti-spam", "Otimização do filtro anti-spam" },
@@ -90,7 +89,7 @@ public class HomePage {
 				for (int i = 0; i < line.length; i++) {
 					if (line[i] != "?" && new File(line[i]).exists() && new File(line[i]).isFile()) {
 						config_files_path[i] = line[i];
-						message += config_files_names[i] + " - " + line[i] + newLine;
+						message += config_files_names[i] + " - " + line[i] + Utils.newLine;
 						config = true;
 					}
 				}
@@ -102,8 +101,9 @@ public class HomePage {
 
 				if (config) {
 					int n = (JOptionPane.showConfirmDialog(frame,
-							"Os seguintes ficheiros encontram-se configurados:" + newLine + newLine + message + newLine
-									+ newLine + "Quer manter estes ficheiros de configuração?" + newLine + newLine));
+							"Os seguintes ficheiros encontram-se configurados:" + Utils.newLine + Utils.newLine
+									+ message + Utils.newLine + Utils.newLine
+									+ "Quer manter estes ficheiros de configuração?" + Utils.newLine + Utils.newLine));
 					// Escolher a opção 'No' resulta na perda das configurações
 					if (n == JOptionPane.NO_OPTION) {
 						for (int i = 0; i < config_files_path.length; i++)
@@ -114,13 +114,6 @@ public class HomePage {
 						System.exit(0);
 					}
 				}
-
-				// if (config && (JOptionPane.showConfirmDialog(frame, "Os
-				// seguintes ficheiros encontram-se configurados:"
-				// + newLine + message + newLine + "Quer manter estes ficheiros
-				// de configuração?") == 1))
-				// for (int i = 0; i < config_files_path.length; i++)
-				// config_files_path[i] = "?";
 				scn.close();
 			} else {
 				/*
@@ -152,20 +145,6 @@ public class HomePage {
 		list = new JList<>(options);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setCellRenderer(new Utils.ListRenderer(images));
-		JScrollPane s = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		panel.add(s, BorderLayout.CENTER);
-
-		// Adiciona o botão de "Selecionar" uma opção do menu
-		JPanel buttons_panel = new JPanel();
-		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		select = new JButton("Selecionar");
-		select.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				selectOptions();
-			}
-		});
 
 		// Reagir a eventos double-click na lista do menu
 		list.addMouseListener(new MouseAdapter() {
@@ -182,6 +161,21 @@ public class HomePage {
 				if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
 					selectOptions();
 				}
+			}
+		});
+
+		JScrollPane s = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		panel.add(s, BorderLayout.CENTER);
+
+		// Adiciona o botão de "Selecionar" uma opção do menu
+		JPanel buttons_panel = new JPanel();
+		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		select = new JButton("Selecionar");
+		select.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				selectOptions();
 			}
 		});
 
@@ -239,7 +233,7 @@ public class HomePage {
 			Utils.saveConfigFilesPath();
 			if (index == 3) {
 				AfinacaoAutomatica.launch();
-				frame.setVisible(false);
+				visible(false);
 			} else if (index == 4) {
 			} else if (index == 5) {
 			}
@@ -254,7 +248,7 @@ public class HomePage {
 	private boolean checkConfigFiles() {
 		boolean noFile = false;
 		String message = "Antes de poder realizar esta operação, é necessário selecionar todos os ficheiros de configuração."
-				+ newLine + newLine;
+				+ Utils.newLine + Utils.newLine;
 		for (int i = 0; i < config_files_path.length; i++) {
 			message += "O ficheiro " + config_files_names[i];
 			if (config_files_path[i] == "?") {
@@ -262,7 +256,7 @@ public class HomePage {
 				noFile = true;
 			} else
 				message += " está configurado em " + config_files_path[i];
-			message += newLine;
+			message += Utils.newLine;
 		}
 
 		if (noFile)
@@ -315,13 +309,14 @@ public class HomePage {
 		return m;
 	}
 
-	public void open() {
-		frame.setVisible(true);
+	public static void visible(boolean open) {
+		frame.setVisible(open);
 	}
 
+	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
 		HomePage h = new HomePage();
-		h.open();
+		h.visible(true);
 	}
 
 }

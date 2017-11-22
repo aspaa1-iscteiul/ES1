@@ -22,6 +22,8 @@ import antiSpamFilter.frames.HomePage;
 
 public class Utils {
 
+	public static String newLine = System.getProperty("line.separator");
+	
 	public static String[] rules(String rules_path) {
 		List<String> rules = new ArrayList<>();
 		try {
