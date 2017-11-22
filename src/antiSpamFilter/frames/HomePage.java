@@ -42,9 +42,6 @@ public class HomePage {
 			"Afinação manual do filtro anti-spam", "Otimização do filtro anti-spam" },
 			config_files_names = { "rules.cf", "spam.log", "ham.log" };
 
-	public static String[] config_files_path = { "?", "?", "?" };
-	public static File configs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
-
 	/**
 	 * Construtor da Home Page
 	 */
@@ -70,8 +67,8 @@ public class HomePage {
 	 */
 	private void configFiles() {
 		try {
-			if (!configs.createNewFile()) {
-				Scanner scn = new Scanner(configs);
+			if (!Utils.configs.createNewFile()) {
+				Scanner scn = new Scanner(Utils.configs);
 				String[] line = scn.nextLine().split("<");
 				String message = "";
 				boolean config = false;
@@ -81,11 +78,14 @@ public class HomePage {
 				 */
 				for (int i = 0; i < line.length; i++) {
 					if (line[i] != "?" && new File(line[i]).exists() && new File(line[i]).isFile()) {
-						config_files_path[i] = line[i];
+						Utils.config_files_path[i] = line[i];
 						message += config_files_names[i] + " - " + line[i] + Utils.newLine;
 						config = true;
 					}
 				}
+				Utils.rules();
+				Utils.hamLog();
+				Utils.spamLog();
 				/*
 				 * Abre uma janela JOptionPane.showConfirmDialog que permite ao
 				 * utilizador escolher manter a configuração dos ficheiros
@@ -99,8 +99,8 @@ public class HomePage {
 									+ "Quer manter estes ficheiros de configuração?" + Utils.newLine + Utils.newLine));
 					// Escolher a opção 'No' resulta na perda das configurações
 					if (n == JOptionPane.NO_OPTION) {
-						for (int i = 0; i < config_files_path.length; i++)
-							config_files_path[i] = "?";
+						for (int i = 0; i < Utils.config_files_path.length; i++)
+							Utils.config_files_path[i] = "?";
 						// Escolher a opção 'Cancel' resulta no término do
 						// processo
 					} else if (n == JOptionPane.CANCEL_OPTION) {
@@ -214,13 +214,19 @@ public class HomePage {
 			 * simultaneamente.
 			 */
 			for (int i = 0; i < config_files_names.length; i++)
-				if (i != index && config_files_path[i].equals(file_path)) {
+				if (i != index && Utils.config_files_path[i].equals(file_path)) {
 					JOptionPane.showMessageDialog(frame,
 							"O ficheiro selecionado já foi configurado para " + config_files_names[i],
 							"Selecionar ficheiro " + config_files_names[index], JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-			config_files_path[index] = file_path;
+			Utils.config_files_path[index] = file_path;
+			if (index == 0)
+				Utils.rules();
+			else if (index == 1)
+				Utils.spamLog();
+			else
+				Utils.hamLog();
 
 		} else if (checkConfigFiles()) {
 			Utils.saveConfigFilesPath();
@@ -242,13 +248,13 @@ public class HomePage {
 		boolean noFile = false;
 		String message = "Antes de poder realizar esta operação, é necessário selecionar todos os ficheiros de configuração."
 				+ Utils.newLine + Utils.newLine;
-		for (int i = 0; i < config_files_path.length; i++) {
+		for (int i = 0; i < Utils.config_files_path.length; i++) {
 			message += "O ficheiro " + config_files_names[i];
-			if (config_files_path[i] == "?") {
+			if (Utils.config_files_path[i] == "?") {
 				message += " não está configurado";
 				noFile = true;
 			} else
-				message += " está configurado em " + config_files_path[i];
+				message += " está configurado em " + Utils.config_files_path[i];
 			message += Utils.newLine;
 		}
 

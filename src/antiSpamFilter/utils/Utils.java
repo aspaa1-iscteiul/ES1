@@ -9,6 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -21,27 +23,79 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 import antiSpamFilter.frames.AfinacaoAutomatica;
-import antiSpamFilter.frames.HomePage;
 
 public class Utils {
 
+	public static String[] config_files_path = { "?", "?", "?" };
+	public static File configs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
+	public static ArrayList<List<String>> ham = new ArrayList<List<String>>(), spam = new ArrayList<List<String>>();
+	public static HashMap<String, Double> rules = new HashMap<String, Double>();
+
 	public static String newLine = System.getProperty("line.separator");
 
-	public static String[] rules(String rules_path) {
-		List<String> rules = new ArrayList<>();
+	public static String[] lines(String file_path) {
+		List<String> lines = new ArrayList<>();
 		try {
-			Scanner scn = new Scanner(new File(rules_path));
+			Scanner scn = new Scanner(new File(file_path));
 			while (scn.hasNextLine()) {
 				String line = scn.nextLine();
 				if (!line.equals(""))
-					rules.add(line);
+					lines.add(line);
 			}
 			scn.close();
 		} catch (FileNotFoundException e) { // if is not a file
-			JOptionPane.showMessageDialog(new JFrame(), "O ficheiro rules.cf já não está na diretoria indicada");
+			JOptionPane.showMessageDialog(new JFrame(),
+					"O ficheiro " + file_path + " já não está na diretoria indicada");
 			System.exit(1);
 		}
-		return rules.toArray(new String[0]);
+		return lines.toArray(new String[0]);
+	}
+
+	public static void rules() {
+		String file_path = config_files_path[0];
+		if (!file_path.equals("?")) {
+			String[] list = lines(file_path);
+			for (String s : list) {
+				String[] ss = s.split(" ");
+				if (ss.length < 2)
+					rules.put(s, ((Math.random() * 10) - 5));
+				else
+					try {
+						rules.put(ss[0], Double.valueOf(ss[1]));
+					} catch (NumberFormatException e) {
+						JOptionPane.showMessageDialog(new JFrame(), "Ficheiro rules.cf tem um formato inválido");
+						System.exit(1);
+					}
+			}
+		} else {
+			JOptionPane.showMessageDialog(new JFrame(), "Não devias estar aqui - Utils.java line 71");
+		}
+	}
+
+	public static void spamLog() {
+		String file_path = config_files_path[1];
+		if (!file_path.equals("?")) {
+			String[] list = lines(file_path);
+			for (String s : list) {
+				String[] ss = s.split("\t");
+				spam.add(Arrays.asList(Arrays.copyOfRange(ss, 1, ss.length)));
+			}
+		} else {
+			JOptionPane.showMessageDialog(new JFrame(), "Não devias estar aqui - Utils.java line 84");
+		}
+	}
+
+	public static void hamLog() {
+		String file_path = config_files_path[2];
+		if (!file_path.equals("?")) {
+			String[] list = lines(file_path);
+			for (String s : list) {
+				String[] ss = s.split("\t");
+				ham.add(Arrays.asList(Arrays.copyOfRange(ss, 1, ss.length)));
+			}
+		} else {
+			JOptionPane.showMessageDialog(new JFrame(), "Não devias estar aqui - Utils.java line 97");
+		}
 	}
 
 	/**
@@ -50,10 +104,10 @@ public class Utils {
 	 */
 	public static void saveConfigFilesPath() {
 		try {
-			FileWriter w = new FileWriter(HomePage.configs, false);
-			for (int i = 0; i < HomePage.config_files_path.length; i++) {
-				w.write(HomePage.config_files_path[i]);
-				if (i < HomePage.config_files_path.length - 1)
+			FileWriter w = new FileWriter(configs, false);
+			for (int i = 0; i < config_files_path.length; i++) {
+				w.write(config_files_path[i]);
+				if (i < config_files_path.length - 1)
 					w.write("<");
 			}
 			w.close();
@@ -62,6 +116,41 @@ public class Utils {
 		}
 	}
 
+	public static int falsePositives() {
+		int total = 0;
+		for (List<String> var : ham) {
+			double sum = 0;
+			for (String key : var)
+				if (rules.get(key) != null)
+					sum += rules.get(key);
+				else
+					JOptionPane.showMessageDialog(new JFrame(), "FP - KEY ERROR");
+			if (sum < 5.0)
+				total++;
+		}
+		return total;
+	}
+
+	public static int falseNegatives() {
+		int total = 0;
+		for (List<String> var : spam) {
+			double sum = 0;
+			for (String key : var)
+				if (rules.get(key) != null)
+					sum += rules.get(key);
+				else
+					JOptionPane.showMessageDialog(new JFrame(), "FN - KEY ERROR -> " + key);
+			if (sum > 5.0)
+				total++;
+		}
+		return total;
+	}
+
+	/*
+	 * 
+	 * Classes
+	 * 
+	 */
 	public static class ListRenderer extends DefaultListCellRenderer {
 
 		/**

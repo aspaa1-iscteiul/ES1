@@ -31,15 +31,17 @@ public class AfinacaoAutomatica {
 	private JScrollPane scroll_rules_panel;
 	private JTextArea help_text1, help_text2;
 	private JButton generate, save, cancel;
-	private HashMap<String, Double> rules = new HashMap<String, Double>();
+	private JLabel help_label_1, help_label_2;
 
 	public AfinacaoAutomatica() {
 		frame = new JFrame();
 		frame.setTitle("Afinação automática do filtro anti-spam");
 
-		mapRules(HomePage.config_files_path[0]);
+		Utils.rules();
 
 		addContents();
+
+		calculate();
 
 		frame.pack();
 		frame.setSize(750, 600);
@@ -47,28 +49,15 @@ public class AfinacaoAutomatica {
 
 	}
 
-	private void mapRules(String path) {
-		rules.clear();
-		String[] list = Utils.rules(path);
-		for (String s : list) {
-			String[] ss = s.split(" ");
-			if (ss.length < 2)
-				rules.put(s, ((Math.random() * 10) - 5));
-			else
-				try {
-					rules.put(ss[0], Double.valueOf(ss[1]));
-				} catch (NumberFormatException e) {
-					JOptionPane.showMessageDialog(frame, "Ficheiro rules.cf tem um formato inválido");
-					System.exit(1);
-				}
-		}
+	private void changeWeights() {
+		for (HashMap.Entry<String, Double> entry : Utils.rules.entrySet())
+			entry.setValue((Math.random() * 10) - 5);
+		calculate();
 	}
 
-	private void changeWeights() {
-		for (HashMap.Entry<String, Double> entry : rules.entrySet()) {
-			entry.setValue((Math.random() * 10) - 5);
-		}
-
+	private void calculate() {
+		help_label_1.setText("  Falsos Positivos (FP):  " + Utils.falsePositives() + " / " + Utils.ham.size());
+		help_label_2.setText("  Falsos Negativos (FN):  " + Utils.falseNegatives() + " / " + Utils.spam.size());
 	}
 
 	private void addContents() {
@@ -115,7 +104,8 @@ public class AfinacaoAutomatica {
 			}
 		});
 		help_panel_1.add(help1, BorderLayout.WEST);
-		help_panel_1.add(new JLabel("  Falsos Positivos (FP): FP/Total"), BorderLayout.CENTER);
+		help_label_1 = new JLabel("  Falsos Positivos (FP): ");
+		help_panel_1.add(help_label_1, BorderLayout.CENTER);
 		help_text1 = myTextArea(Utils.newLine
 				+ "Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam.                   ");
 		help_panel_1.add(help_text1, BorderLayout.SOUTH);
@@ -133,7 +123,8 @@ public class AfinacaoAutomatica {
 			}
 		});
 		help_panel_2.add(help2, BorderLayout.WEST);
-		help_panel_2.add(new JLabel("  Falsos Negativos (FN): FN/Total"), BorderLayout.CENTER);
+		help_label_2 = new JLabel("  Falsos Negativos (FN): FN/Total");
+		help_panel_2.add(help_label_2, BorderLayout.CENTER);
 		help_text2 = myTextArea(Utils.newLine
 				+ "Um Falso Negativo (FN) ocorre quando uma mensagem spam é classificada como mensagem legítima.");
 		help_panel_2.add(help_text2, BorderLayout.SOUTH);
@@ -156,8 +147,8 @@ public class AfinacaoAutomatica {
 				pp.remove(scroll_rules_panel);
 				createRulesPanel();
 				pp.add(scroll_rules_panel, BorderLayout.CENTER);
-				pp.validate();
-				pp.repaint();
+				frame.validate();
+				frame.repaint();
 			}
 		});
 
@@ -166,8 +157,8 @@ public class AfinacaoAutomatica {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					FileWriter w = new FileWriter(HomePage.config_files_path[0], false);
-					for (HashMap.Entry<String, Double> entry : rules.entrySet())
+					FileWriter w = new FileWriter(Utils.config_files_path[0], false);
+					for (HashMap.Entry<String, Double> entry : Utils.rules.entrySet())
 						w.write(entry.getKey() + " " + entry.getValue().toString() + Utils.newLine);
 					w.close();
 				} catch (IOException e1) {
@@ -198,11 +189,11 @@ public class AfinacaoAutomatica {
 		frame.dispose();
 		HomePage.visible(true);
 	}
-	
+
 	public void createRulesPanel() {
 		JPanel rules_panel = new JPanel();
 		rules_panel.setLayout(new GridLayout(0, 1));
-		for (HashMap.Entry<String, Double> entry : rules.entrySet()) {
+		for (HashMap.Entry<String, Double> entry : Utils.rules.entrySet()) {
 			JPanel p = new JPanel();
 			p.setLayout(new BorderLayout());
 			p.add(new JLabel(entry.getKey() + "     "), BorderLayout.CENTER);
