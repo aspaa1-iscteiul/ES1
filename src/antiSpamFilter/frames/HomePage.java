@@ -1,21 +1,17 @@
 package antiSpamFilter.frames;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -30,18 +26,22 @@ import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import antiSpamFilter.utils.Utils;
+
 public class HomePage {
 
 	private JFrame frame;
 	private JList<String> list;
 	private JButton select, cancel;
 	private Map<String, ImageIcon> images;
-	private File configs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
 	private String newLine = System.getProperty("line.separator");
 	private String[] options = { "Selecionar ficheiro rules.cf", "Selecionar ficheiro spam.log",
 			"Selecionar ficheiro ham.log", "Geração automática de uma configuração",
 			"Afinação manual do filtro anti-spam", "Otimização do filtro anti-spam" },
-			config_files_path = { "?", "?", "?" }, config_files_names = { "rules.cf", "spam.log", "ham.log" };
+			config_files_names = { "rules.cf", "spam.log", "ham.log" };
+
+	public static String[] config_files_path = { "?", "?", "?" };
+	public static File configs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
 
 	/**
 	 * Construtor da Home Page
@@ -106,7 +106,7 @@ public class HomePage {
 				 * cria-o com os valores por defeito para a falta de
 				 * configurações (?)
 				 */
-				saveConfigFilesPath();
+				Utils.saveConfigFilesPath();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -129,7 +129,7 @@ public class HomePage {
 		images = createImages();
 		list = new JList<>(options);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setCellRenderer(new ListRenderer());
+		list.setCellRenderer(new Utils.ListRenderer(images));
 		JScrollPane s = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panel.add(s, BorderLayout.CENTER);
@@ -152,40 +152,10 @@ public class HomePage {
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+				closeWindow();
 			}
 		});
-		frame.addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowOpened(WindowEvent e) {
-			}
-
-			@Override
-			public void windowIconified(WindowEvent e) {
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-			}
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				saveConfigFilesPath();
-			}
-
-			@Override
-			public void windowClosed(WindowEvent e) {
-			}
-
-			@Override
-			public void windowActivated(WindowEvent e) {
-			}
-		});
+		frame.addWindowListener(new Utils.WindowClose());
 		buttons_panel.add(select);
 		buttons_panel.add(cancel);
 		panel.add(buttons_panel, BorderLayout.SOUTH);
@@ -193,22 +163,8 @@ public class HomePage {
 		frame.add(panel);
 	}
 
-	/**
-	 * Guarda o path dos ficheiros de configuração escolhidos num ficheiro.
-	 * Permite que sejam mantidas as configurações para sessões seguintes.
-	 */
-	private void saveConfigFilesPath() {
-		try {
-			FileWriter w = new FileWriter(configs, false);
-			for (int i = 0; i < config_files_path.length; i++) {
-				w.write(config_files_path[i]);
-				if (i < config_files_path.length - 1)
-					w.write("<");
-			}
-			w.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private void closeWindow() {
+		frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 	}
 
 	/**
@@ -239,14 +195,13 @@ public class HomePage {
 			config_files_path[index] = file_path;
 
 		} else if (checkConfigFiles()) {
-			frame.setEnabled(false);
+			Utils.saveConfigFilesPath();
 			if (index == 3) {
 				AfinacaoAutomatica.launch(config_files_path[0]);
-				System.out.println("exit...");
+				frame.setVisible(false);
 			} else if (index == 4) {
 			} else if (index == 5) {
 			}
-			frame.setEnabled(true);
 		}
 	}
 
@@ -317,26 +272,6 @@ public class HomePage {
 		m.put(options[4], new ImageIcon("src/antiSpamFilter/frames/icons/pencil.PNG"));
 		m.put(options[5], new ImageIcon("src/antiSpamFilter/frames/icons/magic_wand.PNG"));
 		return m;
-	}
-
-	private class ListRenderer extends DefaultListCellRenderer {
-
-		/**
-		 * Default
-		 */
-		private static final long serialVersionUID = 1L;
-		private Font font = new Font("Consolas", Font.BOLD, 14);
-
-		@Override
-		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-			JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			label.setIcon(images.get((String) value));
-			label.setHorizontalTextPosition(JLabel.RIGHT);
-			label.setFont(font);
-			return label;
-		}
-
 	}
 
 	public void open() {

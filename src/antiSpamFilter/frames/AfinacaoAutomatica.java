@@ -1,6 +1,7 @@
 package antiSpamFilter.frames;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -15,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -24,7 +26,7 @@ public class AfinacaoAutomatica {
 
 	private JFrame frame;
 	private JPanel help_panel_1, help_panel_2;
-	private JLabel help_label1, help_label2;
+	private JTextArea help_text1, help_text2;
 	private HashMap<String, Double> rules = new HashMap<String, Double>();
 
 	public AfinacaoAutomatica(String path) {
@@ -51,7 +53,7 @@ public class AfinacaoAutomatica {
 
 	private void addContents() {
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1, 2));
+		panel.setLayout(new BorderLayout());
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
 		JPanel pp = new JPanel();
@@ -74,16 +76,23 @@ public class AfinacaoAutomatica {
 
 		JScrollPane scroll = new JScrollPane(rules_panel);
 		pp.add(scroll, BorderLayout.CENTER);
-		panel.add(pp);
+		panel.add(pp, BorderLayout.CENTER);
+
+		/*
+		 * lado direito
+		 */
 
 		JPanel p = new JPanel();
+		p.setBorder(new EmptyBorder(20, 10, 10, 10));
 		p.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JPanel results_panel = new JPanel();
-		results_panel.setLayout(new GridLayout(0,1));
-		p.add(results_panel);
+		results_panel.setLayout(new BorderLayout());
 
-		JLabel l = new JLabel("Para a configuração gerada, obtemos:");
-		results_panel.add(l);
+		results_panel.add(new JLabel("Para a configuração gerada, obtemos:"), BorderLayout.NORTH);
+
+		JPanel help_panels = new JPanel();
+		help_panels.setBorder(new EmptyBorder(10, 10, 10, 10));
+		help_panels.setLayout(new GridLayout(0, 1));
 
 		help_panel_1 = new JPanel();
 		help_panel_1.setLayout(new BorderLayout());
@@ -91,20 +100,24 @@ public class AfinacaoAutomatica {
 		help.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (help_label1.getText().equals("\n\n"))
-					help_label1.setText(
-							"Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam");
+				if (help_text1.getForeground().equals(Color.BLACK))
+					help_text1.setForeground(new JPanel().getBackground());
 				else
-					help_label1.setText("\n\n");
+					help_text1.setForeground(Color.BLACK);
 			}
 		});
 		help_panel_1.add(help, BorderLayout.WEST);
 		JLabel label = new JLabel("Falsos Positivos (FP): FP/Total");
 		help_panel_1.add(label, BorderLayout.CENTER);
-		help_label1 = new JLabel("\n\n");
-		help_panel_1.add(help_label1, BorderLayout.SOUTH);
+		help_text1 = new JTextArea("Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam");
+		help_text1.setForeground(new JPanel().getBackground());
+		help_text1.setBackground(new JPanel().getBackground());
+		help_text1.setLineWrap(true);
+		help_text1.setWrapStyleWord(true);
+		help_text1.setEditable(false);
+		help_panel_1.add(help_text1, BorderLayout.SOUTH);
 
-		results_panel.add(help_panel_1);
+		help_panels.add(help_panel_1);
 
 		help_panel_2 = new JPanel();
 		help_panel_2.setLayout(new BorderLayout());
@@ -112,22 +125,32 @@ public class AfinacaoAutomatica {
 		help.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (help_label2.getText().equals("\n\n"))
-					help_label2.setText(
-							"Um Falso Negativo (FN) ocorre quando uma mensagem spam é classificada como mensagem legítima");
+				if (help_text2.getForeground().equals(Color.BLACK))
+					help_text2.setForeground(new JPanel().getBackground());
 				else
-					help_label2.setText("\n\n");
+					help_text2.setForeground(Color.BLACK);
 			}
 		});
 		help_panel_2.add(help, BorderLayout.WEST);
 		label = new JLabel("Falsos Negativos (FN): FN/Total");
 		help_panel_2.add(label, BorderLayout.CENTER);
-		help_label2 = new JLabel("\n\n");
-		help_panel_2.add(help_label2, BorderLayout.SOUTH);
+		help_text2 = new JTextArea("Um Falso Negativo (FN) ocorre quando uma mensagem spam é classificada como mensagem legítima");
+		help_text2.setForeground(new JPanel().getBackground());
+		help_text2.setBackground(new JPanel().getBackground());
+		help_text2.setLineWrap(true);
+		help_text2.setWrapStyleWord(true);
+		help_text2.setEditable(false);
+		help_panel_2.add(help_text2, BorderLayout.SOUTH);
 
-		results_panel.add(help_panel_2);
+		help_panels.add(help_panel_2);
 
-		panel.add(p);
+		results_panel.add(help_panels, BorderLayout.CENTER);
+
+		p.add(results_panel);
+
+		panel.add(p, BorderLayout.EAST);
+
+		frame.add(panel);
 
 		/*
 		 * p1.setBounds(0, n.getHeight(), x / 2, y - n.getHeight());
@@ -210,7 +233,6 @@ public class AfinacaoAutomatica {
 		 * JButton cancelar = new JButton("Cancelar"); p3.add(cancelar);
 		 * frame.add(p3, BorderLayout.PAGE_END);
 		 */
-		frame.add(panel);
 	}
 
 	public JButton helpButton() {
