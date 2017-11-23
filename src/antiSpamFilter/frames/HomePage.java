@@ -28,6 +28,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import antiSpamFilter.utils.OtherClasses;
 import antiSpamFilter.utils.Utils;
 
 public class HomePage {
@@ -136,7 +137,7 @@ public class HomePage {
 		images = createImages();
 		list = new JList<>(options);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setCellRenderer(new Utils.ListRenderer(images));
+		list.setCellRenderer(new OtherClasses.ListRenderer(images));
 
 		// Reagir a eventos double-click na lista do menu
 		list.addMouseListener(new MouseAdapter() {
@@ -182,7 +183,7 @@ public class HomePage {
 				frame.dispose();
 			}
 		});
-		frame.addWindowListener(new Utils.HomePageClose());
+		frame.addWindowListener(new OtherClasses.HomePageClose());
 		buttons_panel.add(select);
 		buttons_panel.add(cancel);
 		panel.add(buttons_panel, BorderLayout.SOUTH);

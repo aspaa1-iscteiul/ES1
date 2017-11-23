@@ -16,7 +16,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		 * Gera um vetor de pesos com tamanho igual ao número de regras
 		 * existentes
 		 */
-		this(Utils.lines(Utils.config_files_path[0]).length);
+		this(Utils.lines(Utils.config_files_path[0]).size());
 	}
 
 	public AntiSpamFilterProblem(Integer numberOfVariables) {

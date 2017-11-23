@@ -1,9 +1,5 @@
 package antiSpamFilter.utils;
 
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -12,17 +8,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-
-import antiSpamFilter.frames.AfinacaoAutomatica;
 
 public class Utils {
 
@@ -33,8 +22,8 @@ public class Utils {
 
 	public static String newLine = System.getProperty("line.separator");
 
-	public static String[] lines(String file_path) {
-		List<String> lines = new ArrayList<>();
+	public static ArrayList<String> lines(String file_path) {
+		ArrayList<String> lines = new ArrayList<>();
 		try {
 			Scanner scn = new Scanner(new File(file_path));
 			while (scn.hasNextLine()) {
@@ -48,13 +37,13 @@ public class Utils {
 					"O ficheiro " + file_path + " já não está na diretoria indicada");
 			System.exit(1);
 		}
-		return lines.toArray(new String[0]);
+		return lines;
 	}
 
 	public static void rules() {
 		String file_path = config_files_path[0];
 		if (rules.isEmpty() && !file_path.equals("?")) {
-			String[] list = lines(file_path);
+			ArrayList<String> list = lines(file_path);
 			for (String s : list) {
 				String[] ss = s.split(" ");
 				if (ss.length < 2)
@@ -73,7 +62,7 @@ public class Utils {
 	public static void spamLog() {
 		String file_path = config_files_path[1];
 		if (spam.isEmpty() && !file_path.equals("?")) {
-			String[] list = lines(file_path);
+			ArrayList<String> list = lines(file_path);
 			for (String s : list) {
 				String[] ss = s.split("\t");
 				spam.add(Arrays.asList(Arrays.copyOfRange(ss, 1, ss.length)));
@@ -84,7 +73,7 @@ public class Utils {
 	public static void hamLog() {
 		String file_path = config_files_path[2];
 		if (ham.isEmpty() && !file_path.equals("?")) {
-			String[] list = lines(file_path);
+			ArrayList<String> list = lines(file_path);
 			for (String s : list) {
 				String[] ss = s.split("\t");
 				ham.add(Arrays.asList(Arrays.copyOfRange(ss, 1, ss.length)));
@@ -126,10 +115,10 @@ public class Utils {
 		for (List<String> var : ham) {
 			double sum = 0;
 			for (String key : var)
-				if (rules.get(key) != null)
+				try {
 					sum += rules.get(key);
-				else
-					JOptionPane.showMessageDialog(new JFrame(), "FP - KEY ERROR -> " + key);
+				} catch (NullPointerException e) {
+				}
 			if (sum < 5.0)
 				total++;
 		}
@@ -145,111 +134,16 @@ public class Utils {
 		int total = 0;
 		for (List<String> var : spam) {
 			double sum = 0;
-			for (String key : var)
-				if (rules.get(key) != null)
+			for (String key : var) {
+				try {
 					sum += rules.get(key);
-				else
-					JOptionPane.showMessageDialog(new JFrame(), "FN - KEY ERROR -> " + key);
+				} catch (NullPointerException e) {
+				}
+			}
 			if (sum > 5.0)
 				total++;
 		}
 		return total;
-	}
-
-	/*
-	 * 
-	 * Classes
-	 * 
-	 */
-	public static class ListRenderer extends DefaultListCellRenderer {
-
-		/**
-		 * Default
-		 */
-		private static final long serialVersionUID = 1L;
-		private Font font = new Font("Consolas", Font.BOLD, 14);
-		private Map<String, ImageIcon> images;
-
-		public ListRenderer(Map<String, ImageIcon> images) {
-			this.images = images;
-		}
-
-		@Override
-		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-			JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			label.setIcon(images.get((String) value));
-			label.setHorizontalTextPosition(JLabel.RIGHT);
-			label.setFont(font);
-			return label;
-		}
-
-	}
-
-	public static class HomePageClose implements WindowListener {
-
-		@Override
-		public void windowOpened(WindowEvent e) {
-		}
-
-		@Override
-		public void windowClosing(WindowEvent e) {
-			saveConfigFilesPath();
-		}
-
-		@Override
-		public void windowClosed(WindowEvent e) {
-		}
-
-		@Override
-		public void windowIconified(WindowEvent e) {
-		}
-
-		@Override
-		public void windowDeiconified(WindowEvent e) {
-		}
-
-		@Override
-		public void windowActivated(WindowEvent e) {
-		}
-
-		@Override
-		public void windowDeactivated(WindowEvent e) {
-		}
-
-	}
-
-	public static class AfinacaoAutomaticaClose implements WindowListener {
-
-		@Override
-		public void windowOpened(WindowEvent e) {
-		}
-
-		@Override
-		public void windowClosing(WindowEvent e) {
-			AfinacaoAutomatica.backHome();
-		}
-
-		@Override
-		public void windowClosed(WindowEvent e) {
-		}
-
-		@Override
-		public void windowIconified(WindowEvent e) {
-		}
-
-		@Override
-		public void windowDeiconified(WindowEvent e) {
-		}
-
-		@Override
-		public void windowActivated(WindowEvent e) {
-		}
-
-		@Override
-		public void windowDeactivated(WindowEvent e) {
-		}
-
 	}
 
 }

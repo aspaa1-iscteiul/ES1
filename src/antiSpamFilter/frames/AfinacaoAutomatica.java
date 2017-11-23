@@ -22,18 +22,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
+import antiSpamFilter.utils.OtherClasses;
 import antiSpamFilter.utils.Utils;
 
 public class AfinacaoAutomatica {
 
 	private static JFrame frame;
-	private JPanel help_panel_1, help_panel_2;
-	private JScrollPane scroll_rules_panel;
-	private JTextArea help_text_1, help_text_2;
-	private JButton generate, save, cancel;
-	private JLabel help_label_1, help_label_2;
-	private Font font_labels_1 = new Font("Helvetica", Font.PLAIN, 18),
-			font_labels_2 = new Font("Helvetica", Font.PLAIN, 14), font_text = new Font("Helvetica", Font.PLAIN, 12);
+	private JTextArea help_text_fp, help_text_fn;
+	private JLabel help_label_fp, help_label_fn;
+	private Font font_titles = new Font("Helvetica", Font.PLAIN, 18),
+			font_labels = new Font("Helvetica", Font.PLAIN, 14), font_text = new Font("Helvetica", Font.PLAIN, 12);
 
 	public AfinacaoAutomatica() {
 		frame = new JFrame();
@@ -48,7 +46,7 @@ public class AfinacaoAutomatica {
 		frame.pack();
 		frame.setSize(750, 600);
 		frame.setResizable(false);
-
+		frame.addWindowListener(new OtherClasses.AfinacaoAutomaticaClose());
 	}
 
 	private void changeWeights() {
@@ -58,8 +56,12 @@ public class AfinacaoAutomatica {
 	}
 
 	private void calculate() {
-		help_label_1.setText("  Falsos Positivos (FP):  " + Utils.falsePositives() + " / " + Utils.ham.size());
-		help_label_2.setText("  Falsos Negativos (FN):  " + Utils.falseNegatives() + " / " + Utils.spam.size());
+		int var = String.valueOf(Utils.ham.size()).length();
+		help_label_fp.setText("  Falsos Positivos (FP):  " + String.format("%0" + var + "d", Utils.falsePositives())
+				+ " / " + Utils.ham.size());
+		var = String.valueOf(Utils.spam.size()).length();
+		help_label_fn.setText("  Falsos Negativos (FN):  " + String.format("%0" + var + "d", Utils.falseNegatives())
+				+ " / " + Utils.spam.size());
 	}
 
 	private void addContents() {
@@ -67,88 +69,56 @@ public class AfinacaoAutomatica {
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-		JPanel pp = new JPanel();
-		pp.setLayout(new BorderLayout());
+		JPanel center_panel = new JPanel();
+		center_panel.setLayout(new BorderLayout());
 
-		JLabel n = new JLabel("Configuração do vetor de pesos");
-		n.setFont(font_labels_1);
-		pp.add(n, BorderLayout.NORTH);
+		JLabel title = new JLabel("Configuração do vetor de pesos");
+		title.setFont(font_titles);
+		center_panel.add(title, BorderLayout.NORTH);
 
-		createRulesPanel();
+		JScrollPane scroll_rules_panel = createRulesPanel();
+		center_panel.add(scroll_rules_panel, BorderLayout.CENTER);
+		panel.add(center_panel, BorderLayout.CENTER);
 
-		pp.add(scroll_rules_panel, BorderLayout.CENTER);
-		panel.add(pp, BorderLayout.CENTER);
+		JPanel right_panel = new JPanel();
+		right_panel.setBorder(new EmptyBorder(20, 10, 10, 10));
+		right_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		/*
-		 * lado direito
-		 */
-
-		JPanel p = new JPanel();
-		p.setBorder(new EmptyBorder(20, 10, 10, 10));
-		p.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JPanel results_panel = new JPanel();
 		results_panel.setLayout(new BorderLayout());
 
-		JLabel l = new JLabel("Para a configuração gerada, obtemos:");
-		l.setFont(font_labels_1);
-		results_panel.add(l, BorderLayout.NORTH);
+		title = new JLabel("Para a configuração gerada, obtemos:");
+		title.setFont(font_titles);
+		results_panel.add(title, BorderLayout.NORTH);
 
 		JPanel help_panels = new JPanel();
 		help_panels.setBorder(new EmptyBorder(10, 10, 10, 10));
 		help_panels.setLayout(new GridLayout(0, 1));
-
-		help_panel_1 = new JPanel();
-		help_panel_1.setBorder(new EmptyBorder(20, 10, 10, 10));
-		help_panel_1.setLayout(new BorderLayout());
-		JButton help1 = helpButton(1);
-		help_panel_1.add(help1, BorderLayout.WEST);
-		help_label_1 = new JLabel("  Falsos Positivos (FP): ");
-		help_label_1.setFont(font_labels_2);
-		help_panel_1.add(help_label_1, BorderLayout.CENTER);
-		help_text_1 = myTextArea(Utils.newLine
-				+ "Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam.                   ");
-		help_text_1.setFont(font_text);
-		help_panel_1.add(help_text_1, BorderLayout.SOUTH);
-
-		help_panels.add(help_panel_1);
-
-		help_panel_2 = new JPanel();
-		help_panel_2.setBorder(new EmptyBorder(20, 10, 10, 10));
-		help_panel_2.setLayout(new BorderLayout());
-		JButton help2 = helpButton(2);
-		help_panel_2.add(help2, BorderLayout.WEST);
-		help_label_2 = new JLabel("  Falsos Negativos (FN): FN/Total");
-		help_label_2.setFont(font_labels_2);
-		help_panel_2.add(help_label_2, BorderLayout.CENTER);
-		help_text_2 = myTextArea(Utils.newLine
-				+ "Um Falso Negativo (FN) ocorre quando uma mensagem spam é classificada como mensagem legítima.");
-		help_text_2.setFont(font_text);
-		help_panel_2.add(help_text_2, BorderLayout.SOUTH);
-
-		help_panels.add(help_panel_2);
+		help_panels.add(createHelpPanel(1));
+		help_panels.add(createHelpPanel(2));
 
 		results_panel.add(help_panels, BorderLayout.CENTER);
 
-		p.add(results_panel);
+		right_panel.add(results_panel);
 
-		panel.add(p, BorderLayout.EAST);
+		panel.add(right_panel, BorderLayout.EAST);
 
 		JPanel buttons_panel = new JPanel();
 		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		generate = new JButton("Gerar novo vetor de pesos");
+		JButton generate = new JButton("Gerar novo vetor de pesos");
 		generate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				changeWeights();
-				pp.remove(scroll_rules_panel);
+				center_panel.remove(scroll_rules_panel);
 				createRulesPanel();
-				pp.add(scroll_rules_panel, BorderLayout.CENTER);
+				center_panel.add(scroll_rules_panel, BorderLayout.CENTER);
 				frame.validate();
 				frame.repaint();
 			}
 		});
 
-		save = new JButton("Guardar");
+		JButton save = new JButton("Guardar");
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -165,14 +135,14 @@ public class AfinacaoAutomatica {
 			}
 		});
 
-		cancel = new JButton("Cancelar");
+		JButton cancel = new JButton("Cancelar");
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				backHome();
 			}
 		});
-		frame.addWindowListener(new Utils.AfinacaoAutomaticaClose());
+
 		buttons_panel.add(generate);
 		buttons_panel.add(save);
 		buttons_panel.add(cancel);
@@ -186,27 +156,65 @@ public class AfinacaoAutomatica {
 		HomePage.visible(true);
 	}
 
-	public void createRulesPanel() {
+	private JScrollPane createRulesPanel() {
 		JPanel rules_panel = new JPanel();
 		rules_panel.setLayout(new GridLayout(0, 1));
 		for (HashMap.Entry<String, Double> entry : Utils.rules.entrySet()) {
-			JPanel p = new JPanel();
-			p.setLayout(new BorderLayout());
-			p.add(new JLabel(entry.getKey() + "     "), BorderLayout.CENTER);
-			p.add(new JLabel(String.format("%.6f", entry.getValue())), BorderLayout.EAST);
-			rules_panel.add(p);
+			JPanel panel = new JPanel();
+			panel.setLayout(new BorderLayout());
+			panel.add(new JLabel(entry.getKey() + "     "), BorderLayout.CENTER);
+			panel.add(new JLabel(String.format("%.4f", entry.getValue())), BorderLayout.EAST);
+			rules_panel.add(panel);
 		}
-		scroll_rules_panel = new JScrollPane(rules_panel);
+		return new JScrollPane(rules_panel);
 	}
 
-	public JTextArea myTextArea(String text) {
-		JTextArea t = new JTextArea(text);
-		t.setForeground(new JPanel().getBackground());
-		t.setBackground(new JPanel().getBackground());
-		t.setLineWrap(true);
-		t.setWrapStyleWord(true);
-		t.setEditable(false);
-		return t;
+	private JPanel createHelpPanel(int number) {
+		JPanel panel = new JPanel();
+		panel.setBorder(new EmptyBorder(20, 10, 10, 10));
+		panel.setLayout(new BorderLayout());
+		panel.add(helpButton(number), BorderLayout.WEST);
+		JLabel label = new JLabel("  Falsos Positivos (FP): ");
+		label.setFont(font_labels);
+		panel.add(label, BorderLayout.CENTER);
+		JTextArea text = myTextArea(Utils.newLine
+				+ "Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam.");
+		text.setFont(font_text);
+		panel.add(text, BorderLayout.SOUTH);
+		if (number == 1) {
+			help_label_fp = label;
+			help_text_fp = text;
+		} else {
+			help_label_fn = label;
+			help_text_fn = text;
+		}
+		return panel;
+	}
+
+	private JTextArea myTextArea(String text) {
+		JTextArea textarea = new JTextArea(text);
+		textarea.setForeground(new JPanel().getBackground());
+		textarea.setBackground(new JPanel().getBackground());
+		textarea.setLineWrap(true);
+		textarea.setWrapStyleWord(true);
+		textarea.setEditable(false);
+		return textarea;
+	}
+
+	private JButton helpButton(int number) {
+		JButton button = new JButton(new ImageIcon("./src/antiSpamFilter/frames/icons/help_button.png"));
+		button.setMargin(new Insets(0, 0, 0, 0));
+		button.setBorderPainted(false);
+		button.setContentAreaFilled(false);
+		button.setFocusPainted(false);
+		button.setOpaque(false);
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				appearText(number == 1 ? help_text_fp : help_text_fn);
+			}
+		});
+		return button;
 	}
 
 	private void appearText(JTextArea text) {
@@ -214,22 +222,6 @@ public class AfinacaoAutomatica {
 			text.setForeground(new JPanel().getBackground());
 		else
 			text.setForeground(Color.BLACK);
-	}
-
-	public JButton helpButton(int number) {
-		JButton b = new JButton(new ImageIcon("./src/antiSpamFilter/frames/icons/help_button.png"));
-		b.setMargin(new Insets(0, 0, 0, 0));
-		b.setBorderPainted(false);
-		b.setContentAreaFilled(false);
-		b.setFocusPainted(false);
-		b.setOpaque(false);
-		b.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				appearText(number == 1 ? help_text_1 : help_text_2);
-			}
-		});
-		return b;
 	}
 
 	public void visible(boolean open) {
