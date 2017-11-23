@@ -53,7 +53,7 @@ public class Utils {
 
 	public static void rules() {
 		String file_path = config_files_path[0];
-		if (!file_path.equals("?")) {
+		if (rules.isEmpty() && !file_path.equals("?")) {
 			String[] list = lines(file_path);
 			for (String s : list) {
 				String[] ss = s.split(" ");
@@ -67,35 +67,35 @@ public class Utils {
 						System.exit(1);
 					}
 			}
-		} else {
-			JOptionPane.showMessageDialog(new JFrame(), "Não devias estar aqui - Utils.java line 71");
 		}
 	}
 
 	public static void spamLog() {
 		String file_path = config_files_path[1];
-		if (!file_path.equals("?")) {
+		if (spam.isEmpty() && !file_path.equals("?")) {
 			String[] list = lines(file_path);
 			for (String s : list) {
 				String[] ss = s.split("\t");
 				spam.add(Arrays.asList(Arrays.copyOfRange(ss, 1, ss.length)));
 			}
-		} else {
-			JOptionPane.showMessageDialog(new JFrame(), "Não devias estar aqui - Utils.java line 84");
 		}
 	}
 
 	public static void hamLog() {
 		String file_path = config_files_path[2];
-		if (!file_path.equals("?")) {
+		if (ham.isEmpty() && !file_path.equals("?")) {
 			String[] list = lines(file_path);
 			for (String s : list) {
 				String[] ss = s.split("\t");
 				ham.add(Arrays.asList(Arrays.copyOfRange(ss, 1, ss.length)));
 			}
-		} else {
-			JOptionPane.showMessageDialog(new JFrame(), "Não devias estar aqui - Utils.java line 97");
 		}
+	}
+
+	public static void readConfigFiles() {
+		rules();
+		spamLog();
+		hamLog();
 	}
 
 	/**
@@ -117,6 +117,11 @@ public class Utils {
 	}
 
 	public static int falsePositives() {
+		if (ham.isEmpty()) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"O ficheiro ham.log não está configurado, não posso continuar...");
+			System.exit(1);
+		}
 		int total = 0;
 		for (List<String> var : ham) {
 			double sum = 0;
@@ -124,7 +129,7 @@ public class Utils {
 				if (rules.get(key) != null)
 					sum += rules.get(key);
 				else
-					JOptionPane.showMessageDialog(new JFrame(), "FP - KEY ERROR");
+					JOptionPane.showMessageDialog(new JFrame(), "FP - KEY ERROR -> " + key);
 			if (sum < 5.0)
 				total++;
 		}
@@ -132,6 +137,11 @@ public class Utils {
 	}
 
 	public static int falseNegatives() {
+		if (spam.isEmpty()) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"O ficheiro spam.log não está configurado, não posso continuar...");
+			System.exit(1);
+		}
 		int total = 0;
 		for (List<String> var : spam) {
 			double sum = 0;
@@ -176,13 +186,7 @@ public class Utils {
 
 	}
 
-	public static class WindowClose implements WindowListener {
-
-		private boolean home_page;
-
-		public WindowClose(boolean home_page) {
-			this.home_page = home_page;
-		}
+	public static class HomePageClose implements WindowListener {
 
 		@Override
 		public void windowOpened(WindowEvent e) {
@@ -190,10 +194,40 @@ public class Utils {
 
 		@Override
 		public void windowClosing(WindowEvent e) {
-			if (home_page)
-				saveConfigFilesPath();
-			else
-				AfinacaoAutomatica.backHome();
+			saveConfigFilesPath();
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+		}
+
+		@Override
+		public void windowActivated(WindowEvent e) {
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+		}
+
+	}
+
+	public static class AfinacaoAutomaticaClose implements WindowListener {
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			AfinacaoAutomatica.backHome();
 		}
 
 		@Override

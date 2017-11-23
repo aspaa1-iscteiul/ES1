@@ -29,15 +29,17 @@ public class AfinacaoAutomatica {
 	private static JFrame frame;
 	private JPanel help_panel_1, help_panel_2;
 	private JScrollPane scroll_rules_panel;
-	private JTextArea help_text1, help_text2;
+	private JTextArea help_text_1, help_text_2;
 	private JButton generate, save, cancel;
 	private JLabel help_label_1, help_label_2;
+	private Font font_labels_1 = new Font("Helvetica", Font.PLAIN, 18),
+			font_labels_2 = new Font("Helvetica", Font.PLAIN, 14), font_text = new Font("Helvetica", Font.PLAIN, 12);
 
 	public AfinacaoAutomatica() {
 		frame = new JFrame();
 		frame.setTitle("Afinação automática do filtro anti-spam");
 
-		Utils.rules();
+		Utils.readConfigFiles();
 
 		addContents();
 
@@ -69,7 +71,7 @@ public class AfinacaoAutomatica {
 		pp.setLayout(new BorderLayout());
 
 		JLabel n = new JLabel("Configuração do vetor de pesos");
-		n.setFont(new Font("Arial", Font.BOLD, 13));
+		n.setFont(font_labels_1);
 		pp.add(n, BorderLayout.NORTH);
 
 		createRulesPanel();
@@ -87,7 +89,9 @@ public class AfinacaoAutomatica {
 		JPanel results_panel = new JPanel();
 		results_panel.setLayout(new BorderLayout());
 
-		results_panel.add(new JLabel("Para a configuração gerada, obtemos:"), BorderLayout.NORTH);
+		JLabel l = new JLabel("Para a configuração gerada, obtemos:");
+		l.setFont(font_labels_1);
+		results_panel.add(l, BorderLayout.NORTH);
 
 		JPanel help_panels = new JPanel();
 		help_panels.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -96,38 +100,30 @@ public class AfinacaoAutomatica {
 		help_panel_1 = new JPanel();
 		help_panel_1.setBorder(new EmptyBorder(20, 10, 10, 10));
 		help_panel_1.setLayout(new BorderLayout());
-		JButton help1 = helpButton();
-		help1.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				appearText(help_text1);
-			}
-		});
+		JButton help1 = helpButton(1);
 		help_panel_1.add(help1, BorderLayout.WEST);
 		help_label_1 = new JLabel("  Falsos Positivos (FP): ");
+		help_label_1.setFont(font_labels_2);
 		help_panel_1.add(help_label_1, BorderLayout.CENTER);
-		help_text1 = myTextArea(Utils.newLine
+		help_text_1 = myTextArea(Utils.newLine
 				+ "Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam.                   ");
-		help_panel_1.add(help_text1, BorderLayout.SOUTH);
+		help_text_1.setFont(font_text);
+		help_panel_1.add(help_text_1, BorderLayout.SOUTH);
 
 		help_panels.add(help_panel_1);
 
 		help_panel_2 = new JPanel();
 		help_panel_2.setBorder(new EmptyBorder(20, 10, 10, 10));
 		help_panel_2.setLayout(new BorderLayout());
-		JButton help2 = helpButton();
-		help2.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				appearText(help_text2);
-			}
-		});
+		JButton help2 = helpButton(2);
 		help_panel_2.add(help2, BorderLayout.WEST);
 		help_label_2 = new JLabel("  Falsos Negativos (FN): FN/Total");
+		help_label_2.setFont(font_labels_2);
 		help_panel_2.add(help_label_2, BorderLayout.CENTER);
-		help_text2 = myTextArea(Utils.newLine
+		help_text_2 = myTextArea(Utils.newLine
 				+ "Um Falso Negativo (FN) ocorre quando uma mensagem spam é classificada como mensagem legítima.");
-		help_panel_2.add(help_text2, BorderLayout.SOUTH);
+		help_text_2.setFont(font_text);
+		help_panel_2.add(help_text_2, BorderLayout.SOUTH);
 
 		help_panels.add(help_panel_2);
 
@@ -176,7 +172,7 @@ public class AfinacaoAutomatica {
 				backHome();
 			}
 		});
-		frame.addWindowListener(new Utils.WindowClose(false));
+		frame.addWindowListener(new Utils.AfinacaoAutomaticaClose());
 		buttons_panel.add(generate);
 		buttons_panel.add(save);
 		buttons_panel.add(cancel);
@@ -213,20 +209,26 @@ public class AfinacaoAutomatica {
 		return t;
 	}
 
-	public void appearText(JTextArea text) {
+	private void appearText(JTextArea text) {
 		if (text.getForeground().equals(Color.BLACK))
 			text.setForeground(new JPanel().getBackground());
 		else
 			text.setForeground(Color.BLACK);
 	}
 
-	public JButton helpButton() {
+	public JButton helpButton(int number) {
 		JButton b = new JButton(new ImageIcon("./src/antiSpamFilter/frames/icons/help_button.png"));
 		b.setMargin(new Insets(0, 0, 0, 0));
 		b.setBorderPainted(false);
 		b.setContentAreaFilled(false);
 		b.setFocusPainted(false);
 		b.setOpaque(false);
+		b.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				appearText(number == 1 ? help_text_1 : help_text_2);
+			}
+		});
 		return b;
 	}
 

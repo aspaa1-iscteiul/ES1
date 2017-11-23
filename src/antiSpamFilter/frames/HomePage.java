@@ -9,7 +9,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -83,9 +82,9 @@ public class HomePage {
 						config = true;
 					}
 				}
-				Utils.rules();
-				Utils.hamLog();
-				Utils.spamLog();
+
+				Utils.readConfigFiles();
+
 				/*
 				 * Abre uma janela JOptionPane.showConfirmDialog que permite ao
 				 * utilizador escolher manter a configuração dos ficheiros
@@ -180,19 +179,15 @@ public class HomePage {
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				closeWindow();
+				frame.dispose();
 			}
 		});
-		frame.addWindowListener(new Utils.WindowClose(true));
+		frame.addWindowListener(new Utils.HomePageClose());
 		buttons_panel.add(select);
 		buttons_panel.add(cancel);
 		panel.add(buttons_panel, BorderLayout.SOUTH);
 
 		frame.add(panel);
-	}
-
-	private void closeWindow() {
-		frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 	}
 
 	/**
