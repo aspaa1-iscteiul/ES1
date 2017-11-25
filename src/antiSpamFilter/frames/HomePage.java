@@ -224,14 +224,16 @@ public class HomePage {
 			Utils.readConfigFiles();
 
 		} else if (checkConfigFiles()) {
+			visible(false);
 			Utils.saveConfigFilesPath();
 			if (!Utils.readConfigFiles())
 				return;
 			if (index == 3) {
 				AfinacaoAutomatica.launch();
-				visible(false);
 			} else if (index == 4) {
+				visible(true); // TODO A realizar nos próximos sprints
 			} else if (index == 5) {
+				visible(true); // TODO A realizar nos próximos sprints
 			}
 		}
 	}

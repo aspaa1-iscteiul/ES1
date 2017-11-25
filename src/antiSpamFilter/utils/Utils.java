@@ -93,15 +93,20 @@ public class Utils {
 	}
 
 	/**
-	 * Mapeia as regras que se verificam em cada mensagem spam numa ArrayList de
-	 * Listas de Strings. Retorna 'true' caso o ficheiro spam.log esteja
-	 * configurado e não esteja vazio e 'false' caso contrário.
+	 * Mapeia as regras que se verificam em cada mensagem ham/spam numa
+	 * ArrayList de Listas de Strings. Retorna 'true' caso o ficheiro
+	 * ham/spam.log esteja configurado e não esteja vazio e 'false' caso
+	 * contrário.
 	 * 
+	 * @param hamLog
+	 *            Assume o valor 'true' caso se pretenda correr a função para o
+	 *            cenário ham e 'false' caso se pretenda correr a função para o
+	 *            cenário spam
 	 * @return correuTudoBem
 	 */
-	public static boolean log(boolean b) {
-		String file_path = config_files_path[b ? 2 : 1];
-		ArrayList<String[]> var = new ArrayList<String[]>(b ? hamLogRules : spamLogRules);
+	public static boolean log(boolean hamLog) {
+		String file_path = config_files_path[hamLog ? 2 : 1];
+		ArrayList<String[]> var = new ArrayList<String[]>(hamLog ? hamLogRules : spamLogRules);
 		if (!file_path.equals("?")) {
 			var.clear();
 			ArrayList<String> list = lines(file_path);
@@ -111,15 +116,16 @@ public class Utils {
 				String[] ss = s.split("\t");
 				var.add(Arrays.copyOfRange(ss, 1, ss.length));
 			}
-			if (b)
+			if (hamLog)
 				hamLogRules = new ArrayList<String[]>(var);
 			else
 				spamLogRules = new ArrayList<String[]>(var);
 			if (var.isEmpty()) {
 				JOptionPane.showMessageDialog(new JFrame(),
-						"O ficheiro " + (b ? "ham" : "spam") + ".log selecionado está vazio. Por favor, reconfigure-o",
+						"O ficheiro " + (hamLog ? "ham" : "spam")
+								+ ".log selecionado está vazio. Por favor, reconfigure-o",
 						"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
-				config_files_path[b ? 2 : 1] = "?";
+				config_files_path[hamLog ? 2 : 1] = "?";
 				return false;
 			}
 			return true;
@@ -159,14 +165,20 @@ public class Utils {
 	}
 
 	/**
-	 * Calcula o número de Falsos Positivos no domínio. O número de FP é
-	 * calculado percorrendo o ficheiro ham.log e incrementando um contador de
-	 * cada vez que o somatório os pesos das regras presentes numa mensagem
-	 * totalize um valor superior ao threshold estabelecido (=5).
+	 * Calcula o número de Falsos Positivos/Falsos Negativos no domínio. O
+	 * número de FP/FN é calculado percorrendo o ficheiro ham.log/spam.log e
+	 * incrementando um contador de cada vez que o somatório os pesos das regras
+	 * presentes numa mensagem totalize um valor superior/inferior ao threshold
+	 * estabelecido (=5).
 	 * 
-	 * @return Número de falsos positivos
+	 * @param fp
+	 *            Assume o valor 'true' caso se pretenda correr a função para o
+	 *            cenário Falsos Positivos e 'false' caso se pretenda correr a
+	 *            função para o cenário Falsos Negativos
+	 * 
+	 * @return correuTudoBem
 	 */
-	public static int falses(boolean b) {
+	public static int falses(boolean fp) {
 		if (hamLogRules.isEmpty() || spamLogRules.isEmpty()) {
 			JOptionPane.showMessageDialog(new JFrame(), "O ficheiro " + (hamLogRules.isEmpty() ? "ham" : "spam")
 					+ ".log não está configurado, não posso continuar...");
@@ -174,7 +186,7 @@ public class Utils {
 			return 0;
 		}
 		int total = 0;
-		ArrayList<String[]> v = new ArrayList<String[]>(b ? hamLogRules : spamLogRules);
+		ArrayList<String[]> v = new ArrayList<String[]>(fp ? hamLogRules : spamLogRules);
 		for (String[] msg : v) {
 			double sum = 0;
 			for (String rule : msg)
@@ -182,7 +194,7 @@ public class Utils {
 					sum += rules_weights.get(rule);
 				} catch (NullPointerException e) {
 				}
-			if ((sum > 5.0 && b) || (sum < 5.0 && !b))
+			if ((sum > 5.0 && fp) || (sum < 5.0 && !fp))
 				total++;
 		}
 		return total;
