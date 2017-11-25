@@ -280,17 +280,31 @@ public class AfinacaoAutomatica {
 		return button;
 	}
 
-	private void appearText(JTextArea text) {
-		if (text.getForeground().equals(Color.BLACK))
-			text.setForeground(new JPanel().getBackground());
+	/**
+	 * Caso o texto informativo esteja visível, camufla-o com o background. Caso
+	 * contrário, torna-o visível.
+	 * 
+	 * @param infoText
+	 */
+	private void appearText(JTextArea infoText) {
+		if (infoText.getForeground().equals(Color.BLACK))
+			infoText.setForeground(new JPanel().getBackground());
 		else
-			text.setForeground(Color.BLACK);
+			infoText.setForeground(Color.BLACK);
 	}
 
-	public void visible(boolean open) {
-		afinacaoAuto.setVisible(open);
+	/**
+	 * Define a visibilidade da frame de Afinação Automática
+	 * 
+	 * @param setVisible
+	 */
+	public void visible(boolean setVisible) {
+		afinacaoAuto.setVisible(setVisible);
 	}
 
+	/**
+	 * Lança uma nova janela de Afinação Automática
+	 */
 	public static void launch() {
 		new AfinacaoAutomatica().visible(true);
 	}
