@@ -90,7 +90,7 @@ public class UtilsTest {
 
 		for (int i = 0; i < all.size(); i++) {
 			for (int j = 0; j < all.get(i).length; j++) {
-				assertEquals(Utils.spam.get(i)[j], all.get(i)[j], "ok");
+				assertEquals(Utils.spamLogRules.get(i)[j], all.get(i)[j], "ok");
 			}
 		}
 

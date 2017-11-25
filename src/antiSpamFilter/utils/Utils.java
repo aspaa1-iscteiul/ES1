@@ -15,11 +15,21 @@ public class Utils {
 
 	public static String[] config_files_path = { "?", "?", "?" };
 	public static File fileConfigs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
-	public static ArrayList<String[]> ham = new ArrayList<String[]>(), spam = new ArrayList<String[]>();
-	public static HashMap<String, Double> rules = new HashMap<String, Double>();
+	public static ArrayList<String[]> hamLogRules = new ArrayList<String[]>(), spamLogRules = new ArrayList<String[]>();
+	public static HashMap<String, Double> rules_weights = new HashMap<String, Double>();
 
+	// Garante a utilização do caractere de mudança de linha, independentemente
+	// do Sistema Operativo em que a aplicação corre
 	public static String newLine = System.getProperty("line.separator");
 
+	/**
+	 * Retorna o conteúdo, divido por linhas, do ficheiro cujo path é passado
+	 * como argumento .
+	 * 
+	 * @param file_path
+	 *            Path do ficheiro cujo conteúdo queremos obter
+	 * @return ArrayList com as linhas do ficheiro
+	 */
 	public static ArrayList<String> lines(String file_path) {
 		ArrayList<String> lines = new ArrayList<>();
 		try {
@@ -30,7 +40,8 @@ public class Utils {
 					lines.add(line);
 			}
 			scn.close();
-		} catch (FileNotFoundException e) { // if is not a file
+			// Não encontrou o ficheiro na diretoria indicada
+		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"O ficheiro " + file_path + " já não se encontra na diretoria indicada",
 					"Configuração dos ficheiros", JOptionPane.WARNING_MESSAGE);
@@ -39,20 +50,29 @@ public class Utils {
 		return lines;
 	}
 
+	/**
+	 * Mapeia as regras e pesos (presentes no ficheiro rules.cf configurado) num
+	 * HashMap<String, Double>. Retorna 'true' caso o ficheiro rules.cf esteja
+	 * configurado e não esteja vazio e 'false' caso contrário.
+	 * 
+	 * @return correuTudoBem
+	 */
 	public static boolean rules() {
 		String file_path = config_files_path[0];
 		if (!file_path.equals("?")) {
-			rules.clear();
+			rules_weights.clear();
 			ArrayList<String> list = lines(file_path);
 			if (list == null)
 				return false;
 			for (String s : list) {
 				String[] ss = s.split(" ");
+				// O ficheiro rules.cf não tem pesos guardados
 				if (ss.length < 2)
-					rules.put(s, ((Math.random() * 10) - 5));
+					rules_weights.put(s, ((Math.random() * 10) - 5));
+				// O ficheiro rules.cf tem pesos atribuídos às regras
 				else
 					try {
-						rules.put(ss[0], Double.valueOf(ss[1]));
+						rules_weights.put(ss[0], Double.valueOf(ss[1]));
 					} catch (NumberFormatException e) {
 						JOptionPane.showMessageDialog(new JFrame(), "Ficheiro rules.cf tem um formato inválido",
 								"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
@@ -60,7 +80,7 @@ public class Utils {
 						return false;
 					}
 			}
-			if (rules.isEmpty()) {
+			if (rules_weights.isEmpty()) {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"O ficheiro rules.cf selecionados está vazio. Por favor, reconfigure-o",
 						"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
@@ -72,9 +92,16 @@ public class Utils {
 		return false;
 	}
 
+	/**
+	 * Mapeia as regras que se verificam em cada mensagem spam numa ArrayList de
+	 * Listas de Strings. Retorna 'true' caso o ficheiro spam.log esteja
+	 * configurado e não esteja vazio e 'false' caso contrário.
+	 * 
+	 * @return correuTudoBem
+	 */
 	public static boolean log(boolean b) {
-		String file_path = config_files_path[b ? 1 : 2];
-		ArrayList<String[]> var = new ArrayList<String[]>(b ? spam : ham);
+		String file_path = config_files_path[b ? 2 : 1];
+		ArrayList<String[]> var = new ArrayList<String[]>(b ? hamLogRules : spamLogRules);
 		if (!file_path.equals("?")) {
 			var.clear();
 			ArrayList<String> list = lines(file_path);
@@ -85,15 +112,14 @@ public class Utils {
 				var.add(Arrays.copyOfRange(ss, 1, ss.length));
 			}
 			if (b)
-				spam = new ArrayList<String[]>(var);
+				hamLogRules = new ArrayList<String[]>(var);
 			else
-				ham = new ArrayList<String[]>(var);
+				spamLogRules = new ArrayList<String[]>(var);
 			if (var.isEmpty()) {
 				JOptionPane.showMessageDialog(new JFrame(),
-						"O ficheiro spam.log selecionado está vazio. Por favor, reconfigure-o",
+						"O ficheiro " + (b ? "ham" : "spam") + ".log selecionado está vazio. Por favor, reconfigure-o",
 						"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
-				config_files_path[1] = "?";
-
+				config_files_path[b ? 2 : 1] = "?";
 				return false;
 			}
 			return true;
@@ -101,6 +127,13 @@ public class Utils {
 		return false;
 	}
 
+	/**
+	 * Executa, por invocação, o mapeamento das regras, mensagens ham e
+	 * mensagens spam nas respetivas estruturas de dados. Caso todos tenham
+	 * decorrido sem problemas, retorna 'true'. Caso contrário, retorna 'false'.
+	 * 
+	 * @return correuTudoBem
+	 */
 	public static boolean readConfigFiles() {
 		return rules() && log(true) && log(false);
 	}
@@ -124,25 +157,26 @@ public class Utils {
 	}
 
 	/**
+	 * Calcula o número de Falsos Positivos no domínio. O número de FP é
+	 * calculado percorrendo o ficheiro ham.log e incrementando um contador de
+	 * cada vez que o somatório os pesos das regras presentes numa mensagem
+	 * totalize um valor superior ao threshold estabelecido (=5).
 	 * 
-	 * @param b
-	 *            true se for falsos Positivos
-	 * @return
+	 * @return Número de falsos positivos
 	 */
 	public static int falses(boolean b) {
-		if (ham.isEmpty() || spam.isEmpty()) {
-			String var = ham.isEmpty() ? "ham" : "spam";
-			JOptionPane.showMessageDialog(new JFrame(),
-					"O ficheiro " + var + ".log não está configurado, não posso continuar...");
+		if (hamLogRules.isEmpty() || spamLogRules.isEmpty()) {
+			JOptionPane.showMessageDialog(new JFrame(), "O ficheiro " + (hamLogRules.isEmpty() ? "ham" : "spam")
+					+ ".log não está configurado, não posso continuar...");
 			config_files_path[2] = "?";
 		}
 		int total = 0;
-		ArrayList<String[]> v = new ArrayList<String[]>(b ? spam : ham);
-		for (String[] var : v) {
+		ArrayList<String[]> v = new ArrayList<String[]>(b ? hamLogRules : spamLogRules);
+		for (String[] msg : v) {
 			double sum = 0;
-			for (String key : var)
+			for (String rule : msg)
 				try {
-					sum += rules.get(key);
+					sum += rules_weights.get(rule);
 				} catch (NullPointerException e) {
 				}
 			if ((sum > 5.0 && b) || (sum < 5.0 && !b))
