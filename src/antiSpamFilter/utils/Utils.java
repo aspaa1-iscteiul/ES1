@@ -13,6 +13,8 @@ import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import antiSpamFilter.frames.HomePage;
+
 public class Utils {
 
 	public static String[] config_files_path = { "?", "?", "?" };
@@ -34,15 +36,16 @@ public class Utils {
 			scn.close();
 		} catch (FileNotFoundException e) { // if is not a file
 			JOptionPane.showMessageDialog(new JFrame(),
-					"O ficheiro " + file_path + " já não está na diretoria indicada");
+					"O ficheiro " + file_path + " já não se encontra na diretoria indicada");
 			System.exit(1);
 		}
 		return lines;
 	}
 
-	public static void rules() {
+	public static boolean rules() {
 		String file_path = config_files_path[0];
-		if (rules.isEmpty() && !file_path.equals("?")) {
+		if (!file_path.equals("?")) {
+			rules.clear();
 			ArrayList<String> list = lines(file_path);
 			for (String s : list) {
 				String[] ss = s.split(" ");
@@ -56,35 +59,59 @@ public class Utils {
 						System.exit(1);
 					}
 			}
+			if (rules.isEmpty()) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"O ficheiro rules.cf não está configurado, não posso continuar...");
+				config_files_path[0] = "?";
+				return false;
+			}
+			return true;
 		}
+		return false;
 	}
 
-	public static void spamLog() {
+	public static boolean spamLog() {
 		String file_path = config_files_path[1];
-		if (spam.isEmpty() && !file_path.equals("?")) {
+		if (!file_path.equals("?")) {
+			spam.clear();
 			ArrayList<String> list = lines(file_path);
 			for (String s : list) {
 				String[] ss = s.split("\t");
 				spam.add(Arrays.asList(Arrays.copyOfRange(ss, 1, ss.length)));
 			}
+			if (spam.isEmpty()) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"O ficheiro spam.log não está configurado, não posso continuar...");
+				config_files_path[1] = "?";
+				return false;
+			}
+			return true;
 		}
+		return false;
 	}
 
-	public static void hamLog() {
+	public static boolean hamLog() {
 		String file_path = config_files_path[2];
-		if (ham.isEmpty() && !file_path.equals("?")) {
+		if (!file_path.equals("?")) {
+			ham.clear();
 			ArrayList<String> list = lines(file_path);
 			for (String s : list) {
 				String[] ss = s.split("\t");
 				ham.add(Arrays.asList(Arrays.copyOfRange(ss, 1, ss.length)));
 			}
+			if (ham.isEmpty()) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"O ficheiro ham.log não está configurado, não posso continuar...");
+				config_files_path[2] = "?";
+				return false;
+			}
+			return true;
 		}
+		return false;
 	}
 
-	public static void readConfigFiles() {
-		rules();
-		spamLog();
-		hamLog();
+	public static boolean readConfigFiles() {
+		return rules() && spamLog() && hamLog();
 	}
 
 	/**
@@ -109,7 +136,7 @@ public class Utils {
 		if (ham.isEmpty()) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"O ficheiro ham.log não está configurado, não posso continuar...");
-			System.exit(1);
+			config_files_path[2] = "?";
 		}
 		int total = 0;
 		for (List<String> var : ham) {
@@ -129,17 +156,16 @@ public class Utils {
 		if (spam.isEmpty()) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"O ficheiro spam.log não está configurado, não posso continuar...");
-			System.exit(1);
+			config_files_path[1] = "?";
 		}
 		int total = 0;
 		for (List<String> var : spam) {
 			double sum = 0;
-			for (String key : var) {
+			for (String key : var)
 				try {
 					sum += rules.get(key);
 				} catch (NullPointerException e) {
 				}
-			}
 			if (sum > 5.0)
 				total++;
 		}

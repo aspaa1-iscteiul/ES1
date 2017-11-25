@@ -84,7 +84,7 @@ public class HomePage {
 					}
 				}
 
-				Utils.readConfigFiles();
+				// Utils.readConfigFiles(); TODO clear
 
 				/*
 				 * Abre uma janela JOptionPane.showConfirmDialog que permite ao
@@ -226,6 +226,8 @@ public class HomePage {
 
 		} else if (checkConfigFiles()) {
 			Utils.saveConfigFilesPath();
+			if (!Utils.readConfigFiles())
+				return;
 			if (index == 3) {
 				AfinacaoAutomatica.launch();
 				visible(false);

@@ -30,6 +30,7 @@ public class AfinacaoAutomatica {
 	private static JFrame frame;
 	private JTextArea help_text_fp, help_text_fn;
 	private JLabel help_label_fp, help_label_fn;
+	private JScrollPane scroll_rules_panel;
 	private Font font_titles = new Font("Helvetica", Font.PLAIN, 18),
 			font_labels = new Font("Helvetica", Font.PLAIN, 14), font_text = new Font("Helvetica", Font.PLAIN, 12);
 
@@ -76,7 +77,7 @@ public class AfinacaoAutomatica {
 		title.setFont(font_titles);
 		center_panel.add(title, BorderLayout.NORTH);
 
-		JScrollPane scroll_rules_panel = createRulesPanel();
+		createRulesPanel();
 		center_panel.add(scroll_rules_panel, BorderLayout.CENTER);
 		panel.add(center_panel, BorderLayout.CENTER);
 
@@ -156,7 +157,7 @@ public class AfinacaoAutomatica {
 		HomePage.visible(true);
 	}
 
-	private JScrollPane createRulesPanel() {
+	private void createRulesPanel() {
 		JPanel rules_panel = new JPanel();
 		rules_panel.setLayout(new GridLayout(0, 1));
 		for (HashMap.Entry<String, Double> entry : Utils.rules.entrySet()) {
@@ -166,7 +167,7 @@ public class AfinacaoAutomatica {
 			panel.add(new JLabel(String.format("%.4f", entry.getValue())), BorderLayout.EAST);
 			rules_panel.add(panel);
 		}
-		return new JScrollPane(rules_panel);
+		scroll_rules_panel = new JScrollPane(rules_panel);
 	}
 
 	private JPanel createHelpPanel(int number) {
