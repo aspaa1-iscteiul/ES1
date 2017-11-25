@@ -84,8 +84,6 @@ public class HomePage {
 					}
 				}
 
-				// Utils.readConfigFiles(); TODO clear
-
 				/*
 				 * Abre uma janela JOptionPane.showConfirmDialog que permite ao
 				 * utilizador escolher manter a configuração dos ficheiros

@@ -36,7 +36,8 @@ public class Utils {
 			scn.close();
 		} catch (FileNotFoundException e) { // if is not a file
 			JOptionPane.showMessageDialog(new JFrame(),
-					"O ficheiro " + file_path + " já não se encontra na diretoria indicada");
+					"O ficheiro " + file_path + " já não se encontra na diretoria indicada",
+					"Configuração dos ficheiros", JOptionPane.WARNING_MESSAGE);
 			System.exit(1);
 		}
 		return lines;
@@ -55,13 +56,15 @@ public class Utils {
 					try {
 						rules.put(ss[0], Double.valueOf(ss[1]));
 					} catch (NumberFormatException e) {
-						JOptionPane.showMessageDialog(new JFrame(), "Ficheiro rules.cf tem um formato inválido");
+						JOptionPane.showMessageDialog(new JFrame(), "Ficheiro rules.cf tem um formato inválido",
+								"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
 						System.exit(1);
 					}
 			}
 			if (rules.isEmpty()) {
 				JOptionPane.showMessageDialog(new JFrame(),
-						"O ficheiro rules.cf não está configurado, não posso continuar...");
+						"O ficheiro rules.cf selecionados está vazio. Por favor, reconfigure-o",
+						"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
 				config_files_path[0] = "?";
 				return false;
 			}
@@ -81,7 +84,8 @@ public class Utils {
 			}
 			if (spam.isEmpty()) {
 				JOptionPane.showMessageDialog(new JFrame(),
-						"O ficheiro spam.log não está configurado, não posso continuar...");
+						"O ficheiro spam.log selecionado está vazio. Por favor, reconfigure-o",
+						"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
 				config_files_path[1] = "?";
 				return false;
 			}
@@ -101,7 +105,8 @@ public class Utils {
 			}
 			if (ham.isEmpty()) {
 				JOptionPane.showMessageDialog(new JFrame(),
-						"O ficheiro ham.log não está configurado, não posso continuar...");
+						"O ficheiro ham.log selecionado está vazio. Por favor, reconfigure-o",
+						"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
 				config_files_path[2] = "?";
 				return false;
 			}

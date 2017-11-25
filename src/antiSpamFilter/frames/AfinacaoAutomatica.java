@@ -129,7 +129,8 @@ public class AfinacaoAutomatica {
 						w.write(entry.getKey() + " " + entry.getValue().toString() + Utils.newLine);
 					w.close();
 				} catch (IOException e1) {
-					JOptionPane.showMessageDialog(frame, "O ficheiro rules.cf já não está na diretoria indicada");
+					JOptionPane.showMessageDialog(frame, "O ficheiro rules.cf já não está na diretoria indicada",
+							"Configuração dos ficheiros", JOptionPane.WARNING_MESSAGE);
 					System.exit(1);
 				}
 				backHome();
@@ -175,18 +176,21 @@ public class AfinacaoAutomatica {
 		panel.setBorder(new EmptyBorder(20, 10, 10, 10));
 		panel.setLayout(new BorderLayout());
 		panel.add(helpButton(number), BorderLayout.WEST);
-		JLabel label = new JLabel("  Falsos Positivos (FP): ");
+		JLabel label = new JLabel();
 		label.setFont(font_labels);
 		panel.add(label, BorderLayout.CENTER);
-		JTextArea text = myTextArea(Utils.newLine
-				+ "Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam.");
+		JTextArea text = myTextArea(" ");
 		text.setFont(font_text);
 		panel.add(text, BorderLayout.SOUTH);
 		if (number == 1) {
 			help_label_fp = label;
+			text.setText(Utils.newLine
+					+ "Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam.");
 			help_text_fp = text;
 		} else {
 			help_label_fn = label;
+			text.setText(Utils.newLine
+					+ "Um Falso Negativo (FN) ocorre quando uma mensagem spam é classificada como mensagem legítima.");
 			help_text_fn = text;
 		}
 		return panel;
