@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -33,11 +32,11 @@ import antiSpamFilter.utils.Utils;
 
 public class HomePage {
 
-	private static JFrame frame;
-	private JList<String> list;
+	private static JFrame homePage;
+	private JList<String> menuList;
 	private JButton select, cancel;
 	private Map<String, ImageIcon> images;
-	private String[] options = { "Selecionar ficheiro rules.cf", "Selecionar ficheiro spam.log",
+	private String[] menuOptions = { "Selecionar ficheiro rules.cf", "Selecionar ficheiro spam.log",
 			"Selecionar ficheiro ham.log", "Geração automática de uma configuração",
 			"Afinação manual do filtro anti-spam", "Otimização do filtro anti-spam" },
 			config_files_names = { "rules.cf", "spam.log", "ham.log" };
@@ -46,8 +45,8 @@ public class HomePage {
 	 * Construtor da Home Page
 	 */
 	public HomePage() {
-		frame = new JFrame();
-		frame.setTitle("Home Page");
+		homePage = new JFrame();
+		homePage.setTitle("Home Page");
 
 		configFiles();
 
@@ -56,8 +55,8 @@ public class HomePage {
 		/*
 		 * Define o tamanho base da janela e impede que esta seja redimensionada
 		 */
-		frame.setSize(450, 450);
-		frame.setResizable(false);
+		homePage.setSize(450, 450);
+		homePage.setResizable(false);
 	}
 
 	/**
@@ -67,10 +66,15 @@ public class HomePage {
 	 */
 	private void configFiles() {
 		try {
-			if (!Utils.configs.createNewFile()) {
-				Scanner scn = new Scanner(Utils.configs);
+			/*
+			 * O ficheiro onde são guardadas as configurações dos ficheiros já
+			 * existe
+			 */
+			if (!Utils.fileConfigs.createNewFile()) {
+				Scanner scn = new Scanner(Utils.fileConfigs);
 				String[] line = scn.nextLine().split("<");
 				String message = "";
+				// TODO Rename variable 'config'
 				boolean config = false;
 				/*
 				 * Recupera os paths dos ficheiros configurados durante a última
@@ -91,7 +95,7 @@ public class HomePage {
 				 */
 
 				if (config) {
-					int n = (JOptionPane.showConfirmDialog(frame,
+					int n = (JOptionPane.showConfirmDialog(homePage,
 							"Os seguintes ficheiros encontram-se configurados:" + Utils.newLine + Utils.newLine
 									+ message + Utils.newLine + Utils.newLine
 									+ "Quer manter estes ficheiros de configuração?" + Utils.newLine + Utils.newLine));
@@ -108,9 +112,9 @@ public class HomePage {
 				scn.close();
 			} else {
 				/*
-				 * Caso o ficheiro onde são guardados os paths não exista,
-				 * cria-o com os valores por defeito para a falta de
-				 * configurações (?)
+				 * Caso o ficheiro onde são guardados os paths ainda não exista,
+				 * criamo-lo com os valores por defeito para a falta de
+				 * configurações (i.e., "?")
 				 */
 				Utils.saveConfigFilesPath();
 			}
@@ -127,37 +131,38 @@ public class HomePage {
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-		JLabel label = new JLabel("Menu");
-		label.setFont(new Font("Arial", Font.BOLD, 28));
-		panel.add(label, BorderLayout.NORTH);
+		JLabel menuLabel = new JLabel("Menu");
+		menuLabel.setFont(new Font("Arial", Font.BOLD, 28));
+		panel.add(menuLabel, BorderLayout.NORTH);
 
 		// Adiciona as opções do menu
 		images = createImages();
-		list = new JList<>(options);
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setCellRenderer(new OtherClasses.ListRenderer(images));
+		menuList = new JList<>(menuOptions);
+		// Impede seleção múltipla
+		menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		menuList.setCellRenderer(new OtherClasses.ListRenderer(images));
 
 		// Reagir a eventos double-click na lista do menu
-		list.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent me) {
-				if (me.getClickCount() == 2) {
+		menuList.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent mouseEvent) {
+				if (mouseEvent.getClickCount() == 2) {
 					selectOptions();
 				}
 			}
 		});
 
 		// Reagir a eventos key-enter na lista do menu
-		list.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent ke) {
-				if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+		menuList.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent keyEvent) {
+				if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
 					selectOptions();
 				}
 			}
 		});
 
-		JScrollPane s = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		JScrollPane scrollPanel = new JScrollPane(menuList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		panel.add(s, BorderLayout.CENTER);
+		panel.add(scrollPanel, BorderLayout.CENTER);
 
 		// Adiciona o botão de "Selecionar" uma opção do menu
 		JPanel buttons_panel = new JPanel();
@@ -178,15 +183,15 @@ public class HomePage {
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
+				homePage.dispose();
 			}
 		});
-		frame.addWindowListener(new OtherClasses.HomePageClose());
+		homePage.addWindowListener(new OtherClasses.HomePageClose());
 		buttons_panel.add(select);
 		buttons_panel.add(cancel);
 		panel.add(buttons_panel, BorderLayout.SOUTH);
 
-		frame.add(panel);
+		homePage.add(panel);
 	}
 
 	/**
@@ -194,7 +199,7 @@ public class HomePage {
 	 * Page.
 	 */
 	private void selectOptions() {
-		int index = list.getSelectedIndex();
+		int index = menuList.getSelectedIndex();
 		if (index == -1) // não foi selecionada nenhuma opção
 			return;
 		if (index >= 0 && index <= 2) {
@@ -209,7 +214,7 @@ public class HomePage {
 			 */
 			for (int i = 0; i < config_files_names.length; i++)
 				if (i != index && Utils.config_files_path[i].equals(file_path)) {
-					JOptionPane.showMessageDialog(frame,
+					JOptionPane.showMessageDialog(homePage,
 							"O ficheiro selecionado já foi configurado para " + config_files_names[i],
 							"Selecionar ficheiro " + config_files_names[index], JOptionPane.WARNING_MESSAGE);
 					return;
@@ -255,7 +260,7 @@ public class HomePage {
 		}
 
 		if (noFile)
-			JOptionPane.showMessageDialog(frame, message, "Configuração dos ficheiros",
+			JOptionPane.showMessageDialog(homePage, message, "Configuração dos ficheiros",
 					JOptionPane.INFORMATION_MESSAGE);
 		return !noFile;
 	}
@@ -281,7 +286,7 @@ public class HomePage {
 		fc.setFileFilter(new FileNameExtensionFilter(extension.toUpperCase() + " File", extension));
 		fc.setAcceptAllFileFilterUsed(false);
 		// Retorna o path do ficheiro selecionado
-		if (fc.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION)
+		if (fc.showOpenDialog(homePage) == JFileChooser.APPROVE_OPTION)
 			return fc.getSelectedFile().getAbsolutePath();
 		return null;
 	}
@@ -295,17 +300,17 @@ public class HomePage {
 		// Associa uma opção do menu ao respetivo icon, de acordo com os mockups
 		// desenhados
 		HashMap<String, ImageIcon> m = new HashMap<>();
-		m.put(options[0], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
-		m.put(options[1], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
-		m.put(options[2], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
-		m.put(options[3], new ImageIcon("src/antiSpamFilter/frames/icons/circle.PNG"));
-		m.put(options[4], new ImageIcon("src/antiSpamFilter/frames/icons/pencil.PNG"));
-		m.put(options[5], new ImageIcon("src/antiSpamFilter/frames/icons/magic_wand.PNG"));
+		m.put(menuOptions[0], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
+		m.put(menuOptions[1], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
+		m.put(menuOptions[2], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
+		m.put(menuOptions[3], new ImageIcon("src/antiSpamFilter/frames/icons/circle.PNG"));
+		m.put(menuOptions[4], new ImageIcon("src/antiSpamFilter/frames/icons/pencil.PNG"));
+		m.put(menuOptions[5], new ImageIcon("src/antiSpamFilter/frames/icons/magic_wand.PNG"));
 		return m;
 	}
 
 	public static void visible(boolean open) {
-		frame.setVisible(open);
+		homePage.setVisible(open);
 	}
 
 	@SuppressWarnings("static-access")

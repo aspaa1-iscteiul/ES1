@@ -9,16 +9,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
-import antiSpamFilter.frames.HomePage;
 
 public class Utils {
 
 	public static String[] config_files_path = { "?", "?", "?" };
-	public static File configs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
+	public static File fileConfigs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
 	public static ArrayList<List<String>> ham = new ArrayList<List<String>>(), spam = new ArrayList<List<String>>();
 	public static HashMap<String, Double> rules = new HashMap<String, Double>();
 
@@ -125,7 +122,7 @@ public class Utils {
 	 */
 	public static void saveConfigFilesPath() {
 		try {
-			FileWriter w = new FileWriter(configs, false);
+			FileWriter w = new FileWriter(fileConfigs, false);
 			for (int i = 0; i < config_files_path.length; i++) {
 				w.write(config_files_path[i]);
 				if (i < config_files_path.length - 1)
