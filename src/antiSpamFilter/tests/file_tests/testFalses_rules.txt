@@ -1,0 +1,4 @@
+rule1 4.0
+rule2 4.0
+rule3 -4.0
+rule4 -4.0
