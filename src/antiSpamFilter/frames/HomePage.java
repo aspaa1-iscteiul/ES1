@@ -219,12 +219,17 @@ public class HomePage {
 							"Selecionar ficheiro " + config_files_names[index], JOptionPane.WARNING_MESSAGE);
 					return;
 				}
+			// Guarda o ficheiro escolhido
 			Utils.config_files_path[index] = file_path;
 			if (index == 0)
 				Utils.rules();
 			else if (index == 1)
+				// Retorna 'true' caso o ficheiro rules.cf esteja configurado e
+				// o mesmo não esteja vazio
 				Utils.spamLog();
 			else
+				// Retorna 'true' caso o ficheiro rules.cf esteja configurado e
+				// o mesmo não esteja vazio
 				Utils.hamLog();
 
 		} else if (checkConfigFiles()) {
@@ -269,20 +274,20 @@ public class HomePage {
 	 * Baseado JFileChooser do java Swing providencia um mecanismo simples para
 	 * que o utilizador escolha um ficheiro.
 	 * 
-	 * @param string
+	 * @param fileName
 	 *            Nome do ficheiro cujo path queremos configurar
 	 * @return Path do ficheiro selecionado
 	 */
-	private String getFileChosen(String string) {
+	private String getFileChosen(String fileName) {
 		JFileChooser fc = new JFileChooser();
 		// Inicia a GUI na diretoria do projeto
 		fc.setCurrentDirectory(new java.io.File("."));
 		// Inclui no título da janela o nome do ficheiro a selecionar
-		fc.setDialogTitle("Selecionar ficheiro " + string);
+		fc.setDialogTitle("Selecionar ficheiro " + fileName);
 		// Impede a seleção de múltiplas opções
 		fc.setMultiSelectionEnabled(false);
 		// Apenas os ficheiros com extensão correta são visíveis
-		String extension = string.substring(string.lastIndexOf('.') + 1);
+		String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
 		fc.setFileFilter(new FileNameExtensionFilter(extension.toUpperCase() + " File", extension));
 		fc.setAcceptAllFileFilterUsed(false);
 		// Retorna o path do ficheiro selecionado
@@ -309,8 +314,13 @@ public class HomePage {
 		return m;
 	}
 
-	public static void visible(boolean open) {
-		homePage.setVisible(open);
+	/**
+	 * Define a visibilidade da frame da HomePage
+	 * 
+	 * @param setVisible
+	 */
+	public static void visible(boolean setVisible) {
+		homePage.setVisible(setVisible);
 	}
 
 	@SuppressWarnings("static-access")

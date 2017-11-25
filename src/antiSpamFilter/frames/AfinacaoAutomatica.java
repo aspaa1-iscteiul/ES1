@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,44 +26,60 @@ import antiSpamFilter.utils.Utils;
 
 public class AfinacaoAutomatica {
 
-	private static JFrame frame;
+	private static JFrame afinacaoAuto;
 	private JTextArea help_text_fp, help_text_fn;
 	private JLabel help_label_fp, help_label_fn;
 	private JScrollPane scroll_rules_panel;
 	private Font font_titles = new Font("Helvetica", Font.PLAIN, 18),
 			font_labels = new Font("Helvetica", Font.PLAIN, 14), font_text = new Font("Helvetica", Font.PLAIN, 12);
 
+	/**
+	 * Construtor da página de Afinação Automática
+	 */
 	public AfinacaoAutomatica() {
-		frame = new JFrame();
-		frame.setTitle("Afinação automática do filtro anti-spam");
+		afinacaoAuto = new JFrame();
+		afinacaoAuto.setTitle("Afinação automática do filtro anti-spam");
 
 		Utils.readConfigFiles();
 
 		addContents();
 
-		calculate();
+		calculate_FP_FN();
 
-		frame.pack();
-		frame.setSize(750, 600);
-		frame.setResizable(false);
-		frame.addWindowListener(new OtherClasses.AfinacaoAutomaticaClose());
+		afinacaoAuto.pack();
+		afinacaoAuto.setSize(750, 600);
+		afinacaoAuto.setResizable(false);
+		afinacaoAuto.addWindowListener(new OtherClasses.AfinacaoAutomaticaClose());
 	}
 
+	/**
+	 * Atribui novos pesos de forma aleatória com valores entre -5 e 5 às regras
+	 * mapeadas no HashMap
+	 */
 	private void changeWeights() {
-		for (HashMap.Entry<String, Double> entry : Utils.rules.entrySet())
+		for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet())
 			entry.setValue((Math.random() * 10) - 5);
-		calculate();
+		calculate_FP_FN();
 	}
 
-	private void calculate() {
-		int var = String.valueOf(Utils.ham.size()).length();
-		help_label_fp.setText("  Falsos Positivos (FP):  " + String.format("%0" + var + "d", Utils.falsePositives())
-				+ " / " + Utils.ham.size());
-		var = String.valueOf(Utils.spam.size()).length();
-		help_label_fn.setText("  Falsos Negativos (FN):  " + String.format("%0" + var + "d", Utils.falseNegatives())
-				+ " / " + Utils.spam.size());
+	/**
+	 * Procede ao cálculo, por invocação, do número de Falsos Positivos e Falsos
+	 * Negativos
+	 */
+	private void calculate_FP_FN() {
+		int decimal_places = String.valueOf(Utils.hamLogRules.size()).length();
+		help_label_fp.setText(
+				"  Falsos Positivos (FP):  " + String.format("%0" + decimal_places + "d", Utils.falsePositives())
+						+ " / " + Utils.hamLogRules.size());
+		decimal_places = String.valueOf(Utils.spamLogRules.size()).length();
+		help_label_fn.setText(
+				"  Falsos Negativos (FN):  " + String.format("%0" + decimal_places + "d", Utils.falseNegatives())
+						+ " / " + Utils.spamLogRules.size());
 	}
 
+	/**
+	 * Adiciona os conteúdos à janela de Afinação Automática
+	 */
 	private void addContents() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
@@ -73,9 +88,9 @@ public class AfinacaoAutomatica {
 		JPanel center_panel = new JPanel();
 		center_panel.setLayout(new BorderLayout());
 
-		JLabel title = new JLabel("Configuração do vetor de pesos");
-		title.setFont(font_titles);
-		center_panel.add(title, BorderLayout.NORTH);
+		JLabel panelTitle = new JLabel("Configuração do vetor de pesos");
+		panelTitle.setFont(font_titles);
+		center_panel.add(panelTitle, BorderLayout.NORTH);
 
 		createRulesPanel();
 		center_panel.add(scroll_rules_panel, BorderLayout.CENTER);
@@ -88,17 +103,17 @@ public class AfinacaoAutomatica {
 		JPanel results_panel = new JPanel();
 		results_panel.setLayout(new BorderLayout());
 
-		title = new JLabel("Para a configuração gerada, obtemos:");
-		title.setFont(font_titles);
-		results_panel.add(title, BorderLayout.NORTH);
+		panelTitle = new JLabel("Para a configuração gerada, obtemos:");
+		panelTitle.setFont(font_titles);
+		results_panel.add(panelTitle, BorderLayout.NORTH);
 
-		JPanel help_panels = new JPanel();
-		help_panels.setBorder(new EmptyBorder(10, 10, 10, 10));
-		help_panels.setLayout(new GridLayout(0, 1));
-		help_panels.add(createHelpPanel(1));
-		help_panels.add(createHelpPanel(2));
+		JPanel help_panel = new JPanel();
+		help_panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		help_panel.setLayout(new GridLayout(0, 1));
+		help_panel.add(createHelpPanel(1));
+		help_panel.add(createHelpPanel(2));
 
-		results_panel.add(help_panels, BorderLayout.CENTER);
+		results_panel.add(help_panel, BorderLayout.CENTER);
 
 		right_panel.add(results_panel);
 
@@ -108,14 +123,19 @@ public class AfinacaoAutomatica {
 		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		JButton generate = new JButton("Gerar novo vetor de pesos");
 		generate.addActionListener(new ActionListener() {
+			/*
+			 * Sentinela no butão 'Gerar novo vetor' responsável por invocar a
+			 * função changeWeights() e refletir as alterações na interface
+			 * gráfica da página de Afinação Automática
+			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				changeWeights();
 				center_panel.remove(scroll_rules_panel);
 				createRulesPanel();
 				center_panel.add(scroll_rules_panel, BorderLayout.CENTER);
-				frame.validate();
-				frame.repaint();
+				afinacaoAuto.validate();
+				afinacaoAuto.repaint();
 			}
 		});
 
@@ -125,11 +145,12 @@ public class AfinacaoAutomatica {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					FileWriter w = new FileWriter(Utils.config_files_path[0], false);
-					for (HashMap.Entry<String, Double> entry : Utils.rules.entrySet())
+					for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet())
 						w.write(entry.getKey() + " " + entry.getValue().toString() + Utils.newLine);
 					w.close();
 				} catch (IOException e1) {
-					JOptionPane.showMessageDialog(frame, "O ficheiro rules.cf já não está na diretoria indicada",
+					JOptionPane.showMessageDialog(afinacaoAuto,
+							"Não foi possível prosseguir! O ficheiro rules.cf está a ser editado.",
 							"Configuração dos ficheiros", JOptionPane.WARNING_MESSAGE);
 					System.exit(1);
 				}
@@ -150,18 +171,18 @@ public class AfinacaoAutomatica {
 		buttons_panel.add(cancel);
 		panel.add(buttons_panel, BorderLayout.SOUTH);
 
-		frame.add(panel);
+		afinacaoAuto.add(panel);
 	}
 
 	public static void backHome() {
-		frame.dispose();
+		afinacaoAuto.dispose();
 		HomePage.visible(true);
 	}
 
 	private void createRulesPanel() {
 		JPanel rules_panel = new JPanel();
 		rules_panel.setLayout(new GridLayout(0, 1));
-		for (HashMap.Entry<String, Double> entry : Utils.rules.entrySet()) {
+		for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet()) {
 			JPanel panel = new JPanel();
 			panel.setLayout(new BorderLayout());
 			panel.add(new JLabel(entry.getKey() + "     "), BorderLayout.CENTER);
@@ -230,7 +251,7 @@ public class AfinacaoAutomatica {
 	}
 
 	public void visible(boolean open) {
-		frame.setVisible(open);
+		afinacaoAuto.setVisible(open);
 	}
 
 	public static void launch() {
