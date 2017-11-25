@@ -1,14 +1,16 @@
 package antiSpamFilter.tests;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
-import java.util.ArrayList;
-
 import org.junit.Test;
-
 import antiSpamFilter.utils.Utils;
 
+/**
+ * Classe de testes unitários da classe Utils.java com cobertura acima de 75%
+ * para todas as métricas.
+ * 
+ * @author Ana Pestana, Diogo Reis, Guilherme Azevedo, Rafael Costa
+ *
+ */
 public class UtilsTest {
 
 	/**
@@ -17,14 +19,10 @@ public class UtilsTest {
 	 */
 	@Test
 	public void testLines() {
-		/*
-		 * quando o ficheiro existe
-		 */
+		// Cenário 1 - O ficheiro existe
 		Utils.lines("./src/antiSpamFilter/tests/testLines.txt");
-		
-		/*
-		 * quando o ficheiro indicado não existe
-		 */
+
+		// Cenário 2 - O ficheiro indicado não existe
 		Utils.lines("./don't_exist");
 	}
 
@@ -33,39 +31,29 @@ public class UtilsTest {
 	 */
 	@Test
 	public void testRules() {
-		/*
-		 * quando o ficheiro de rules está bem formatado e já contem os pesos
-		 */
+		// Cenário 1 - O ficheiro rules.cf está bem formatado e já contém os
+		// pesos
 		Utils.config_files_path[0] = "./src/antiSpamFilter/tests/file_tests/testRules.txt";
 		Utils.rules();
 
-		/*
-		 * quando o ficheiro de rules está vazio
-		 */
+		// Cenário 2 - O ficheiro rules.cf encontra-se vazio
 		Utils.config_files_path[0] = "./src/antiSpamFilter/tests/file_tests/testRules2.txt";
 		Utils.rules();
 
-		/*
-		 * quando o ficheiro de rules está bem formatado mas não contem os pesos
-		 */
+		// Cenário 3 - O ficheiro rules.cf está bem formatado mas ainda não
+		// contém pesos
 		Utils.config_files_path[0] = "./src/antiSpamFilter/tests/file_tests/testRules3.txt";
 		Utils.rules();
 
-		/*
-		 * quando o ficheiro de rules não está bem formatado
-		 */
+		// Cenário 4 - O ficheiro rules.cf não está bem formatado
 		Utils.config_files_path[0] = "./src/antiSpamFilter/tests/file_tests/testRules4.txt";
 		Utils.rules();
 
-		/*
-		 * quando o caminho para o ficheiro rules não está configurado
-		 */
+		// Cenário 5 - O path para o ficheiro rules.cf não está configurado
 		Utils.config_files_path[0] = "?";
 		Utils.rules();
 
-		/*
-		 * teste para quando o caminho para o ficheiro de rules não existe
-		 */
+		// Cenário 6 - O path para o ficheiro rules.cf não existe
 		Utils.config_files_path[0] = "./don't_exist";
 		Utils.rules();
 	}
@@ -75,38 +63,28 @@ public class UtilsTest {
 	 */
 	@Test
 	public void testLog() {
-		/*
-		 * quando o ficheiro spam.log está bem configurado
-		 */
+		// Cenário 1 - O ficheiro spam.log está bem configurado
 		Utils.config_files_path[1] = "./src/antiSpamFilter/tests/file_tests/testLog.txt";
 		Utils.log(false);
 
-		/*
-		 * quando o ficheiro ham.log está bem configurado
-		 */
+		// Cenário 2 - O ficheiro ham.log está bem configurado
 		Utils.config_files_path[2] = "./src/antiSpamFilter/tests/file_tests/testLog.txt";
 		Utils.log(true);
 
-		/*
-		 * quando quando o caminho para o ficheiro ham.log ou spam.log não está
-		 * configurado
-		 */
+		// Cenário 3 - O caminho para o ficheiro ham.log ou spam.log não está
+		// configurado
 		Utils.config_files_path[1] = "?";
 		Utils.log(false);
 		Utils.config_files_path[2] = "?";
 		Utils.log(true);
 
-		/*
-		 * quando o ficheiro de ham.log ou spam.log está vazio
-		 */
+		// Cenário 4 - O ficheiro ham.log ou spam.log está vazio
 		Utils.config_files_path[1] = "./src/antiSpamFilter/tests/file_tests/testLog2.txt";
 		Utils.log(false);
 		Utils.config_files_path[2] = "./src/antiSpamFilter/tests/file_tests/testLog2.txt";
 		Utils.log(true);
 
-		/*
-		 * quando o ficheiro de ham.log ou spam.log não existe
-		 */
+		// Cenário 5 - O ficheiro ham.log ou spam.log não existe
 		Utils.config_files_path[1] = "./don't_exist";
 		Utils.log(false);
 		Utils.config_files_path[2] = "./don't_exist";
@@ -118,17 +96,13 @@ public class UtilsTest {
 	 */
 	@Test
 	public void testReadConfigFiles() {
-		/*
-		 * quando os ficheiros estão configurados
-		 */
+		// Cenário 1 - Os ficheiros estão configurado
 		Utils.config_files_path[0] = "./src/antiSpamFilter/tests/file_tests/testRules.txt";
 		Utils.config_files_path[1] = "./src/antiSpamFilter/tests/file_tests/testLog.txt";
 		Utils.config_files_path[2] = "./src/antiSpamFilter/tests/file_tests/testLog.txt";
 		Utils.readConfigFiles();
-		
-		/*
-		 * quando um dos ficheiros não está configurados
-		 */
+
+		// Cenário 2 - Um dos ficheiros não está configurado
 		Utils.config_files_path[0] = "?";
 		Utils.readConfigFiles();
 		Utils.config_files_path[0] = "./src/antiSpamFilter/tests/file_tests/testRules.txt";
@@ -144,14 +118,10 @@ public class UtilsTest {
 	 */
 	@Test
 	public void testSaveConfigFilesPath() {
-		/*
-		 * quando os ficheiros existem
-		 */
+		// Cenário 1 - Os ficheiros existem
 		Utils.saveConfigFilesPath();
-		
-		/*
-		 * quando vai para o catch
-		 */
+
+		// Cenário 2 - Entra no Catch
 		Utils.fileConfigs = new File("./src");
 		Utils.saveConfigFilesPath();
 	}
@@ -161,16 +131,15 @@ public class UtilsTest {
 	 */
 	@Test
 	public void testFalses() {
-		/*
-		 * quando o ficheiro spam.log e ham.log está bem configurado
-		 */
+		// Cenário - Ambos os ficheiros spam.log e ham.log estão bem
+		// configurados
 		Utils.config_files_path[0] = "./src/antiSpamFilter/tests/file_tests/testFalses_rules.txt";
 		Utils.config_files_path[1] = "./src/antiSpamFilter/tests/file_tests/testFalses_spam.txt";
 		Utils.config_files_path[2] = "./src/antiSpamFilter/tests/file_tests/testFalses_ham.txt";
 		Utils.readConfigFiles();
 		Utils.falses(false);
 		Utils.falses(true);
-		
+
 		Utils.config_files_path[0] = "./src/antiSpamFilter/tests/file_tests/testFalses_rules.txt";
 		Utils.config_files_path[1] = "./src/antiSpamFilter/tests/file_tests/testFalses_spam.txt";
 		Utils.config_files_path[2] = "?";

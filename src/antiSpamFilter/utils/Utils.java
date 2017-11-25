@@ -190,7 +190,7 @@ public class Utils {
 		if (hamLogRules.isEmpty() || spamLogRules.isEmpty()) {
 			JOptionPane.showMessageDialog(new JFrame(), "O ficheiro " + (hamLogRules.isEmpty() ? "ham" : "spam")
 					+ ".log não está configurado, não posso continuar...");
-			config_files_path[b ? 2 : 1] = "?";
+			config_files_path[fp ? 2 : 1] = "?";
 			return 0;
 		}
 		int total = 0;
