@@ -11,6 +11,14 @@ import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+/**
+ * Classe contendo funções de âmbito geral e atributos invocadas por diferentes
+ * funções em várias classes
+ * 
+ * @author Ana Pestana, Diogo Reis, Guilherme Azevedo, Rafael Costa
+ *
+ */
+
 public class Utils {
 
 	public static String[] config_files_path = { "?", "?", "?" };

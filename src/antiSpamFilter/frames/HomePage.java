@@ -30,6 +30,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import antiSpamFilter.utils.OtherClasses;
 import antiSpamFilter.utils.Utils;
 
+/**
+ * 
+ * Classe responsável por determinar o comportamento da primeira interface de
+ * interação com o utilizador - a Home Page -, incluindo suporte à seleção de
+ * uma opção do menu e à seleção dos ficheiros de configuração rules.cf,
+ * spam.log e ham.log.
+ * 
+ * @author Ana Pestana, Diogo Reis, Guilherme Azevedo, Rafael Costa
+ *
+ */
 public class HomePage {
 
 	private static JFrame homePage;

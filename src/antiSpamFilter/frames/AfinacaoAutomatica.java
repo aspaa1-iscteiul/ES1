@@ -24,6 +24,15 @@ import javax.swing.border.EmptyBorder;
 import antiSpamFilter.utils.OtherClasses;
 import antiSpamFilter.utils.Utils;
 
+/**
+ * Classe responsável por determinar o comportamento da aplicação no que
+ * respeita à funcionalidade de afinação automática do filtro anti-spam,
+ * incluindo suporte à contagem dos falsos positivos e falsos negativos e ao
+ * display da configuração do vetor de pesos
+ * 
+ * @author Ana Pestana, Diogo Reis, Guilherme Azevedo, Rafael Costa
+ *
+ */
 public class AfinacaoAutomatica {
 
 	private static JFrame afinacaoAuto;
