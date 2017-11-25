@@ -166,7 +166,9 @@ public class Utils {
 			}
 			w.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(new JFrame(), "Não foi possível prosseguir! O ficheiro "
+					+ fileConfigs.getAbsolutePath() + " não pode ser aberto.", "Erro Fatal",
+					JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
@@ -188,7 +190,8 @@ public class Utils {
 		if (hamLogRules.isEmpty() || spamLogRules.isEmpty()) {
 			JOptionPane.showMessageDialog(new JFrame(), "O ficheiro " + (hamLogRules.isEmpty() ? "ham" : "spam")
 					+ ".log não está configurado, não posso continuar...");
-			config_files_path[2] = "?";
+			config_files_path[b ? 2 : 1] = "?";
+			return 0;
 		}
 		int total = 0;
 		ArrayList<String[]> v = new ArrayList<String[]>(fp ? hamLogRules : spamLogRules);

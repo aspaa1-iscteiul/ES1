@@ -1,0 +1,2 @@
+ID1	rule1	rule20
+ID2	rule1	rule2
