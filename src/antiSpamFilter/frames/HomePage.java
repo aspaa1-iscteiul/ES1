@@ -220,12 +220,7 @@ public class HomePage {
 					return;
 				}
 			Utils.config_files_path[index] = file_path;
-			if (index == 0)
-				Utils.rules();
-			else if (index == 1)
-				Utils.spamLog();
-			else
-				Utils.hamLog();
+			Utils.readConfigFiles();
 
 		} else if (checkConfigFiles()) {
 			Utils.saveConfigFilesPath();

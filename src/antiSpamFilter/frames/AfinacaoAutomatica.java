@@ -58,10 +58,10 @@ public class AfinacaoAutomatica {
 
 	private void calculate() {
 		int var = String.valueOf(Utils.ham.size()).length();
-		help_label_fp.setText("  Falsos Positivos (FP):  " + String.format("%0" + var + "d", Utils.falsePositives())
+		help_label_fp.setText("  Falsos Positivos (FP):  " + String.format("%0" + var + "d", Utils.falses(true))
 				+ " / " + Utils.ham.size());
 		var = String.valueOf(Utils.spam.size()).length();
-		help_label_fn.setText("  Falsos Negativos (FN):  " + String.format("%0" + var + "d", Utils.falseNegatives())
+		help_label_fn.setText("  Falsos Negativos (FN):  " + String.format("%0" + var + "d", Utils.falses(false))
 				+ " / " + Utils.spam.size());
 	}
 

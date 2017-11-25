@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -16,7 +15,7 @@ public class Utils {
 
 	public static String[] config_files_path = { "?", "?", "?" };
 	public static File fileConfigs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
-	public static ArrayList<List<String>> ham = new ArrayList<List<String>>(), spam = new ArrayList<List<String>>();
+	public static ArrayList<String[]> ham = new ArrayList<String[]>(), spam = new ArrayList<String[]>();
 	public static HashMap<String, Double> rules = new HashMap<String, Double>();
 
 	public static String newLine = System.getProperty("line.separator");
@@ -35,7 +34,7 @@ public class Utils {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"O ficheiro " + file_path + " já não se encontra na diretoria indicada",
 					"Configuração dos ficheiros", JOptionPane.WARNING_MESSAGE);
-			System.exit(1);
+			return null;
 		}
 		return lines;
 	}
@@ -45,6 +44,8 @@ public class Utils {
 		if (!file_path.equals("?")) {
 			rules.clear();
 			ArrayList<String> list = lines(file_path);
+			if (list == null)
+				return false;
 			for (String s : list) {
 				String[] ss = s.split(" ");
 				if (ss.length < 2)
@@ -55,7 +56,8 @@ public class Utils {
 					} catch (NumberFormatException e) {
 						JOptionPane.showMessageDialog(new JFrame(), "Ficheiro rules.cf tem um formato inválido",
 								"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
-						System.exit(1);
+						config_files_path[0] = "?";
+						return false;
 					}
 			}
 			if (rules.isEmpty()) {
@@ -70,41 +72,28 @@ public class Utils {
 		return false;
 	}
 
-	public static boolean spamLog() {
-		String file_path = config_files_path[1];
+	public static boolean log(boolean b) {
+		String file_path = config_files_path[b ? 1 : 2];
+		ArrayList<String[]> var = new ArrayList<String[]>(b ? spam : ham);
 		if (!file_path.equals("?")) {
-			spam.clear();
+			var.clear();
 			ArrayList<String> list = lines(file_path);
+			if (list == null)
+				return false;
 			for (String s : list) {
 				String[] ss = s.split("\t");
-				spam.add(Arrays.asList(Arrays.copyOfRange(ss, 1, ss.length)));
+				var.add(Arrays.copyOfRange(ss, 1, ss.length));
 			}
-			if (spam.isEmpty()) {
+			if (b)
+				spam = new ArrayList<String[]>(var);
+			else
+				ham = new ArrayList<String[]>(var);
+			if (var.isEmpty()) {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"O ficheiro spam.log selecionado está vazio. Por favor, reconfigure-o",
 						"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
 				config_files_path[1] = "?";
-				return false;
-			}
-			return true;
-		}
-		return false;
-	}
 
-	public static boolean hamLog() {
-		String file_path = config_files_path[2];
-		if (!file_path.equals("?")) {
-			ham.clear();
-			ArrayList<String> list = lines(file_path);
-			for (String s : list) {
-				String[] ss = s.split("\t");
-				ham.add(Arrays.asList(Arrays.copyOfRange(ss, 1, ss.length)));
-			}
-			if (ham.isEmpty()) {
-				JOptionPane.showMessageDialog(new JFrame(),
-						"O ficheiro ham.log selecionado está vazio. Por favor, reconfigure-o",
-						"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
-				config_files_path[2] = "?";
 				return false;
 			}
 			return true;
@@ -113,7 +102,7 @@ public class Utils {
 	}
 
 	public static boolean readConfigFiles() {
-		return rules() && spamLog() && hamLog();
+		return rules() && log(true) && log(false);
 	}
 
 	/**
@@ -134,41 +123,29 @@ public class Utils {
 		}
 	}
 
-	public static int falsePositives() {
-		if (ham.isEmpty()) {
+	/**
+	 * 
+	 * @param b
+	 *            true se for falsos Positivos
+	 * @return
+	 */
+	public static int falses(boolean b) {
+		if (ham.isEmpty() || spam.isEmpty()) {
+			String var = ham.isEmpty() ? "ham" : "spam";
 			JOptionPane.showMessageDialog(new JFrame(),
-					"O ficheiro ham.log não está configurado, não posso continuar...");
+					"O ficheiro " + var + ".log não está configurado, não posso continuar...");
 			config_files_path[2] = "?";
 		}
 		int total = 0;
-		for (List<String> var : ham) {
+		ArrayList<String[]> v = new ArrayList<String[]>(b ? spam : ham);
+		for (String[] var : v) {
 			double sum = 0;
 			for (String key : var)
 				try {
 					sum += rules.get(key);
 				} catch (NullPointerException e) {
 				}
-			if (sum < 5.0)
-				total++;
-		}
-		return total;
-	}
-
-	public static int falseNegatives() {
-		if (spam.isEmpty()) {
-			JOptionPane.showMessageDialog(new JFrame(),
-					"O ficheiro spam.log não está configurado, não posso continuar...");
-			config_files_path[1] = "?";
-		}
-		int total = 0;
-		for (List<String> var : spam) {
-			double sum = 0;
-			for (String key : var)
-				try {
-					sum += rules.get(key);
-				} catch (NullPointerException e) {
-				}
-			if (sum > 5.0)
+			if ((sum > 5.0 && b) || (sum < 5.0 && !b))
 				total++;
 		}
 		return total;
