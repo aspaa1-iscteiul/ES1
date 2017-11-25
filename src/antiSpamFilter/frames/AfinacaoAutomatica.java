@@ -68,13 +68,11 @@ public class AfinacaoAutomatica {
 	 */
 	private void calculate_FP_FN() {
 		int decimal_places = String.valueOf(Utils.hamLogRules.size()).length();
-		help_label_fp.setText(
-				"  Falsos Positivos (FP):  " + String.format("%0" + decimal_places + "d", Utils.falses(true))
-						+ " / " + Utils.hamLogRules.size());
+		help_label_fp.setText("  Falsos Positivos (FP):  "
+				+ String.format("%0" + decimal_places + "d", Utils.falses(true)) + " / " + Utils.hamLogRules.size());
 		decimal_places = String.valueOf(Utils.spamLogRules.size()).length();
-		help_label_fn.setText(
-				"  Falsos Negativos (FN):  " + String.format("%0" + decimal_places + "d", Utils.falses(false))
-						+ " / " + Utils.spamLogRules.size());
+		help_label_fn.setText("  Falsos Negativos (FN):  "
+				+ String.format("%0" + decimal_places + "d", Utils.falses(false)) + " / " + Utils.spamLogRules.size());
 	}
 
 	/**
@@ -141,6 +139,10 @@ public class AfinacaoAutomatica {
 
 		JButton save = new JButton("Guardar");
 		save.addActionListener(new ActionListener() {
+			/*
+			 * Sentinela no butão 'Guardar' responsável por guardar a
+			 * configuração e retornar à Home Page
+			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -160,6 +162,10 @@ public class AfinacaoAutomatica {
 
 		JButton cancel = new JButton("Cancelar");
 		cancel.addActionListener(new ActionListener() {
+			/*
+			 * Sentinela no butão 'Cancelar' responsável por retornar à Home
+			 * Page quando o botão é pressionado
+			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				backHome();
@@ -174,11 +180,17 @@ public class AfinacaoAutomatica {
 		afinacaoAuto.add(panel);
 	}
 
+	/**
+	 * Descarta a GUI atual e retorna à Home Page
+	 */
 	public static void backHome() {
 		afinacaoAuto.dispose();
 		HomePage.visible(true);
 	}
 
+	/**
+	 * Criar o painel scrollable com as regras e respetivos pesos
+	 */
 	private void createRulesPanel() {
 		JPanel rules_panel = new JPanel();
 		rules_panel.setLayout(new GridLayout(0, 1));
@@ -192,33 +204,51 @@ public class AfinacaoAutomatica {
 		scroll_rules_panel = new JScrollPane(rules_panel);
 	}
 
+	/**
+	 * Criar o painel com a contagem de FP ou FN, o botão de ajuda e a respetiva
+	 * textArea informativa
+	 * 
+	 * @param number
+	 *            Indica qual dos dois cenários tratar (1 para FP e 2 para FN)
+	 * @return
+	 */
 	private JPanel createHelpPanel(int number) {
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(20, 10, 10, 10));
 		panel.setLayout(new BorderLayout());
-		panel.add(helpButton(number), BorderLayout.WEST);
-		JLabel label = new JLabel();
-		label.setFont(font_labels);
-		panel.add(label, BorderLayout.CENTER);
-		JTextArea text = myTextArea(" ");
-		text.setFont(font_text);
-		panel.add(text, BorderLayout.SOUTH);
+		panel.add(formatHelpButton(number), BorderLayout.WEST);
+
+		JLabel count = new JLabel();
+		count.setFont(font_labels);
+		panel.add(count, BorderLayout.CENTER);
+
+		JTextArea info = formatTextArea(" ");
+		info.setFont(font_text);
+		panel.add(info, BorderLayout.SOUTH);
+
 		if (number == 1) {
-			help_label_fp = label;
-			text.setText(Utils.newLine
+			help_label_fp = count;
+			info.setText(Utils.newLine
 					+ "Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam.");
-			help_text_fp = text;
+			help_text_fp = info;
 		} else {
-			help_label_fn = label;
-			text.setText(Utils.newLine
+			help_label_fn = count;
+			info.setText(Utils.newLine
 					+ "Um Falso Negativo (FN) ocorre quando uma mensagem spam é classificada como mensagem legítima.");
-			help_text_fn = text;
+			help_text_fn = info;
 		}
 		return panel;
 	}
 
-	private JTextArea myTextArea(String text) {
-		JTextArea textarea = new JTextArea(text);
+	/**
+	 * Formatar a textArea informativa
+	 * 
+	 * @param info
+	 *            Texto de ajuda
+	 * @return textArea formatada
+	 */
+	private JTextArea formatTextArea(String info) {
+		JTextArea textarea = new JTextArea(info);
 		textarea.setForeground(new JPanel().getBackground());
 		textarea.setBackground(new JPanel().getBackground());
 		textarea.setLineWrap(true);
@@ -227,7 +257,14 @@ public class AfinacaoAutomatica {
 		return textarea;
 	}
 
-	private JButton helpButton(int number) {
+	/**
+	 * Formatar os botões de ajuda
+	 * 
+	 * @param number
+	 *            Número do botão a formatar
+	 * @return botão de ajuda formatado
+	 */
+	private JButton formatHelpButton(int number) {
 		JButton button = new JButton(new ImageIcon("./src/antiSpamFilter/frames/icons/help_button.png"));
 		button.setMargin(new Insets(0, 0, 0, 0));
 		button.setBorderPainted(false);
