@@ -47,7 +47,7 @@ public class HomePage {
 	private JButton select, cancel;
 	private Map<String, ImageIcon> images;
 	private String[] menuOptions = { "Selecionar ficheiro rules.cf", "Selecionar ficheiro spam.log",
-			"Selecionar ficheiro ham.log", "Geração automática de uma configuração",
+			"Selecionar ficheiro ham.log", "Geração aleatória de uma configuração",
 			"Afinação manual do filtro anti-spam", "Otimização do filtro anti-spam" },
 			config_files_names = { "rules.cf", "spam.log", "ham.log" };
 
