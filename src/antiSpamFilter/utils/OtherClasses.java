@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import antiSpamFilter.frames.AfinacaoAutomatica;
+//import antiSpamFilter.frames.AfinacaoManual;
 
 public class OtherClasses {
 	public static class ListRenderer extends DefaultListCellRenderer {
@@ -47,6 +48,7 @@ public class OtherClasses {
 		@Override
 		public void windowClosing(WindowEvent e) {
 			Utils.saveConfigFilesPath();
+			System.exit(0);
 		}
 
 		@Override
@@ -103,5 +105,38 @@ public class OtherClasses {
 		}
 
 	}
+
+//	public static class AfinacaoManualClose implements WindowListener {
+//
+//		@Override
+//		public void windowOpened(WindowEvent e) {
+//		}
+//
+//		@Override
+//		public void windowClosing(WindowEvent e) {
+//			AfinacaoManual.backHome();
+//		}
+//
+//		@Override
+//		public void windowClosed(WindowEvent e) {
+//		}
+//
+//		@Override
+//		public void windowIconified(WindowEvent e) {
+//		}
+//
+//		@Override
+//		public void windowDeiconified(WindowEvent e) {
+//		}
+//
+//		@Override
+//		public void windowActivated(WindowEvent e) {
+//		}
+//
+//		@Override
+//		public void windowDeactivated(WindowEvent e) {
+//		}
+//
+//	}
 
 }

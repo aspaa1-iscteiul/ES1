@@ -1,10 +1,10 @@
 postscript("HV.Boxplot.eps", horizontal=FALSE, onefile=FALSE, height=8, width=12, pointsize=10)
-resultDirectory<-"../data"
+resultDirectory<-"..\data"
 qIndicator <- function(indicator, problem)
 {
-fileNSGAII<-paste(resultDirectory, "NSGAII", sep="/")
-fileNSGAII<-paste(fileNSGAII, problem, sep="/")
-fileNSGAII<-paste(fileNSGAII, indicator, sep="/")
+fileNSGAII<-paste(resultDirectory, "NSGAII", sep="\")
+fileNSGAII<-paste(fileNSGAII, problem, sep="\")
+fileNSGAII<-paste(fileNSGAII, indicator, sep="\")
 NSGAII<-scan(fileNSGAII)
 
 algs<-c("NSGAII")

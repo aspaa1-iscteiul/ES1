@@ -27,6 +27,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import antiSpamFilter.AntiSpamFilterAutomaticConfiguration;
 import antiSpamFilter.utils.OtherClasses;
 import antiSpamFilter.utils.Utils;
 
@@ -243,6 +244,12 @@ public class HomePage {
 			} else if (index == 4) {
 				visible(true); // TODO A realizar nos próximos sprints
 			} else if (index == 5) {
+				try {
+					AntiSpamFilterAutomaticConfiguration.algorithm();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				visible(true); // TODO A realizar nos próximos sprints
 			}
 		}

@@ -7,7 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -206,6 +211,10 @@ public class Utils {
 				total++;
 		}
 		return total;
+	}
+
+	public static <K, V> Map<K, V> toMap(List<K> keys, List<V> values) {
+		return IntStream.range(0, keys.size()).boxed().collect(Collectors.toMap(keys::get, values::get));
 	}
 
 }
