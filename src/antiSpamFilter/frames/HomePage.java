@@ -244,13 +244,8 @@ public class HomePage {
 			} else if (index == 4) {
 				visible(true); // TODO A realizar nos próximos sprints
 			} else if (index == 5) {
-				try {
-					AntiSpamFilterAutomaticConfiguration.algorithm();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				visible(true); // TODO A realizar nos próximos sprints
+				Otimizacao.launch();
+//				visible(true); // TODO A realizar nos próximos sprints
 			}
 		}
 	}
