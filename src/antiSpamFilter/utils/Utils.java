@@ -1,5 +1,7 @@
 package antiSpamFilter.utils;
 
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -215,6 +217,11 @@ public class Utils {
 
 	public static <K, V> Map<K, V> toMap(List<K> keys, List<V> values) {
 		return IntStream.range(0, keys.size()).boxed().collect(Collectors.toMap(keys::get, values::get));
+	}
+
+	public static void frameAtCenter(JFrame frame) {
+		frame.setLocation(new Point((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth()) / 2,
+				(Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight()) / 2));
 	}
 
 }

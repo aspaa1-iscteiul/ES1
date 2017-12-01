@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import antiSpamFilter.frames.AfinacaoAutomatica;
+import antiSpamFilter.frames.Otimizacao;
 //import antiSpamFilter.frames.AfinacaoManual;
 
 public class OtherClasses {
@@ -106,37 +107,37 @@ public class OtherClasses {
 
 	}
 
-//	public static class AfinacaoManualClose implements WindowListener {
-//
-//		@Override
-//		public void windowOpened(WindowEvent e) {
-//		}
-//
-//		@Override
-//		public void windowClosing(WindowEvent e) {
-//			AfinacaoManual.backHome();
-//		}
-//
-//		@Override
-//		public void windowClosed(WindowEvent e) {
-//		}
-//
-//		@Override
-//		public void windowIconified(WindowEvent e) {
-//		}
-//
-//		@Override
-//		public void windowDeiconified(WindowEvent e) {
-//		}
-//
-//		@Override
-//		public void windowActivated(WindowEvent e) {
-//		}
-//
-//		@Override
-//		public void windowDeactivated(WindowEvent e) {
-//		}
-//
-//	}
+	public static class OtimizacaoClose implements WindowListener {
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			Otimizacao.backHome();
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+		}
+
+		@Override
+		public void windowActivated(WindowEvent e) {
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+		}
+
+	}
 
 }

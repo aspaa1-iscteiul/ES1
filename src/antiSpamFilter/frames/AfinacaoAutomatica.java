@@ -59,6 +59,7 @@ public class AfinacaoAutomatica {
 		afinacaoAuto.setSize(750, 600);
 		afinacaoAuto.setResizable(false);
 		afinacaoAuto.addWindowListener(new OtherClasses.AfinacaoAutomaticaClose());
+		Utils.frameAtCenter(afinacaoAuto);
 	}
 
 	/**

@@ -27,7 +27,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import antiSpamFilter.AntiSpamFilterAutomaticConfiguration;
 import antiSpamFilter.utils.OtherClasses;
 import antiSpamFilter.utils.Utils;
 
@@ -68,6 +67,7 @@ public class HomePage {
 		 */
 		homePage.setSize(450, 450);
 		homePage.setResizable(false);
+		Utils.frameAtCenter(homePage);
 	}
 
 	/**
@@ -245,7 +245,7 @@ public class HomePage {
 				visible(true); // TODO A realizar nos próximos sprints
 			} else if (index == 5) {
 				Otimizacao.launch();
-//				visible(true); // TODO A realizar nos próximos sprints
+				// visible(true); // TODO A realizar nos próximos sprints
 			}
 		}
 	}
