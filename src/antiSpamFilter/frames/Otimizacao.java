@@ -35,11 +35,11 @@ import antiSpamFilter.utils.Utils;
 public class Otimizacao {
 
 	private static JFrame frame;
-	private static final String algorithm_files = "./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.r";
 	private Font font_titles = new Font("Helvetica", Font.PLAIN, 18),
 			font_labels = new Font("Helvetica", Font.PLAIN, 14), font_text = new Font("Helvetica", Font.PLAIN, 12);
 	private JTextArea help_text_fp, help_text_fn;
 	private String help_label_fp_text, help_label_fn_text;
+	private static final String algorithm_files = "./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.r";
 
 	public Otimizacao() {
 		calculateBest();
@@ -54,6 +54,7 @@ public class Otimizacao {
 		frame.setResizable(false);
 		frame.addWindowListener(new OtherClasses.OtimizacaoClose());
 		Utils.frameAtCenter(frame);
+		visible(true);
 	}
 
 	private void calculateBest() {
@@ -76,18 +77,16 @@ public class Otimizacao {
 			public void run() {
 				try {
 					AntiSpamFilterAutomaticConfiguration.algorithm();
-					readAlgorithmOutputs();
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(frame,
 							"Aconteceu alguma coisa durante a execução do código dos profs...");
 				}
-				// now fix the progress bar
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
+						readAlgorithmOutputs();
 						frame.dispose();
 						finishConstruct();
-						visible(true);
 					}
 				});
 			}
@@ -96,14 +95,14 @@ public class Otimizacao {
 
 	private void readAlgorithmOutputs() {
 		ArrayList<String> lines = Utils.lines(algorithm_files + "f");
-		double fp = Double.MAX_VALUE, fn = Double.MAX_VALUE;
+		int fp = Integer.MAX_VALUE, fn = Integer.MAX_VALUE;
 		int index = -1;
 		for (int i = 0; i < lines.size(); i++) {
 			String[] values = lines.get(i).split(" ");
 			double fp_aux = Double.valueOf(values[0]), fn_aux = Double.valueOf(values[1]);
 			if (fp_aux < fp || (fp_aux == fp && fn_aux < fn)) {
-				fp = fp_aux;
-				fn = fn_aux;
+				fp = (int) fp_aux;
+				fn = (int) fn_aux;
 				index = i;
 			}
 		}

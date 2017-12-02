@@ -104,7 +104,6 @@ public class HomePage {
 				 * utilizador escolher manter a configuração dos ficheiros
 				 * selecionados durante a última sessão ou descartá-los.
 				 */
-
 				if (config) {
 					int n = (JOptionPane.showConfirmDialog(homePage,
 							"Os seguintes ficheiros encontram-se configurados:" + Utils.newLine + Utils.newLine

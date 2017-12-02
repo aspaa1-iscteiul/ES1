@@ -215,7 +215,7 @@ public class Utils {
 		return total;
 	}
 
-	public static <K, V> Map<K, V> toMap(List<K> keys, List<V> values) {
+	public static <K, V> Map<K, V> listsToMap(List<K> keys, List<V> values) {
 		return IntStream.range(0, keys.size()).boxed().collect(Collectors.toMap(keys::get, values::get));
 	}
 
