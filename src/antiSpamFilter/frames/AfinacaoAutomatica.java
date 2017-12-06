@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import antiSpamFilter.utils.GuiUtils;
 import antiSpamFilter.utils.Utils;
 
@@ -59,6 +58,13 @@ public class AfinacaoAutomatica {
 		afinacaoAuto.add(panel);
 	}
 
+	/**
+	 * Cria os botões generate, save e cancel num painel (buttons_panel) 
+	 * 
+	 * @param center_panel
+	 *            Painel atualizado pela geração aleatória
+	 * @return Painel com os butões (buttons_panel)
+	 */
 	private JPanel createButtons(JPanel center_panel) {
 		JPanel buttons_panel = new JPanel();
 		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -92,7 +98,7 @@ public class AfinacaoAutomatica {
 				try {
 					FileWriter w = new FileWriter(Utils.config_files_path[0], false);
 					for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet())
-						w.write(entry.getKey() + " " + entry.getValue().toString() + Utils.newLine);
+						w.write(entry.getKey() + " " + entry.getValue().toString() + GuiUtils.newLine);
 					w.close();
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(afinacaoAuto,

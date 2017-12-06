@@ -32,11 +32,12 @@ import antiSpamFilter.frames.Otimizacao;
 
 public class GuiUtils {
 	public static JScrollPane scroll_rules_panel;
+	public static JLabel help_label_fp, help_label_fn;
+	public static String newLine = System.getProperty("line.separator");
 
 	private static Font font_titles = new Font("Helvetica", Font.PLAIN, 18),
 			font_labels = new Font("Helvetica", Font.PLAIN, 14), font_text = new Font("Helvetica", Font.PLAIN, 12);
 	private static JTextArea help_area_fp, help_area_fn;
-	public static JLabel help_label_fp, help_label_fn;
 
 	public static void frameAtCenter(JFrame frame) {
 		frame.setLocation(new Point((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth()) / 2,
@@ -107,7 +108,7 @@ public class GuiUtils {
 			help_label_fp = new JLabel();
 			help_label_fp.setFont(font_labels);
 			panel.add(help_label_fp, BorderLayout.CENTER);
-			help_area_fp = formatTextArea(Utils.newLine
+			help_area_fp = formatTextArea(newLine
 					+ "Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam.");
 			help_area_fp.setFont(font_text);
 			panel.add(help_area_fp, BorderLayout.SOUTH);
@@ -115,7 +116,7 @@ public class GuiUtils {
 			help_label_fn = new JLabel();
 			help_label_fn.setFont(font_labels);
 			panel.add(help_label_fn, BorderLayout.CENTER);
-			help_area_fn = formatTextArea(Utils.newLine
+			help_area_fn = formatTextArea(newLine
 					+ "Um Falso Negativo (FN) ocorre quando uma mensagem spam é classificada como mensagem legítima.");
 			help_area_fn.setFont(font_text);
 			panel.add(help_area_fn, BorderLayout.SOUTH);

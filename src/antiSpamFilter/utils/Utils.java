@@ -33,7 +33,6 @@ public class Utils {
 	 * Garante a utilização do caractere de mudança de linha, independentemente
 	 * do Sistema Operativo em que a aplicação corre
 	 */
-	public static String newLine = System.getProperty("line.separator");
 
 	/**
 	 * Retorna o conteúdo, divido por linhas, do ficheiro cujo path é passado
@@ -57,7 +56,7 @@ public class Utils {
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"O ficheiro " + file_path + " já não se encontra na diretoria indicada",
-					"Configuração dos ficheiros", JOptionPane.WARNING_MESSAGE);
+					"Configuração dos ficheiros", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
 		return lines;
@@ -88,7 +87,7 @@ public class Utils {
 						rules_weights.put(ss[0], Double.valueOf(ss[1]));
 					} catch (NumberFormatException e) {
 						JOptionPane.showMessageDialog(new JFrame(), "Ficheiro rules.cf tem um formato inválido",
-								"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
+								"Conteúdo dos ficheiros", JOptionPane.ERROR_MESSAGE);
 						config_files_path[0] = "?";
 						return false;
 					}
@@ -96,7 +95,7 @@ public class Utils {
 			if (rules_weights.isEmpty()) {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"O ficheiro rules.cf selecionados está vazio. Por favor, reconfigure-o",
-						"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
+						"Conteúdo dos ficheiros", JOptionPane.ERROR_MESSAGE);
 				config_files_path[0] = "?";
 				return false;
 			}
@@ -137,7 +136,7 @@ public class Utils {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"O ficheiro " + (hamLog ? "ham" : "spam")
 								+ ".log selecionado está vazio. Por favor, reconfigure-o",
-						"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
+						"Conteúdo dos ficheiros", JOptionPane.ERROR_MESSAGE);
 				config_files_path[hamLog ? 2 : 1] = "?";
 				return false;
 			}
@@ -173,7 +172,7 @@ public class Utils {
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(new JFrame(), "Não foi possível prosseguir! O ficheiro "
 					+ fileConfigs.getAbsolutePath() + " não pode ser aberto.", "Erro Fatal",
-					JOptionPane.WARNING_MESSAGE);
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

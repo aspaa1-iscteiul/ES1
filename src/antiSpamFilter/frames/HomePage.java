@@ -91,7 +91,7 @@ public class HomePage {
 				for (int i = 0; i < line.length; i++) {
 					if (line[i] != "?" && new File(line[i]).exists() && new File(line[i]).isFile()) {
 						Utils.config_files_path[i] = line[i];
-						message += config_files_names[i] + " - " + line[i] + Utils.newLine;
+						message += config_files_names[i] + " - " + line[i] + GuiUtils.newLine;
 						existsFileConfig = true;
 					}
 				}
@@ -103,9 +103,9 @@ public class HomePage {
 				 */
 				if (existsFileConfig) {
 					int n = (JOptionPane.showConfirmDialog(homePage,
-							"Os seguintes ficheiros encontram-se configurados:" + Utils.newLine + Utils.newLine
-									+ message + Utils.newLine + Utils.newLine
-									+ "Quer manter estes ficheiros de configuração?" + Utils.newLine + Utils.newLine));
+							"Os seguintes ficheiros encontram-se configurados:" + GuiUtils.newLine + GuiUtils.newLine
+									+ message + GuiUtils.newLine + GuiUtils.newLine
+									+ "Quer manter estes ficheiros de configuração?" + GuiUtils.newLine + GuiUtils.newLine));
 					// Escolher a opção 'No' resulta na perda das configurações
 					if (n == JOptionPane.NO_OPTION) {
 						for (int i = 0; i < Utils.config_files_path.length; i++)
@@ -253,7 +253,7 @@ public class HomePage {
 	private boolean checkConfigFiles() {
 		boolean noFile = false;
 		String message = "Antes de poder realizar esta operação, é necessário selecionar todos os ficheiros de configuração."
-				+ Utils.newLine + Utils.newLine;
+				+ GuiUtils.newLine + GuiUtils.newLine;
 		for (int i = 0; i < Utils.config_files_path.length; i++) {
 			message += "O ficheiro " + config_files_names[i];
 			if (Utils.config_files_path[i] == "?") {
@@ -261,7 +261,7 @@ public class HomePage {
 				noFile = true;
 			} else
 				message += " está configurado em " + Utils.config_files_path[i];
-			message += Utils.newLine;
+			message += GuiUtils.newLine;
 		}
 
 		if (noFile)

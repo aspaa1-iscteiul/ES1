@@ -72,7 +72,7 @@ public class Otimizacao {
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(progressFrame,
 							"Ocorreu um problema durante a execução da framework JMetal", "Erro",
-							JOptionPane.WARNING_MESSAGE);
+							JOptionPane.ERROR_MESSAGE);
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -88,12 +88,15 @@ public class Otimizacao {
 								Desktop.getDesktop().open(output);
 							else
 								JOptionPane.showMessageDialog(progressFrame,
-										"aconteceu um problema a compilar com o Rscript.exe");
+										"Ocorreu um problema ao compilar com o Rscript.exe", "Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
+
 						} catch (IOException | InterruptedException e) {
-							JOptionPane.showMessageDialog(progressFrame,
-									"aconteceu um problema a compilar com o Rscript.exe");
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							String message = "Ocorreu um problema ao compilar com o Rscript.exe" + GuiUtils.newLine
+									+ GuiUtils.newLine
+									+ "Sugestão: Por favor, verifique que o path para o executável Rscript.exe se encontra incluído na variável de ambiente PATH" + GuiUtils.newLine;
+							JOptionPane.showMessageDialog(progressFrame, message, "Indicador Hypervolume",
+									JOptionPane.ERROR_MESSAGE);
+//							e.printStackTrace();
 						}
 						constructFrame();
 						readAlgorithmOutputs();
@@ -125,11 +128,11 @@ public class Otimizacao {
 			Utils.rules_weights.put(rulesList.get(i), Double.valueOf(values[i]));
 
 		int decimal_places = String.valueOf(Utils.hamLogRules.size()).length();
-		GuiUtils.help_label_fp.setText("  Falsos Positivos (FP):  " + String.format("%0" + decimal_places + "d", (int) fp) + " / "
-				+ Utils.hamLogRules.size());
+		GuiUtils.help_label_fp.setText("  Falsos Positivos (FP):  "
+				+ String.format("%0" + decimal_places + "d", (int) fp) + " / " + Utils.hamLogRules.size());
 		decimal_places = String.valueOf(Utils.spamLogRules.size()).length();
-		GuiUtils.help_label_fn.setText("  Falsos Negativos (FN):  " + String.format("%0" + decimal_places + "d", (int) fn) + " / "
-				+ Utils.spamLogRules.size());
+		GuiUtils.help_label_fn.setText("  Falsos Negativos (FN):  "
+				+ String.format("%0" + decimal_places + "d", (int) fn) + " / " + Utils.spamLogRules.size());
 	}
 
 	/**
@@ -152,7 +155,7 @@ public class Otimizacao {
 				try {
 					FileWriter w = new FileWriter(Utils.config_files_path[0], false);
 					for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet())
-						w.write(entry.getKey() + " " + entry.getValue().toString() + Utils.newLine);
+						w.write(entry.getKey() + " " + entry.getValue().toString() + GuiUtils.newLine);
 					w.close();
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(frame,
