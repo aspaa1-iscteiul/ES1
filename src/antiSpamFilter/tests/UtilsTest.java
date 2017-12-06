@@ -2,10 +2,9 @@ package antiSpamFilter.tests;
 
 import java.io.File;
 import java.util.ArrayList;
-
 import javax.swing.JFrame;
-
 import org.junit.Test;
+import antiSpamFilter.utils.GuiUtils;
 import antiSpamFilter.utils.Utils;
 
 /**
@@ -175,7 +174,7 @@ public class UtilsTest {
 	 */
 	@Test
 	public void testFrameAtCenter() {
-		Utils.frameAtCenter(new JFrame());
+		GuiUtils.frameAtCenter(new JFrame());
 	}
 
 }

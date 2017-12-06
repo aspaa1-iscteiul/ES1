@@ -1,7 +1,5 @@
 package antiSpamFilter.utils;
 
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -14,12 +12,11 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
- * Classe contendo funções de âmbito geral e atributos invocadas por diferentes
+ * Classe contendo funções de âmbito geral e atributos invocados por diferentes
  * funções em várias classes
  * 
  * @author Ana Pestana, Diogo Reis, Guilherme Azevedo, Rafael Costa
@@ -32,10 +29,12 @@ public class Utils {
 	public static File fileConfigs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
 	public static ArrayList<String[]> hamLogRules = new ArrayList<String[]>(), spamLogRules = new ArrayList<String[]>();
 	public static HashMap<String, Double> rules_weights = new HashMap<String, Double>();
-
-	// Garante a utilização do caractere de mudança de linha, independentemente
-	// do Sistema Operativo em que a aplicação corre
+	/*
+	 * Garante a utilização do caractere de mudança de linha, independentemente
+	 * do Sistema Operativo em que a aplicação corre
+	 */
 	public static String newLine = System.getProperty("line.separator");
+
 
 	/**
 	 * Retorna o conteúdo, divido por linhas, do ficheiro cujo path é passado
@@ -219,9 +218,6 @@ public class Utils {
 		return IntStream.range(0, keys.size()).boxed().collect(Collectors.toMap(keys::get, values::get));
 	}
 
-	public static void frameAtCenter(JFrame frame) {
-		frame.setLocation(new Point((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth()) / 2,
-				(Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight()) / 2));
-	}
+
 
 }

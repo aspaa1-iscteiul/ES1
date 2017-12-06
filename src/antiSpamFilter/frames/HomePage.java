@@ -26,8 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import antiSpamFilter.utils.OtherClasses;
+import antiSpamFilter.utils.GuiUtils;
 import antiSpamFilter.utils.Utils;
 
 /**
@@ -67,7 +66,7 @@ public class HomePage {
 		 */
 		homePage.setSize(450, 450);
 		homePage.setResizable(false);
-		Utils.frameAtCenter(homePage);
+		GuiUtils.frameAtCenter(homePage);
 	}
 
 	/**
@@ -85,8 +84,7 @@ public class HomePage {
 				Scanner scn = new Scanner(Utils.fileConfigs);
 				String[] line = scn.nextLine().split("<");
 				String message = "";
-				// TODO Rename variable 'config'
-				boolean config = false;
+				boolean existsFileConfig = false;
 				/*
 				 * Recupera os paths dos ficheiros configurados durante a última
 				 * sessão.
@@ -95,7 +93,7 @@ public class HomePage {
 					if (line[i] != "?" && new File(line[i]).exists() && new File(line[i]).isFile()) {
 						Utils.config_files_path[i] = line[i];
 						message += config_files_names[i] + " - " + line[i] + Utils.newLine;
-						config = true;
+						existsFileConfig = true;
 					}
 				}
 
@@ -104,7 +102,7 @@ public class HomePage {
 				 * utilizador escolher manter a configuração dos ficheiros
 				 * selecionados durante a última sessão ou descartá-los.
 				 */
-				if (config) {
+				if (existsFileConfig) {
 					int n = (JOptionPane.showConfirmDialog(homePage,
 							"Os seguintes ficheiros encontram-se configurados:" + Utils.newLine + Utils.newLine
 									+ message + Utils.newLine + Utils.newLine
@@ -150,7 +148,7 @@ public class HomePage {
 		menuList = new JList<>(menuOptions);
 		// Impede seleção múltipla
 		menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		menuList.setCellRenderer(new OtherClasses.ListRenderer(images));
+		menuList.setCellRenderer(new GuiUtils.ListRenderer(images));
 
 		// Reagir a eventos double-click na lista do menu
 		menuList.addMouseListener(new MouseAdapter() {
@@ -196,7 +194,7 @@ public class HomePage {
 				homePage.dispose();
 			}
 		});
-		homePage.addWindowListener(new OtherClasses.HomePageClose());
+		homePage.addWindowListener(new GuiUtils.HomePageClose());
 		buttons_panel.add(select);
 		buttons_panel.add(cancel);
 		panel.add(buttons_panel, BorderLayout.SOUTH);
@@ -241,10 +239,9 @@ public class HomePage {
 			if (index == 3) {
 				AfinacaoAutomatica.launch();
 			} else if (index == 4) {
-				visible(true); // TODO A realizar nos próximos sprints
+				visible(true); // TODO A realizar no 4º sprint
 			} else if (index == 5) {
 				Otimizacao.launch();
-				// visible(true); // TODO A realizar nos próximos sprints
 			}
 		}
 	}

@@ -20,7 +20,7 @@ import java.util.List;
 public class AntiSpamFilterAutomaticConfiguration {
 	private static final int INDEPENDENT_RUNS = 5;
 
-	public static void algorithm() throws IOException {
+	public static void runAlgorithm() throws IOException {
 		String experimentBaseDirectory = "experimentBaseDirectory";
 
 		List<ExperimentProblem<DoubleSolution>> problemList = new ArrayList<>();
