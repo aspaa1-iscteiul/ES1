@@ -27,7 +27,6 @@ import antiSpamFilter.utils.Utils;
 public class Otimizacao {
 
 	private static JFrame frame, progressFrame;
-	private String help_text_fp, help_text_fn;
 	private static final String algorithmOutputFilesPath = "./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.r";
 
 	public Otimizacao() {
@@ -96,8 +95,8 @@ public class Otimizacao {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						readAlgorithmOutputs();
 						constructFrame();
+						readAlgorithmOutputs();
 						progressFrame.dispose();
 					}
 				});
@@ -126,11 +125,11 @@ public class Otimizacao {
 			Utils.rules_weights.put(rulesList.get(i), Double.valueOf(values[i]));
 
 		int decimal_places = String.valueOf(Utils.hamLogRules.size()).length();
-		help_text_fp = "  Falsos Positivos (FP):  " + String.format("%0" + decimal_places + "d", (int) fp) + " / "
-				+ Utils.hamLogRules.size();
+		GuiUtils.help_label_fp.setText("  Falsos Positivos (FP):  " + String.format("%0" + decimal_places + "d", (int) fp) + " / "
+				+ Utils.hamLogRules.size());
 		decimal_places = String.valueOf(Utils.spamLogRules.size()).length();
-		help_text_fn = "  Falsos Negativos (FN):  " + String.format("%0" + decimal_places + "d", (int) fn) + " / "
-				+ Utils.spamLogRules.size();
+		GuiUtils.help_label_fn.setText("  Falsos Negativos (FN):  " + String.format("%0" + decimal_places + "d", (int) fn) + " / "
+				+ Utils.spamLogRules.size());
 	}
 
 	/**
@@ -138,7 +137,7 @@ public class Otimizacao {
 	 */
 	private void addContents() {
 		JPanel panel = new JPanel();
-		GuiUtils.constructGUI(panel, help_text_fp, help_text_fn);
+		GuiUtils.constructGUI(panel);
 
 		JPanel buttons_panel = new JPanel();
 		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));

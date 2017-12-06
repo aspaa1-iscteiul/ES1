@@ -1,25 +1,16 @@
 package antiSpamFilter.frames;
 
 import java.awt.BorderLayout;
-//import java.awt.Color;
 import java.awt.FlowLayout;
-//import java.awt.Font;
-//import java.awt.GridLayout;
-//import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-//import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-//import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-//import javax.swing.JScrollPane;
-//import javax.swing.JTextArea;
-//import javax.swing.border.EmptyBorder;
 
 import antiSpamFilter.utils.GuiUtils;
 import antiSpamFilter.utils.Utils;
@@ -36,7 +27,6 @@ import antiSpamFilter.utils.Utils;
 public class AfinacaoAutomatica {
 
 	private static JFrame afinacaoAuto;
-	private String help_label_fp, help_label_fn;
 
 	/**
 	 * Construtor da página de Afinação Automática
@@ -46,10 +36,10 @@ public class AfinacaoAutomatica {
 		afinacaoAuto.setTitle("Afinação automática do filtro anti-spam");
 
 		Utils.readConfigFiles();
-		
-		calculate_FP_FN();
 
 		addContents();
+
+		calculate_FP_FN();
 
 		afinacaoAuto.pack();
 		afinacaoAuto.setSize(750, 600);
@@ -59,36 +49,17 @@ public class AfinacaoAutomatica {
 	}
 
 	/**
-	 * Atribui novos pesos de forma aleatória com valores entre -5 e 5 às regras
-	 * mapeadas no HashMap
-	 */
-	private void changeWeights() {
-		for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet())
-			entry.setValue((Math.random() * 10) - 5);
-		calculate_FP_FN();
-	}
-
-	/**
-	 * Procede ao cálculo, por invocação, do número de Falsos Positivos e Falsos
-	 * Negativos
-	 */
-	private void calculate_FP_FN() {
-		int decimal_places = String.valueOf(Utils.hamLogRules.size()).length();
-		help_label_fp = "  Falsos Positivos (FP):  "
-				+ String.format("%0" + decimal_places + "d", Utils.falses(true)) + " / " + Utils.hamLogRules.size();
-		decimal_places = String.valueOf(Utils.spamLogRules.size()).length();
-		help_label_fn = "  Falsos Negativos (FN):  "
-				+ String.format("%0" + decimal_places + "d", Utils.falses(false)) + " / " + Utils.spamLogRules.size();
-	}
-
-	/**
 	 * Adiciona os conteúdos à janela de Afinação Automática
 	 */
 	private void addContents() {
 		JPanel panel = new JPanel();
-		
-		JPanel center_panel = GuiUtils.constructGUI(panel, help_label_fp, help_label_fn);
 
+		panel.add(createButtons(GuiUtils.constructGUI(panel)), BorderLayout.SOUTH);
+
+		afinacaoAuto.add(panel);
+	}
+
+	private JPanel createButtons(JPanel center_panel) {
 		JPanel buttons_panel = new JPanel();
 		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		JButton generate = new JButton("Gerar novo vetor de pesos");
@@ -108,6 +79,7 @@ public class AfinacaoAutomatica {
 				afinacaoAuto.repaint();
 			}
 		});
+		buttons_panel.add(generate);
 
 		JButton save = new JButton("Guardar");
 		save.addActionListener(new ActionListener() {
@@ -131,6 +103,7 @@ public class AfinacaoAutomatica {
 				backHome();
 			}
 		});
+		buttons_panel.add(save);
 
 		JButton cancel = new JButton("Cancelar");
 		cancel.addActionListener(new ActionListener() {
@@ -143,13 +116,32 @@ public class AfinacaoAutomatica {
 				backHome();
 			}
 		});
-
-		buttons_panel.add(generate);
-		buttons_panel.add(save);
 		buttons_panel.add(cancel);
-		panel.add(buttons_panel, BorderLayout.SOUTH);
 
-		afinacaoAuto.add(panel);
+		return buttons_panel;
+	}
+
+	/**
+	 * Atribui novos pesos de forma aleatória com valores entre -5 e 5 às regras
+	 * mapeadas no HashMap
+	 */
+	private void changeWeights() {
+		for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet())
+			entry.setValue((Math.random() * 10) - 5);
+		calculate_FP_FN();
+	}
+
+	/**
+	 * Procede ao cálculo, por invocação, do número de Falsos Positivos e Falsos
+	 * Negativos
+	 */
+	private void calculate_FP_FN() {
+		int decimal_places = String.valueOf(Utils.hamLogRules.size()).length();
+		GuiUtils.help_label_fp.setText("  Falsos Positivos (FP):  "
+				+ String.format("%0" + decimal_places + "d", Utils.falses(true)) + " / " + Utils.hamLogRules.size());
+		decimal_places = String.valueOf(Utils.spamLogRules.size()).length();
+		GuiUtils.help_label_fn.setText("  Falsos Negativos (FN):  "
+				+ String.format("%0" + decimal_places + "d", Utils.falses(false)) + " / " + Utils.spamLogRules.size());
 	}
 
 	/**

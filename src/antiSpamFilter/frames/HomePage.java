@@ -43,7 +43,6 @@ public class HomePage {
 
 	private static JFrame homePage;
 	private JList<String> menuList;
-	private JButton select, cancel;
 	private Map<String, ImageIcon> images;
 	private String[] menuOptions = { "Selecionar ficheiro rules.cf", "Selecionar ficheiro spam.log",
 			"Selecionar ficheiro ham.log", "Geração automática de uma configuração",
@@ -175,7 +174,7 @@ public class HomePage {
 		// Adiciona o botão de "Selecionar" uma opção do menu
 		JPanel buttons_panel = new JPanel();
 		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		select = new JButton("Selecionar");
+		JButton select = new JButton("Selecionar");
 		select.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -187,7 +186,7 @@ public class HomePage {
 		 * Adiciona o botão de "Cancelar" e, caso o mesmo seja pressionado,
 		 * define a sentinela para o fecho da janela
 		 */
-		cancel = new JButton("Cancelar");
+		JButton cancel = new JButton("Cancelar");
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

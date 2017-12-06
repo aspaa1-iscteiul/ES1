@@ -35,19 +35,15 @@ public class GuiUtils {
 
 	private static Font font_titles = new Font("Helvetica", Font.PLAIN, 18),
 			font_labels = new Font("Helvetica", Font.PLAIN, 14), font_text = new Font("Helvetica", Font.PLAIN, 12);
-	private static JTextArea help_area_fp;
-	private static JTextArea help_area_fn;
-	private static String help_text_fp;
-	private static String help_text_fn;
+	private static JTextArea help_area_fp, help_area_fn;
+	public static JLabel help_label_fp, help_label_fn;
 
 	public static void frameAtCenter(JFrame frame) {
 		frame.setLocation(new Point((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth()) / 2,
 				(Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight()) / 2));
 	}
 
-	public static JPanel constructGUI(JPanel panel, String fp, String fn) {
-		help_text_fp = fp;
-		help_text_fn = fn;
+	public static JPanel constructGUI(JPanel panel) {
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
@@ -107,16 +103,18 @@ public class GuiUtils {
 		panel.setLayout(new BorderLayout());
 		panel.add(formatHelpButton(number), BorderLayout.WEST);
 
-		JLabel count = new JLabel(number == 1 ? help_text_fp : help_text_fn);
-		count.setFont(font_labels);
-		panel.add(count, BorderLayout.CENTER);
-
 		if (number == 1) {
+			help_label_fp = new JLabel();
+			help_label_fp.setFont(font_labels);
+			panel.add(help_label_fp, BorderLayout.CENTER);
 			help_area_fp = formatTextArea(Utils.newLine
 					+ "Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam.");
 			help_area_fp.setFont(font_text);
 			panel.add(help_area_fp, BorderLayout.SOUTH);
 		} else {
+			help_label_fn = new JLabel();
+			help_label_fn.setFont(font_labels);
+			panel.add(help_label_fn, BorderLayout.CENTER);
 			help_area_fn = formatTextArea(Utils.newLine
 					+ "Um Falso Negativo (FN) ocorre quando uma mensagem spam é classificada como mensagem legítima.");
 			help_area_fn.setFont(font_text);

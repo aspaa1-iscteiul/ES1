@@ -35,7 +35,6 @@ public class Utils {
 	 */
 	public static String newLine = System.getProperty("line.separator");
 
-
 	/**
 	 * Retorna o conteúdo, divido por linhas, do ficheiro cujo path é passado
 	 * como argumento .
@@ -217,7 +216,5 @@ public class Utils {
 	public static <K, V> Map<K, V> listsToMap(List<K> keys, List<V> values) {
 		return IntStream.range(0, keys.size()).boxed().collect(Collectors.toMap(keys::get, values::get));
 	}
-
-
 
 }
