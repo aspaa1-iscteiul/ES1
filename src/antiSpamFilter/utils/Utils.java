@@ -7,12 +7,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
- * Classe contendo funções de âmbito geral e atributos invocadas por diferentes
+ * Classe contendo funções de âmbito geral e atributos invocados por diferentes
  * funções em várias classes
  * 
  * @author Ana Pestana, Diogo Reis, Guilherme Azevedo, Rafael Costa
@@ -25,10 +29,10 @@ public class Utils {
 	public static File fileConfigs = new File("./src/antiSpamFilter/frames/config_files_path.txt");
 	public static ArrayList<String[]> hamLogRules = new ArrayList<String[]>(), spamLogRules = new ArrayList<String[]>();
 	public static HashMap<String, Double> rules_weights = new HashMap<String, Double>();
-
-	// Garante a utilização do caractere de mudança de linha, independentemente
-	// do Sistema Operativo em que a aplicação corre
-	public static String newLine = System.getProperty("line.separator");
+	/*
+	 * Garante a utilização do caractere de mudança de linha, independentemente
+	 * do Sistema Operativo em que a aplicação corre
+	 */
 
 	/**
 	 * Retorna o conteúdo, divido por linhas, do ficheiro cujo path é passado
@@ -52,7 +56,7 @@ public class Utils {
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"O ficheiro " + file_path + " já não se encontra na diretoria indicada",
-					"Configuração dos ficheiros", JOptionPane.WARNING_MESSAGE);
+					"Configuração dos ficheiros", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
 		return lines;
@@ -83,7 +87,7 @@ public class Utils {
 						rules_weights.put(ss[0], Double.valueOf(ss[1]));
 					} catch (NumberFormatException e) {
 						JOptionPane.showMessageDialog(new JFrame(), "Ficheiro rules.cf tem um formato inválido",
-								"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
+								"Conteúdo dos ficheiros", JOptionPane.ERROR_MESSAGE);
 						config_files_path[0] = "?";
 						return false;
 					}
@@ -91,7 +95,7 @@ public class Utils {
 			if (rules_weights.isEmpty()) {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"O ficheiro rules.cf selecionados está vazio. Por favor, reconfigure-o",
-						"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
+						"Conteúdo dos ficheiros", JOptionPane.ERROR_MESSAGE);
 				config_files_path[0] = "?";
 				return false;
 			}
@@ -132,7 +136,7 @@ public class Utils {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"O ficheiro " + (hamLog ? "ham" : "spam")
 								+ ".log selecionado está vazio. Por favor, reconfigure-o",
-						"Conteúdo dos ficheiros", JOptionPane.WARNING_MESSAGE);
+						"Conteúdo dos ficheiros", JOptionPane.ERROR_MESSAGE);
 				config_files_path[hamLog ? 2 : 1] = "?";
 				return false;
 			}
@@ -168,7 +172,7 @@ public class Utils {
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(new JFrame(), "Não foi possível prosseguir! O ficheiro "
 					+ fileConfigs.getAbsolutePath() + " não pode ser aberto.", "Erro Fatal",
-					JOptionPane.WARNING_MESSAGE);
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -206,6 +210,10 @@ public class Utils {
 				total++;
 		}
 		return total;
+	}
+
+	public static <K, V> Map<K, V> listsToMap(List<K> keys, List<V> values) {
+		return IntStream.range(0, keys.size()).boxed().collect(Collectors.toMap(keys::get, values::get));
 	}
 
 }

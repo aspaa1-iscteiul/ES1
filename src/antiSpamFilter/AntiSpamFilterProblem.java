@@ -1,15 +1,21 @@
 package antiSpamFilter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 
-import antiSpamFilter.frames.HomePage;
 import antiSpamFilter.utils.Utils;
 
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
+
+	/**
+	 * default
+	 */
+	private static final long serialVersionUID = 1L;
+	private ArrayList<String> rules_list;
 
 	public AntiSpamFilterProblem() {
 		/*
@@ -17,6 +23,8 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		 * existentes
 		 */
 		this(Utils.lines(Utils.config_files_path[0]).size());
+		rules_list = new ArrayList<>(Utils.rules_weights.keySet());
+		Collections.sort(rules_list);
 	}
 
 	public AntiSpamFilterProblem(Integer numberOfVariables) {
@@ -36,25 +44,11 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		setUpperLimit(upperLimit);
 	}
 
-	public void evaluate(DoubleSolution solution) {
-		double aux, xi, xj;
-		double[] fx = new double[getNumberOfObjectives()];
-		double[] x = new double[getNumberOfVariables()];
-		for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-			x[i] = solution.getVariableValue(i);
-		}
+	public void evaluate(DoubleSolution solution) {		
+		for (int i = 0; i < solution.getNumberOfVariables(); i++)
+			Utils.rules_weights.put(rules_list.get(i), solution.getVariableValue(i));
 
-		fx[0] = 0.0;
-		for (int var = 0; var < solution.getNumberOfVariables() - 1; var++) {
-			fx[0] += Math.abs(x[0]); // Example for testing
-		}
-
-		fx[1] = 0.0;
-		for (int var = 0; var < solution.getNumberOfVariables(); var++) {
-			fx[1] += Math.abs(x[1]); // Example for testing
-		}
-
-		solution.setObjective(0, fx[0]);
-		solution.setObjective(1, fx[1]);
+		solution.setObjective(0, Utils.falses(true));
+		solution.setObjective(1, Utils.falses(false));
 	}
 }

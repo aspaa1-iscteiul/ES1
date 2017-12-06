@@ -1,0 +1,6 @@
+ID1 rule2 rule4 rule7
+ID2 rule1 rule3
+ID3 rule4 rule1 rule5
+ID4 rule1 rule3 rule7
+ID5 rule1
+ID6 rule2
