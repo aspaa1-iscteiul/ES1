@@ -1,0 +1,38 @@
+1º Sprint - De 29 de Outubro a 12 de Novembro (2 semanas)
+
+O que correu bem?
+
+--> De uma forma geral, foram respeitados os 
+prazos estabelecidos para as atividades do 
+Sprint assim como para a entrega da funcionalidade.
+--> Realizámos testes de Caixa Negra com utilizadores
+que não possuiam qualquer conhecimento do desenho ou
+implementação do incremento.
+
+O que correu menos bem?
+
+--> Os tempos de execução de cada atividade foram mal 
+estimados o que obrigou à sua constante redefinição.
+
+O que deve começar a ser feito?
+
+--> Devemos passar complementar as reuniões presenciais 
+de daily scrum com videoconferências ou videochamadas 
+aos fins-de-semana e feriados.
+--> Devemos passar a garantir a coerência no idioma 
+em que são publicados os comentários para o GitHub, 
+assegurando que as mensagens são escritas em Português, 
+conforme acordado.
+--> Devemos passar a detalhar com mais pormenor a descrição das 
+tarefas do Sprint na plataforma de trabalho colaborativo Trello.
+
+O que deve continuar a ser feito?
+
+--> Devemos continuar a envolver o cliente 
+(professor) na tomada de decisões.
+
+O que deve parar de ser feito?
+
+--> Devemos parar de realizar commits para o 
+repositório quando, no código, ainda existem
+erros por corrigir.

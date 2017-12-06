@@ -1,0 +1,47 @@
+2º Sprint - De 13 de Novembro a 25 de Novembro (2 semanas)
+
+O que correu bem?
+
+--> De uma forma geral, foram respeitados os 
+prazos estabelecidos para as atividades do 
+Sprint assim como para a entrega da funcionalidade.
+--> Realizámos testes de Caixa Negra com utilizadores
+que não possuíam qualquer conhecimento do desenho ou
+implementação do incremento. Através destes testes
+identificámos e corrigimos defeitos da funcionalidade.
+--> As funcionalidades a desenvolver foram bem
+estimadas para o tempo que os elementos do grupo
+tinham disponível durante este último sprint.
+--> Passámos a detalhar com maior pormenor as 
+tarefas do Sprint na plataforma de trabalho 
+colaborativo Trello, o que possibilitou que tivéssemos
+uma visão muito clara do trabalho a desenvolver
+desde o início do sprint.
+
+O que correu menos bem?
+
+--> A distribuição de papéis mostrou-se pouco efetiva
+durante este sprint, pelo que, a partir da próxima
+iteração, iremos adotar uma configuração diferente,
+com o papel de Quality Manager atribuído ao Rafael
+Costa e o de 2º programador atribuído ao Diogo Reis.
+As referidas alterações já se encontram refletidas
+na folha 'Es1 2017 Groups' disponível no e-learning.
+
+O que deve começar a ser feito?
+
+--> Devemos passar a atentar à estruturação das mensagens
+que são publicadas com os commits para o GitHub, 
+assegurando a sua coerência e compreensibilidade.
+
+O que deve continuar a ser feito?
+
+--> Devemos continuar a procurar satisfazer os
+requisitos apresentados pelo cliente (professor).
+
+O que deve parar de ser feito?
+
+--> Devemos passar a facilitar a elaboração da 
+documentação em fases posteriores, começando a 
+incorporar comentários no código durante a fase
+de desenvolvimento.
