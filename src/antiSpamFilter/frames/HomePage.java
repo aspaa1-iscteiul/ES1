@@ -102,10 +102,9 @@ public class HomePage {
 				 * selecionados durante a última sessão ou descartá-los.
 				 */
 				if (existsFileConfig) {
-					int n = (JOptionPane.showConfirmDialog(homePage,
-							"Os seguintes ficheiros encontram-se configurados:" + GuiUtils.newLine + GuiUtils.newLine
-									+ message + GuiUtils.newLine + GuiUtils.newLine
-									+ "Quer manter estes ficheiros de configuração?" + GuiUtils.newLine + GuiUtils.newLine));
+					int n = (JOptionPane.showConfirmDialog(homePage, "Os seguintes ficheiros encontram-se configurados:"
+							+ GuiUtils.newLine + GuiUtils.newLine + message + GuiUtils.newLine + GuiUtils.newLine
+							+ "Quer manter estes ficheiros de configuração?" + GuiUtils.newLine + GuiUtils.newLine));
 					// Escolher a opção 'No' resulta na perda das configurações
 					if (n == JOptionPane.NO_OPTION) {
 						for (int i = 0; i < Utils.config_files_path.length; i++)
@@ -142,30 +141,7 @@ public class HomePage {
 		menuLabel.setFont(new Font("Arial", Font.BOLD, 28));
 		panel.add(menuLabel, BorderLayout.NORTH);
 
-		// Adiciona as opções do menu
-		images = createImages();
-		menuList = new JList<>(menuOptions);
-		// Impede seleção múltipla
-		menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		menuList.setCellRenderer(new GuiUtils.ListRenderer(images));
-
-		// Reagir a eventos double-click na lista do menu
-		menuList.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent mouseEvent) {
-				if (mouseEvent.getClickCount() == 2) {
-					selectOptions();
-				}
-			}
-		});
-
-		// Reagir a eventos key-enter na lista do menu
-		menuList.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent keyEvent) {
-				if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
-					selectOptions();
-				}
-			}
-		});
+		createMenuList();
 
 		JScrollPane scrollPanel = new JScrollPane(menuList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -199,6 +175,35 @@ public class HomePage {
 		panel.add(buttons_panel, BorderLayout.SOUTH);
 
 		homePage.add(panel);
+	}
+
+	/**
+	 * Adiciona as opções do menu
+	 */
+	private void createMenuList() {
+		images = createImages();
+		menuList = new JList<>(menuOptions);
+		// Impede seleção múltipla
+		menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		menuList.setCellRenderer(new GuiUtils.ListRenderer(images));
+
+		// Reagir a eventos double-click na lista do menu
+		menuList.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent mouseEvent) {
+				if (mouseEvent.getClickCount() == 2) {
+					selectOptions();
+				}
+			}
+		});
+
+		// Reagir a eventos key-enter na lista do menu
+		menuList.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent keyEvent) {
+				if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
+					selectOptions();
+				}
+			}
+		});
 	}
 
 	/**

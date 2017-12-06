@@ -30,6 +30,12 @@ import antiSpamFilter.frames.AfinacaoAutomatica;
 import antiSpamFilter.frames.Otimizacao;
 //import antiSpamFilter.frames.AfinacaoManual;
 
+/**
+ * Classe com diversas funções auxiliares à construção das interfaces gráficas
+ * 
+ * @author Ana Pestana, Diogo Reis, Guilherme Azevedo, Rafael Costa
+ *
+ */
 public class GuiUtils {
 	public static JScrollPane scroll_rules_panel;
 	public static JLabel help_label_fp, help_label_fn;
@@ -39,11 +45,24 @@ public class GuiUtils {
 			font_labels = new Font("Helvetica", Font.PLAIN, 14), font_text = new Font("Helvetica", Font.PLAIN, 12);
 	private static JTextArea help_area_fp, help_area_fn;
 
+	/**
+	 * Iniciar a frame no centro do ecrã
+	 * 
+	 * @param frame
+	 */
 	public static void frameAtCenter(JFrame frame) {
 		frame.setLocation(new Point((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth()) / 2,
 				(Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight()) / 2));
 	}
 
+	/**
+	 * Constrói a base das GUI de Afinação Automática e Otimização
+	 * 
+	 * @param panel
+	 *            Painel principal a adicionar à frame
+	 * @return center_panel para permitir a atualização após uma nova geração
+	 *         aleatória
+	 */
 	public static JPanel constructGUI(JPanel panel) {
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -85,6 +104,9 @@ public class GuiUtils {
 		return center_panel;
 	}
 
+	/**
+	 * Criação do painel para display das regras e respetivos pesos
+	 */
 	public static void createRulesPanel() {
 		JPanel rules_panel = new JPanel();
 		rules_panel.setLayout(new GridLayout(0, 1));
@@ -98,6 +120,14 @@ public class GuiUtils {
 		scroll_rules_panel = new JScrollPane(rules_panel);
 	}
 
+	/**
+	 * Criação do painel para display do número de Falsos Positivos e Falsos
+	 * Negativos, assim como informação de apoio
+	 * 
+	 * @param number
+	 *            1: Falsos Positivos, Else: Falsos Negativos
+	 * @return painel com os FP, FN e textAreas de ajuda
+	 */
 	private static JPanel createHelpPanel(int number) {
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(20, 10, 10, 10));
