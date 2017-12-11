@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -23,31 +24,15 @@ import antiSpamFilter.AntiSpamFilterAutomaticConfiguration;
 import antiSpamFilter.utils.GuiUtils;
 import antiSpamFilter.utils.Utils;
 
-/**
- * Classe responsável por determinar o comportamento da aplicação no que
- * respeita à funcionalidade de otimização do filtro anti-spam, incluindo
- * suporte à contagem dos falsos positivos e falsos negativos, ao display da
- * configuração do vetor de pesos e do lançamento das aplicações externas para
- * compilação e visualização do gráfico do indicador de qualidade.
- * 
- * @author Ana Pestana, Diogo Reis, Guilherme Azevedo, Rafael Costa
- *
- */
 public class Otimizacao {
 
 	private static JFrame frame, progressFrame;
 	private static final String algorithmOutputFilesPath = "./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.r";
 
-	/**
-	 * Construtor da página de Otimização
-	 */
 	public Otimizacao() {
 		optimize();
 	}
 
-	/**
-	 * Construtor da GUI
-	 */
 	private void constructFrame() {
 		frame = new JFrame();
 		frame.setTitle("Otimização do filtro anti-spam");
@@ -61,9 +46,6 @@ public class Otimizacao {
 		visible(true);
 	}
 
-	/**
-	 * Display da progressBar
-	 */
 	private void optimize() {
 		JProgressBar progressBar = new JProgressBar();
 		progressBar.setString("A calcular...");
@@ -81,11 +63,6 @@ public class Otimizacao {
 		Executors.newSingleThreadExecutor().execute(executeAlgorithm());
 	}
 
-	/**
-	 * Execução do algoritmo genético de otimização, por invocação.
-	 * 
-	 * @return Thread que corre o algoritmo
-	 */
 	private Runnable executeAlgorithm() {
 		return new Runnable() {
 			@Override
@@ -96,6 +73,8 @@ public class Otimizacao {
 					JOptionPane.showMessageDialog(progressFrame,
 							"Ocorreu um problema durante a execução da framework JMetal", "Erro",
 							JOptionPane.ERROR_MESSAGE);
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
@@ -109,16 +88,15 @@ public class Otimizacao {
 								Desktop.getDesktop().open(output);
 							else
 								JOptionPane.showMessageDialog(progressFrame,
-										"Ocorreu um problema ao compilar com o Rscript.exe", "Indicador Hypervolume",
-										JOptionPane.ERROR_MESSAGE);
+										"Ocorreu um problema ao compilar com o Rscript.exe", "Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
 
 						} catch (IOException | InterruptedException e) {
 							String message = "Ocorreu um problema ao compilar com o Rscript.exe" + GuiUtils.newLine
 									+ GuiUtils.newLine
-									+ "Sugestão: Por favor, verifique que o path para o executável Rscript.exe se encontra incluído na variável de ambiente PATH"
-									+ GuiUtils.newLine;
+									+ "Sugestão: Por favor, verifique que o path para o executável Rscript.exe se encontra incluído na variável de ambiente PATH" + GuiUtils.newLine;
 							JOptionPane.showMessageDialog(progressFrame, message, "Indicador Hypervolume",
 									JOptionPane.ERROR_MESSAGE);
+//							e.printStackTrace();
 						}
 						constructFrame();
 						readAlgorithmOutputs();
@@ -129,9 +107,6 @@ public class Otimizacao {
 		};
 	}
 
-	/**
-	 * Leitura dos valores ótimos devolvidos pelo algoritmo genético
-	 */
 	private void readAlgorithmOutputs() {
 		ArrayList<String> lines = Utils.lines(algorithmOutputFilesPath + "f");
 		int fp = Integer.MAX_VALUE, fn = Integer.MAX_VALUE;
@@ -165,7 +140,7 @@ public class Otimizacao {
 	 */
 	private void addContents() {
 		JPanel panel = new JPanel();
-		GuiUtils.constructGUI(panel);
+		GuiUtils.constructGUI(panel, true);
 
 		JPanel buttons_panel = new JPanel();
 		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -219,18 +194,10 @@ public class Otimizacao {
 		HomePage.visible(true);
 	}
 
-	/**
-	 * Define a visibilidade da frame de Otimização
-	 * 
-	 * @param setVisible
-	 */
 	private void visible(boolean visible) {
 		frame.setVisible(visible);
 	}
 
-	/**
-	 * Lança uma nova janela de Otimização
-	 */
 	public static void launch() {
 		new Otimizacao();
 	}

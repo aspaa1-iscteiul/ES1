@@ -11,33 +11,33 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import antiSpamFilter.frames.AfinacaoAutomatica;
 import antiSpamFilter.frames.Otimizacao;
 //import antiSpamFilter.frames.AfinacaoManual;
 
-/**
- * Classe com diversas funções auxiliares à construção das interfaces gráficas
- * 
- * @author Ana Pestana, Diogo Reis, Guilherme Azevedo, Rafael Costa
- *
- */
 public class GuiUtils {
 	public static JScrollPane scroll_rules_panel;
+	public static HashMap<String, JTextField> rules_values;
 	public static JLabel help_label_fp, help_label_fn;
 	public static String newLine = System.getProperty("line.separator");
 
@@ -45,25 +45,12 @@ public class GuiUtils {
 			font_labels = new Font("Helvetica", Font.PLAIN, 14), font_text = new Font("Helvetica", Font.PLAIN, 12);
 	private static JTextArea help_area_fp, help_area_fn;
 
-	/**
-	 * Iniciar a frame no centro do ecrã
-	 * 
-	 * @param frame
-	 */
 	public static void frameAtCenter(JFrame frame) {
 		frame.setLocation(new Point((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth()) / 2,
 				(Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight()) / 2));
 	}
 
-	/**
-	 * Constrói a base das GUI de Afinação Automática e Otimização
-	 * 
-	 * @param panel
-	 *            Painel principal a adicionar à frame
-	 * @return center_panel para permitir a atualização após uma nova geração
-	 *         aleatória
-	 */
-	public static JPanel constructGUI(JPanel panel) {
+	public static JPanel constructGUI(JPanel panel, boolean optimize) {
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
@@ -74,7 +61,7 @@ public class GuiUtils {
 		panelTitle.setFont(font_titles);
 		center_panel.add(panelTitle, BorderLayout.NORTH);
 
-		createRulesPanel();
+		createRulesPanel(optimize);
 		center_panel.add(scroll_rules_panel, BorderLayout.CENTER);
 		panel.add(center_panel, BorderLayout.CENTER);
 
@@ -104,30 +91,26 @@ public class GuiUtils {
 		return center_panel;
 	}
 
-	/**
-	 * Criação do painel para display das regras e respetivos pesos
-	 */
-	public static void createRulesPanel() {
+	public static void createRulesPanel(boolean optimize) {
 		JPanel rules_panel = new JPanel();
 		rules_panel.setLayout(new GridLayout(0, 1));
+		rules_values = new HashMap<>();
 		for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet()) {
 			JPanel panel = new JPanel();
 			panel.setLayout(new BorderLayout());
-			panel.add(new JLabel(entry.getKey() + "     "), BorderLayout.CENTER);
-			panel.add(new JLabel(String.format("%.4f", entry.getValue())), BorderLayout.EAST);
+			String key = entry.getKey();
+			JTextField value = onlyDoubles(entry.getValue());
+			value.setEditable(!optimize);
+			rules_values.put(key, value);
+			panel.add(new JLabel(key + "     "), BorderLayout.CENTER);
+			panel.add(value, BorderLayout.EAST);
 			rules_panel.add(panel);
 		}
 		scroll_rules_panel = new JScrollPane(rules_panel);
+		scroll_rules_panel.getVerticalScrollBar().setUnitIncrement(50);
+		scroll_rules_panel.setWheelScrollingEnabled(true);
 	}
 
-	/**
-	 * Criação do painel para display do número de Falsos Positivos e Falsos
-	 * Negativos, assim como informação de apoio
-	 * 
-	 * @param number
-	 *            1: Falsos Positivos, Else: Falsos Negativos
-	 * @return painel com os FP, FN e textAreas de ajuda
-	 */
 	private static JPanel createHelpPanel(int number) {
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(20, 10, 10, 10));
@@ -330,6 +313,82 @@ public class GuiUtils {
 		public void windowDeactivated(WindowEvent e) {
 		}
 
+	}
+
+	private static JTextField onlyDoubles(double number) {
+		if (number < -5 || number > 5)
+			return null;
+		String n = Double.toString(number);
+		if (number >= 0)
+			n = "+" + n;
+		if (n.length() >= 7)
+			n = n.substring(0, 7);
+
+		JTextField t = new JTextField(n, 10) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void processKeyEvent(KeyEvent key) {
+				char c = key.getKeyChar();
+				String text = getText();
+
+				int code = key.getKeyCode();
+				if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_LEFT || code == KeyEvent.VK_BACK_SPACE
+						|| code == KeyEvent.VK_DELETE)
+					super.processKeyEvent(key);
+
+				if (code == KeyEvent.VK_ENTER) {
+					double v = Double.valueOf(text);
+					if (v < -5 || v > 5)
+						JOptionPane.showMessageDialog(new JFrame(), "you're good !");
+					else
+						JOptionPane.showMessageDialog(new JFrame(), "you're number is " + v);
+				}
+
+				if (c == ',') {
+					c = '.';
+					key.setKeyChar('.');
+				}
+
+				if (text.length() == 0) {
+					if (c == '-' || c == '+')
+						super.processKeyEvent(key);
+					else if (c >= '0' && c <= '5') {
+						setText("+");
+						super.processKeyEvent(key);
+					} else if (c == '.') {
+						setText("+0");
+						super.processKeyEvent(key);
+					}
+				} else if (text.length() == 1) {
+					if (c >= '0' && c <= '5') {
+						super.processKeyEvent(key);
+					} else if (c == '.') {
+						setText(text + '0');
+						super.processKeyEvent(key);
+					}
+				} else if (text.length() == 2) {
+					if (text.equals("+5") || text.equals("-5"))
+						return;
+					if (c == '.')
+						super.processKeyEvent(key);
+				} else if (text.length() < 7) {
+					if (c >= '0' && c <= '9')
+						super.processKeyEvent(key);
+				}
+			}
+		};
+		t.setFont(new Font("Consolas", Font.PLAIN, 16));
+		return t;
+	}
+
+	public static boolean checkValues() {
+		for (Entry<String, JTextField> entry : GuiUtils.rules_values.entrySet()) {
+			double value = Double.valueOf(entry.getValue().getText());
+			if (value < -5 || value > 5)
+				return false;
+		}
+		return true;
 	}
 
 }

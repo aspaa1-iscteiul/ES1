@@ -7,10 +7,14 @@ import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map.Entry;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import antiSpamFilter.utils.GuiUtils;
 import antiSpamFilter.utils.Utils;
 
@@ -53,13 +57,13 @@ public class AfinacaoAutomatica {
 	private void addContents() {
 		JPanel panel = new JPanel();
 
-		panel.add(createButtons(GuiUtils.constructGUI(panel)), BorderLayout.SOUTH);
+		panel.add(createButtons(GuiUtils.constructGUI(panel, false)), BorderLayout.SOUTH);
 
 		afinacaoAuto.add(panel);
 	}
 
 	/**
-	 * Cria os botões generate, save e cancel num painel (buttons_panel) 
+	 * Cria os botões generate, save e cancel num painel (buttons_panel)
 	 * 
 	 * @param center_panel
 	 *            Painel atualizado pela geração aleatória
@@ -68,6 +72,24 @@ public class AfinacaoAutomatica {
 	private JPanel createButtons(JPanel center_panel) {
 		JPanel buttons_panel = new JPanel();
 		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
+		JButton calculate = new JButton("Calcular FP e FN");
+		calculate.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (GuiUtils.checkValues()) {
+					for (Entry<String, JTextField> entry : GuiUtils.rules_values.entrySet())
+						Utils.rules_weights.put(entry.getKey(), Double.valueOf(entry.getValue().getText()));
+					calculate_FP_FN();
+				} else {
+					JOptionPane.showMessageDialog(afinacaoAuto,
+							"Os valores das rules não estão corretos, só são aceites valores entre -5 e 5",
+							"Configuração dos ficheiros", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		buttons_panel.add(calculate);
+		
 		JButton generate = new JButton("Gerar novo vetor de pesos");
 		generate.addActionListener(new ActionListener() {
 			/*
@@ -79,7 +101,7 @@ public class AfinacaoAutomatica {
 			public void actionPerformed(ActionEvent e) {
 				changeWeights();
 				center_panel.remove(GuiUtils.scroll_rules_panel);
-				GuiUtils.createRulesPanel();
+				GuiUtils.createRulesPanel(false);
 				center_panel.add(GuiUtils.scroll_rules_panel, BorderLayout.CENTER);
 				afinacaoAuto.validate();
 				afinacaoAuto.repaint();
@@ -95,18 +117,24 @@ public class AfinacaoAutomatica {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					FileWriter w = new FileWriter(Utils.config_files_path[0], false);
-					for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet())
-						w.write(entry.getKey() + " " + entry.getValue().toString() + GuiUtils.newLine);
-					w.close();
-				} catch (IOException e1) {
+				if (GuiUtils.checkValues()) {
+					try {
+						FileWriter w = new FileWriter(Utils.config_files_path[0], false);
+						for (Entry<String, JTextField> entry : GuiUtils.rules_values.entrySet())
+							w.write(entry.getKey() + " " + entry.getValue().getText() + GuiUtils.newLine);
+						w.close();
+					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(afinacaoAuto,
+								"Não foi possível prosseguir! O ficheiro rules.cf está a ser editado.",
+								"Configuração dos ficheiros", JOptionPane.WARNING_MESSAGE);
+						System.exit(1);
+					}
+					backHome();
+				} else {
 					JOptionPane.showMessageDialog(afinacaoAuto,
-							"Não foi possível prosseguir! O ficheiro rules.cf está a ser editado.",
+							"Os valores das rules não estão corretos, só são aceites valores entre -5 e 5",
 							"Configuração dos ficheiros", JOptionPane.WARNING_MESSAGE);
-					System.exit(1);
 				}
-				backHome();
 			}
 		});
 		buttons_panel.add(save);

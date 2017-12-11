@@ -45,8 +45,7 @@ public class HomePage {
 	private JList<String> menuList;
 	private Map<String, ImageIcon> images;
 	private String[] menuOptions = { "Selecionar ficheiro rules.cf", "Selecionar ficheiro spam.log",
-			"Selecionar ficheiro ham.log", "Geração aleatória de uma configuração",
-			"Afinação manual do filtro anti-spam", "Otimização do filtro anti-spam" },
+			"Selecionar ficheiro ham.log", "Configuração manual e automática", "Otimização do filtro anti-spam" },
 			config_files_names = { "rules.cf", "spam.log", "ham.log" };
 
 	/**
@@ -141,7 +140,30 @@ public class HomePage {
 		menuLabel.setFont(new Font("Arial", Font.BOLD, 28));
 		panel.add(menuLabel, BorderLayout.NORTH);
 
-		createMenuList();
+		// Adiciona as opções do menu
+		images = createImages();
+		menuList = new JList<>(menuOptions);
+		// Impede seleção múltipla
+		menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		menuList.setCellRenderer(new GuiUtils.ListRenderer(images));
+
+		// Reagir a eventos double-click na lista do menu
+		menuList.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent mouseEvent) {
+				if (mouseEvent.getClickCount() == 2) {
+					selectOptions();
+				}
+			}
+		});
+
+		// Reagir a eventos key-enter na lista do menu
+		menuList.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent keyEvent) {
+				if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
+					selectOptions();
+				}
+			}
+		});
 
 		JScrollPane scrollPanel = new JScrollPane(menuList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -175,35 +197,6 @@ public class HomePage {
 		panel.add(buttons_panel, BorderLayout.SOUTH);
 
 		homePage.add(panel);
-	}
-
-	/**
-	 * Adiciona as opções do menu
-	 */
-	private void createMenuList() {
-		images = createImages();
-		menuList = new JList<>(menuOptions);
-		// Impede seleção múltipla
-		menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		menuList.setCellRenderer(new GuiUtils.ListRenderer(images));
-
-		// Reagir a eventos double-click na lista do menu
-		menuList.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent mouseEvent) {
-				if (mouseEvent.getClickCount() == 2) {
-					selectOptions();
-				}
-			}
-		});
-
-		// Reagir a eventos key-enter na lista do menu
-		menuList.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent keyEvent) {
-				if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
-					selectOptions();
-				}
-			}
-		});
 	}
 
 	/**
@@ -243,8 +236,6 @@ public class HomePage {
 			if (index == 3) {
 				AfinacaoAutomatica.launch();
 			} else if (index == 4) {
-				visible(true); // TODO A realizar no 4º sprint
-			} else if (index == 5) {
 				Otimizacao.launch();
 			}
 		}
@@ -313,9 +304,8 @@ public class HomePage {
 		m.put(menuOptions[0], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
 		m.put(menuOptions[1], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
 		m.put(menuOptions[2], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
-		m.put(menuOptions[3], new ImageIcon("src/antiSpamFilter/frames/icons/circle.PNG"));
-		m.put(menuOptions[4], new ImageIcon("src/antiSpamFilter/frames/icons/pencil.PNG"));
-		m.put(menuOptions[5], new ImageIcon("src/antiSpamFilter/frames/icons/magic_wand.PNG"));
+		m.put(menuOptions[3], new ImageIcon("src/antiSpamFilter/frames/icons/pencil.PNG"));
+		m.put(menuOptions[4], new ImageIcon("src/antiSpamFilter/frames/icons/magic_wand.PNG"));
 		return m;
 	}
 
