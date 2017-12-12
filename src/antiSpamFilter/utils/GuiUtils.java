@@ -12,8 +12,13 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -24,7 +29,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -33,7 +37,6 @@ import javax.swing.border.EmptyBorder;
 
 import antiSpamFilter.frames.AfinacaoAutomatica;
 import antiSpamFilter.frames.Otimizacao;
-//import antiSpamFilter.frames.AfinacaoManual;
 
 public class GuiUtils {
 	public static JScrollPane scroll_rules_panel;
@@ -95,11 +98,13 @@ public class GuiUtils {
 		JPanel rules_panel = new JPanel();
 		rules_panel.setLayout(new GridLayout(0, 1));
 		rules_values = new HashMap<>();
+		// JDoubleInputTextField.ValidInput var = new
+		// JDoubleInputTextField.ValidInput(-5, 5, 4);
 		for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet()) {
 			JPanel panel = new JPanel();
 			panel.setLayout(new BorderLayout());
 			String key = entry.getKey();
-			JTextField value = onlyDoubles(entry.getValue());
+			JTextField value = new JDoubleInputTextField(entry.getValue().toString(), 10, -5, 5, 4);
 			value.setEditable(!optimize);
 			rules_values.put(key, value);
 			panel.add(new JLabel(key + "     "), BorderLayout.CENTER);
@@ -315,71 +320,127 @@ public class GuiUtils {
 
 	}
 
-	private static JTextField onlyDoubles(double number) {
-		if (number < -5 || number > 5)
-			return null;
-		String n = Double.toString(number);
-		if (number >= 0)
-			n = "+" + n;
-		if (n.length() >= 7)
-			n = n.substring(0, 7);
+	public static final class JDoubleInputTextField extends JTextField {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
-		JTextField t = new JTextField(n, 10) {
-			private static final long serialVersionUID = 1L;
+		private double max, min;
+		private int precision;
 
-			@Override
-			public void processKeyEvent(KeyEvent key) {
-				char c = key.getKeyChar();
-				String text = getText();
+		/**
+		 * Creates a new JTextField that only allows double numbers with values
+		 * between <b>min</b> and <b>max</b>
+		 * 
+		 * @param text
+		 *            like in {@link JTextField#JTextField(String, int)}
+		 * @param columns
+		 *            like in {@link JTextField#JTextField(String, int)}
+		 * @param min
+		 *            minimum value of the input (inclusive)
+		 * @param max
+		 *            maximum value of the input (inclusive)
+		 * @param precision
+		 *            number of decimal cases
+		 * 
+		 * @see JTextField#JTextField(String, int)
+		 */
+		public JDoubleInputTextField(String text, int columns, double min, double max, int precision) {
+			super(text, columns);
+			setFont(new Font("Consolas", Font.PLAIN, 16));
+			this.min = min;
+			this.max = max;
+			this.precision = precision;
+			checkText(text);
+		}
 
-				int code = key.getKeyCode();
-				if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_LEFT || code == KeyEvent.VK_BACK_SPACE
-						|| code == KeyEvent.VK_DELETE)
-					super.processKeyEvent(key);
+		@Override
+		public void processKeyEvent(KeyEvent key) {
+			char c = key.getKeyChar();
+			String text_before_process = getText();
+			if (text_before_process == null)
+				return;
 
-				if (code == KeyEvent.VK_ENTER) {
-					double v = Double.valueOf(text);
-					if (v < -5 || v > 5)
-						JOptionPane.showMessageDialog(new JFrame(), "you're good !");
-					else
-						JOptionPane.showMessageDialog(new JFrame(), "you're number is " + v);
-				}
+			super.processKeyEvent(key);
 
-				if (c == ',') {
-					c = '.';
-					key.setKeyChar('.');
-				}
+			int code = key.getKeyCode();
+			if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_LEFT)
+				return;
 
-				if (text.length() == 0) {
-					if (c == '-' || c == '+')
-						super.processKeyEvent(key);
-					else if (c >= '0' && c <= '5') {
-						setText("+");
-						super.processKeyEvent(key);
-					} else if (c == '.') {
-						setText("+0");
-						super.processKeyEvent(key);
-					}
-				} else if (text.length() == 1) {
-					if (c >= '0' && c <= '5') {
-						super.processKeyEvent(key);
-					} else if (c == '.') {
-						setText(text + '0');
-						super.processKeyEvent(key);
-					}
-				} else if (text.length() == 2) {
-					if (text.equals("+5") || text.equals("-5"))
-						return;
-					if (c == '.')
-						super.processKeyEvent(key);
-				} else if (text.length() < 7) {
-					if (c >= '0' && c <= '9')
-						super.processKeyEvent(key);
-				}
+			if (code == KeyEvent.VK_BACK_SPACE || code == KeyEvent.VK_DELETE) {
+				if (!isValidInput(getText()))
+					setText(text_before_process);
+				return;
 			}
-		};
-		t.setFont(new Font("Consolas", Font.PLAIN, 16));
-		return t;
+
+			if (c == ',') {
+				c = '.';
+				key.setKeyChar('.');
+			}
+
+			if ((c == '+' || c == '-') && text_before_process.equals(""))
+				return;
+
+			if (text_before_process.length() >= 7) {
+				setText(text_before_process);
+				return;
+			}
+
+			String var = getText();
+			if (isValidInput(var)) {
+				System.out.println("\t\t\tfinal valid input -> getText() = " + var);
+				try {
+					rearrange(var);
+				} catch (NumberFormatException e) {
+				}
+			} else
+				setText(text_before_process);
+
+		}
+
+		private void checkText(String text) {
+			if (isValidInput(text)) {
+				setText(round(Double.valueOf(text), precision));
+			} else
+				setText(null);
+		}
+
+		private String rearrange(String var) {
+			try {
+				if (Double.valueOf(var) >= 0 && !var.startsWith("+")) {
+					if (Double.valueOf(var) == 0 && var.startsWith("-"))
+						;
+					else
+						var = '+' + var;
+				}
+				while (var.length() > 2 && var.charAt(1) == '0' && var.charAt(2) != '.')
+					var = var.charAt(0) + var.substring(2);
+			} catch (NumberFormatException e) {
+			}
+			return var;
+		}
+
+		private boolean isValidInput(String text) {
+			try {
+				double var = Double.valueOf(round(Double.valueOf(text), precision));
+				System.out.println(var + " -> " + (var >= min && var <= max));
+				return var >= min && var <= max && !(text.endsWith("d") || text.endsWith("f"));
+			} catch (NumberFormatException e) {
+				return text.equals("") || text.equals("+") || text.equals("-");
+			}
+		}
+
+		private static String round(double value, int precision) {
+			if (precision < 0)
+				throw new IllegalArgumentException();
+
+			String number = new BigDecimal(value).setScale(precision, RoundingMode.HALF_UP).toString();
+			if (value >= 0)
+				number = '+' + number;
+			return number;
+		}
+
 	}
 
 	public static boolean checkValues() {
