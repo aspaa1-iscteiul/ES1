@@ -388,13 +388,9 @@ public class GuiUtils {
 			}
 
 			String var = getText();
-			if (isValidInput(var)) {
-				System.out.println("\t\t\tfinal valid input -> getText() = " + var);
-				try {
-					rearrange(var);
-				} catch (NumberFormatException e) {
-				}
-			} else
+			if (isValidInput(var))
+				rearrange(var);
+			else
 				setText(text_before_process);
 
 		}
@@ -424,7 +420,6 @@ public class GuiUtils {
 		private boolean isValidInput(String text) {
 			try {
 				double var = Double.valueOf(round(Double.valueOf(text), precision));
-				System.out.println(var + " -> " + (var >= min && var <= max));
 				return var >= min && var <= max && !(text.endsWith("d") || text.endsWith("f"));
 			} catch (NumberFormatException e) {
 				return text.equals("") || text.equals("+") || text.equals("-");
