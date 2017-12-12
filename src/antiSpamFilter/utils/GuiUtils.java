@@ -12,13 +12,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -98,13 +95,11 @@ public class GuiUtils {
 		JPanel rules_panel = new JPanel();
 		rules_panel.setLayout(new GridLayout(0, 1));
 		rules_values = new HashMap<>();
-		// JDoubleInputTextField.ValidInput var = new
-		// JDoubleInputTextField.ValidInput(-5, 5, 4);
 		for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet()) {
 			JPanel panel = new JPanel();
 			panel.setLayout(new BorderLayout());
 			String key = entry.getKey();
-			JTextField value = new JDoubleInputTextField(entry.getValue().toString(), 10, -5, 5, 4);
+			JTextField value = new JDoubleInputTextField(entry.getValue().toString(), 8, -5, 5, 4);
 			value.setEditable(!optimize);
 			rules_values.put(key, value);
 			panel.add(new JLabel(key + "     "), BorderLayout.CENTER);
@@ -322,12 +317,13 @@ public class GuiUtils {
 
 	public static final class JDoubleInputTextField extends JTextField {
 		/**
-		 * 
+		 * Default
 		 */
 		private static final long serialVersionUID = 1L;
 
 		private double max, min;
 		private int precision;
+		private boolean showPlusSign;
 
 		/**
 		 * Creates a new JTextField that only allows double numbers with values
@@ -347,42 +343,68 @@ public class GuiUtils {
 		 * @see JTextField#JTextField(String, int)
 		 */
 		public JDoubleInputTextField(String text, int columns, double min, double max, int precision) {
+			this(text, columns, min, max, precision, true);
+		}
+
+		/**
+		 * Creates a new JTextField that only allows double numbers with values
+		 * between {@code min} and {@code max}
+		 * 
+		 * @param text
+		 *            like in {@link JTextField#JTextField(String, int)}
+		 * @param columns
+		 *            like in {@link JTextField#JTextField(String, int)}
+		 * @param min
+		 *            minimum value of the input (inclusive)
+		 * @param max
+		 *            maximum value of the input (inclusive)
+		 * @param precision
+		 *            number of decimal cases
+		 * @param showPlusSign
+		 *            if {@code true} it shows and accept plus sign, otherwise
+		 *            doesn't show and doesn't accept the plus sign
+		 * 
+		 * @see JTextField#JTextField(String, int)
+		 */
+		public JDoubleInputTextField(String text, int columns, double min, double max, int precision,
+				boolean showPlusSign) {
 			super(text, columns);
+			if ((min < 0 && max < 0) || (min > 0 && max > 0)) {
+				throw new IllegalArgumentException("zero must be between min and max");
+			}
 			setFont(new Font("Consolas", Font.PLAIN, 16));
 			this.min = min;
 			this.max = max;
 			this.precision = precision;
-			checkText(text);
+			this.showPlusSign = showPlusSign;
+			if (isValidInput(text)) {
+				setText(round(Double.valueOf(text), precision));
+			} else
+				setText(null);
 		}
 
 		@Override
 		public void processKeyEvent(KeyEvent key) {
-			char c = key.getKeyChar();
 			String text_before_process = getText();
-			if (text_before_process == null)
-				return;
 
 			super.processKeyEvent(key);
 
-			int code = key.getKeyCode();
-			if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_LEFT)
-				return;
-
-			if (code == KeyEvent.VK_BACK_SPACE || code == KeyEvent.VK_DELETE) {
+			if (key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_LEFT
+					|| key.getKeyCode() == KeyEvent.VK_BACK_SPACE || key.getKeyCode() == KeyEvent.VK_DELETE) {
 				if (!isValidInput(getText()))
 					setText(text_before_process);
 				return;
 			}
 
-			if (c == ',') {
-				c = '.';
+			if (key.getKeyChar() == ',')
 				key.setKeyChar('.');
-			}
 
-			if ((c == '+' || c == '-') && text_before_process.equals(""))
+			if (((key.getKeyChar() == '+' && showPlusSign) || key.getKeyChar() == '-')
+					&& text_before_process.equals(""))
 				return;
 
-			if (text_before_process.length() >= 7) {
+			int point_index = text_before_process.indexOf(".") + 1;
+			if (point_index > 0 && (text_before_process.length() - point_index) == precision) {
 				setText(text_before_process);
 				return;
 			}
@@ -392,29 +414,23 @@ public class GuiUtils {
 				rearrange(var);
 			else
 				setText(text_before_process);
-
 		}
 
-		private void checkText(String text) {
-			if (isValidInput(text)) {
-				setText(round(Double.valueOf(text), precision));
-			} else
-				setText(null);
-		}
-
-		private String rearrange(String var) {
+		private void rearrange(String var) {
 			try {
 				if (Double.valueOf(var) >= 0 && !var.startsWith("+")) {
-					if (Double.valueOf(var) == 0 && var.startsWith("-"))
-						;
-					else
+					if (!(Double.valueOf(var) == 0 && var.startsWith("-")) && showPlusSign)
 						var = '+' + var;
 				}
 				while (var.length() > 2 && var.charAt(1) == '0' && var.charAt(2) != '.')
 					var = var.charAt(0) + var.substring(2);
 			} catch (NumberFormatException e) {
 			}
-			return var;
+			if (var.equals(".") || var.equals("+."))
+				var = showPlusSign ? "+0." : "0.";
+			if (var.equals("-."))
+				var = "-0.";
+			setText(var);
 		}
 
 		private boolean isValidInput(String text) {
@@ -422,16 +438,17 @@ public class GuiUtils {
 				double var = Double.valueOf(round(Double.valueOf(text), precision));
 				return var >= min && var <= max && !(text.endsWith("d") || text.endsWith("f"));
 			} catch (NumberFormatException e) {
-				return text.equals("") || text.equals("+") || text.equals("-");
+				return text.equals("") || (text.equals("+") && showPlusSign) || text.equals("-") || text.equals(".")
+						|| (text.equals("+.") && showPlusSign) || text.equals("-.");
 			}
 		}
 
-		private static String round(double value, int precision) {
+		private String round(double value, int precision) {
 			if (precision < 0)
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("precision must be equal or bigger then zero");
 
 			String number = new BigDecimal(value).setScale(precision, RoundingMode.HALF_UP).toString();
-			if (value >= 0)
+			if (value >= 0 && showPlusSign)
 				number = '+' + number;
 			return number;
 		}
