@@ -88,15 +88,28 @@ public class Otimizacao {
 								Desktop.getDesktop().open(output);
 							else
 								JOptionPane.showMessageDialog(progressFrame,
-										"Ocorreu um problema ao compilar com o Rscript.exe", "Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
+										"Detetado um problema na visualização do documento HV.Boxplot.eps"
+												+ GuiUtils.newLine + GuiUtils.newLine + "Sugestão de resolução:"
+												+ GuiUtils.newLine
+												+ "Por favor, verifique se tem uma aplicação para visualização de documentos .eps instalada"
+												+ GuiUtils.newLine + GuiUtils.newLine
+												+ "(Poderá proceder ao download do EPS Viewer em: http://epsviewer.org/download.aspx)", // TODO
+																																		// Tornar
+																																		// site
+																																		// num
+																																		// link
+										"Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
 
 						} catch (IOException | InterruptedException e) {
-							String message = "Ocorreu um problema ao compilar com o Rscript.exe" + GuiUtils.newLine
-									+ GuiUtils.newLine
-									+ "Sugestão: Por favor, verifique que o path para o executável Rscript.exe se encontra incluído na variável de ambiente PATH" + GuiUtils.newLine;
-							JOptionPane.showMessageDialog(progressFrame, message, "Indicador Hypervolume",
-									JOptionPane.ERROR_MESSAGE);
-//							e.printStackTrace();
+							JOptionPane.showMessageDialog(progressFrame,
+									"Ocorreu um problema ao compilar com o Rscript.exe" + GuiUtils.newLine
+											+ GuiUtils.newLine + "Sugestão de resolução:" + GuiUtils.newLine
+											+ "Por favor, verifique se tem uma aplicação para compilação de documentos .R instalada no seu computador e, caso"
+											+ GuiUtils.newLine
+											+ "tenha, verifique ainda que o path para o executável Rscript.exe se encontra incluído na variável de ambiente PATH"
+											+ GuiUtils.newLine + GuiUtils.newLine
+											+ "(Poderá proceder ao download do pacote de software R em: https://cran.r-project.org/)",
+									"Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
 						}
 						constructFrame();
 						readAlgorithmOutputs();

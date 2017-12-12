@@ -73,7 +73,7 @@ public class AfinacaoAutomatica {
 		JPanel buttons_panel = new JPanel();
 		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
-		JButton calculate = new JButton("Calcular FP e FN");
+		JButton calculate = new JButton("Confirmar alterações");
 		calculate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

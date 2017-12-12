@@ -389,10 +389,15 @@ public class GuiUtils {
 
 			super.processKeyEvent(key);
 
-			if (key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_LEFT
-					|| key.getKeyCode() == KeyEvent.VK_BACK_SPACE || key.getKeyCode() == KeyEvent.VK_DELETE) {
-				if (!isValidInput(getText()))
-					setText(text_before_process);
+			if (key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_LEFT)
+				return;
+
+			if (key.getKeyCode() == KeyEvent.VK_BACK_SPACE || key.getKeyCode() == KeyEvent.VK_DELETE) {
+				if (key.getID() == KeyEvent.KEY_PRESSED)
+					try {
+						setText(text_before_process.substring(0, text_before_process.length() - 1));
+					} catch (StringIndexOutOfBoundsException e) {
+					}
 				return;
 			}
 
@@ -426,10 +431,6 @@ public class GuiUtils {
 					var = var.charAt(0) + var.substring(2);
 			} catch (NumberFormatException e) {
 			}
-			if (var.equals(".") || var.equals("+."))
-				var = showPlusSign ? "+0." : "0.";
-			if (var.equals("-."))
-				var = "-0.";
 			setText(var);
 		}
 
@@ -438,8 +439,7 @@ public class GuiUtils {
 				double var = Double.valueOf(round(Double.valueOf(text), precision));
 				return var >= min && var <= max && !(text.endsWith("d") || text.endsWith("f"));
 			} catch (NumberFormatException e) {
-				return text.equals("") || (text.equals("+") && showPlusSign) || text.equals("-") || text.equals(".")
-						|| (text.equals("+.") && showPlusSign) || text.equals("-.");
+				return text.equals("") || (text.equals("+") && showPlusSign) || text.equals("-");
 			}
 		}
 
@@ -457,9 +457,13 @@ public class GuiUtils {
 
 	public static boolean checkValues() {
 		for (Entry<String, JTextField> entry : GuiUtils.rules_values.entrySet()) {
-			double value = Double.valueOf(entry.getValue().getText());
-			if (value < -5 || value > 5)
-				return false;
+			try {
+				double value = Double.valueOf(entry.getValue().getText());
+				if (value < -5 || value > 5)
+					return false;
+			} catch (NumberFormatException e) {
+				entry.getValue().setText("+0.0");
+			}
 		}
 		return true;
 	}

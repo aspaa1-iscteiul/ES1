@@ -45,7 +45,8 @@ public class HomePage {
 	private JList<String> menuList;
 	private Map<String, ImageIcon> images;
 	private String[] menuOptions = { "Selecionar ficheiro rules.cf", "Selecionar ficheiro spam.log",
-			"Selecionar ficheiro ham.log", "Configuração manual e automática", "Otimização do filtro anti-spam" },
+			"Selecionar ficheiro ham.log", "Geração aleatória de uma configuração",
+			"Afinação manual do filtro anti-spam", "Otimização do filtro anti-spam" },
 			config_files_names = { "rules.cf", "spam.log", "ham.log" };
 
 	/**
@@ -233,9 +234,9 @@ public class HomePage {
 			Utils.saveConfigFilesPath();
 			if (!Utils.readConfigFiles())
 				return;
-			if (index == 3) {
+			if (index == 3 || index == 4) {
 				AfinacaoAutomatica.launch();
-			} else if (index == 4) {
+			} else if (index == 5) {
 				Otimizacao.launch();
 			}
 		}
@@ -304,8 +305,9 @@ public class HomePage {
 		m.put(menuOptions[0], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
 		m.put(menuOptions[1], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
 		m.put(menuOptions[2], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
-		m.put(menuOptions[3], new ImageIcon("src/antiSpamFilter/frames/icons/pencil.PNG"));
-		m.put(menuOptions[4], new ImageIcon("src/antiSpamFilter/frames/icons/magic_wand.PNG"));
+		m.put(menuOptions[3], new ImageIcon("src/antiSpamFilter/frames/icons/circle.PNG"));
+		m.put(menuOptions[4], new ImageIcon("src/antiSpamFilter/frames/icons/pencil.PNG"));
+		m.put(menuOptions[5], new ImageIcon("src/antiSpamFilter/frames/icons/magic_wand.PNG"));
 		return m;
 	}
 
