@@ -32,7 +32,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import antiSpamFilter.frames.AfinacaoAutomatica;
+import antiSpamFilter.frames.Afinacao;
 import antiSpamFilter.frames.Otimizacao;
 
 public class GuiUtils {
@@ -57,9 +57,32 @@ public class GuiUtils {
 		JPanel center_panel = new JPanel();
 		center_panel.setLayout(new BorderLayout());
 
+		JPanel aux_panel = new JPanel();
+		aux_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JLabel panelTitle = new JLabel("Configuração do vetor de pesos");
 		panelTitle.setFont(font_titles);
-		center_panel.add(panelTitle, BorderLayout.NORTH);
+		aux_panel.add(panelTitle);
+
+		if (!optimize) {
+			JButton button = new JButton(new ImageIcon("src/antiSpamFilter/frames/icons/circle2.PNG"));
+			button.setMargin(new Insets(0, 0, 0, 0));
+			button.setBorderPainted(false);
+			button.setContentAreaFilled(false);
+			button.setFocusPainted(false);
+			button.setOpaque(false);
+			button.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Afinacao.changeWeights();
+					center_panel.remove(GuiUtils.scroll_rules_panel);
+					GuiUtils.createRulesPanel(false);
+					center_panel.add(GuiUtils.scroll_rules_panel, BorderLayout.CENTER);
+					Afinacao.update();
+				}
+			});
+			aux_panel.add(button);
+		}
+		center_panel.add(aux_panel, BorderLayout.NORTH);
 
 		createRulesPanel(optimize);
 		center_panel.add(scroll_rules_panel, BorderLayout.CENTER);
@@ -99,8 +122,7 @@ public class GuiUtils {
 			JPanel panel = new JPanel();
 			panel.setLayout(new BorderLayout());
 			String key = entry.getKey();
-			JTextField value = new JDoubleInputTextField(entry.getValue().toString(), 8, -5, 5, 4);
-			value.setEditable(!optimize);
+			JTextField value = new JDoubleInputTextField(entry.getValue().toString(), 8, -5, 5, 4, !optimize);
 			rules_values.put(key, value);
 			panel.add(new JLabel(key + "     "), BorderLayout.CENTER);
 			panel.add(value, BorderLayout.EAST);
@@ -257,7 +279,7 @@ public class GuiUtils {
 
 		@Override
 		public void windowClosing(WindowEvent e) {
-			AfinacaoAutomatica.backHome();
+			Afinacao.backHome();
 		}
 
 		@Override
@@ -323,7 +345,7 @@ public class GuiUtils {
 
 		private double max, min;
 		private int precision;
-		private boolean showPlusSign;
+		private boolean editable;
 
 		/**
 		 * Creates a new JTextField that only allows double numbers with values
@@ -360,14 +382,14 @@ public class GuiUtils {
 		 *            maximum value of the input (inclusive)
 		 * @param precision
 		 *            number of decimal cases
-		 * @param showPlusSign
-		 *            if {@code true} it shows and accept plus sign, otherwise
-		 *            doesn't show and doesn't accept the plus sign
+		 * @param editable
+		 *            if {@code true} this component is editable, otherwise
+		 *            isn't editable
 		 * 
 		 * @see JTextField#JTextField(String, int)
 		 */
 		public JDoubleInputTextField(String text, int columns, double min, double max, int precision,
-				boolean showPlusSign) {
+				boolean editable) {
 			super(text, columns);
 			if ((min < 0 && max < 0) || (min > 0 && max > 0)) {
 				throw new IllegalArgumentException("zero must be between min and max");
@@ -376,7 +398,7 @@ public class GuiUtils {
 			this.min = min;
 			this.max = max;
 			this.precision = precision;
-			this.showPlusSign = showPlusSign;
+			this.editable = editable;
 			if (isValidInput(text)) {
 				setText(round(Double.valueOf(text), precision));
 			} else
@@ -386,6 +408,9 @@ public class GuiUtils {
 		@Override
 		public void processKeyEvent(KeyEvent key) {
 			String text_before_process = getText();
+
+			if (!editable)
+				return;
 
 			super.processKeyEvent(key);
 
@@ -404,8 +429,7 @@ public class GuiUtils {
 			if (key.getKeyChar() == ',')
 				key.setKeyChar('.');
 
-			if (((key.getKeyChar() == '+' && showPlusSign) || key.getKeyChar() == '-')
-					&& text_before_process.equals(""))
+			if ((key.getKeyChar() == '+' || key.getKeyChar() == '-') && text_before_process.equals(""))
 				return;
 
 			int point_index = text_before_process.indexOf(".") + 1;
@@ -424,7 +448,7 @@ public class GuiUtils {
 		private void rearrange(String var) {
 			try {
 				if (Double.valueOf(var) >= 0 && !var.startsWith("+")) {
-					if (!(Double.valueOf(var) == 0 && var.startsWith("-")) && showPlusSign)
+					if (!(Double.valueOf(var) == 0 && var.startsWith("-")))
 						var = '+' + var;
 				}
 				while (var.length() > 2 && var.charAt(1) == '0' && var.charAt(2) != '.')
@@ -439,7 +463,7 @@ public class GuiUtils {
 				double var = Double.valueOf(round(Double.valueOf(text), precision));
 				return var >= min && var <= max && !(text.endsWith("d") || text.endsWith("f"));
 			} catch (NumberFormatException e) {
-				return text.equals("") || (text.equals("+") && showPlusSign) || text.equals("-");
+				return text.equals("") || text.equals("+") || text.equals("-");
 			}
 		}
 
@@ -448,7 +472,7 @@ public class GuiUtils {
 				throw new IllegalArgumentException("precision must be equal or bigger then zero");
 
 			String number = new BigDecimal(value).setScale(precision, RoundingMode.HALF_UP).toString();
-			if (value >= 0 && showPlusSign)
+			if (value >= 0)
 				number = '+' + number;
 			return number;
 		}

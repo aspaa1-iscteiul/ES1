@@ -235,7 +235,7 @@ public class HomePage {
 			if (!Utils.readConfigFiles())
 				return;
 			if (index == 3 || index == 4) {
-				AfinacaoAutomatica.launch();
+				Afinacao.launch();
 			} else if (index == 5) {
 				Otimizacao.launch();
 			}
