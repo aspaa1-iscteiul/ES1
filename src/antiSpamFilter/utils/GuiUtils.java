@@ -3,6 +3,7 @@ package antiSpamFilter.utils;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -12,10 +13,15 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -26,6 +32,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -490,6 +497,34 @@ public class GuiUtils {
 			}
 		}
 		return true;
+	}
+
+	public static class RException extends MouseAdapter {
+		private static final String NEW_LINE = "<br/>";
+		private JLabel label;
+
+		public RException(JFrame frame) {
+			label = new JLabel("<html>Ocorreu um problema ao compilar com o Rscript.exe" + NEW_LINE + NEW_LINE
+					+ "Sugestão de resolução:" + NEW_LINE
+					+ "Por favor, verifique se tem uma aplicação para compilação de documentos .R instalada no seu computador e, caso"
+					+ NEW_LINE
+					+ "tenha, verifique ainda que o path para o executável Rscript.exe se encontra incluído na variável de ambiente PATH"
+					+ NEW_LINE + NEW_LINE
+					+ "(Poderá proceder ao download do pacote de software R em: <a href=\"\">https://cran.r-project.org/</a>)</html>");
+			label.addMouseListener(this);
+			JOptionPane.showMessageDialog(frame, label, "Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
+		}
+
+		public void mousePressed(MouseEvent event) {
+			if (event.getX() >= 342 && event.getX() <= 486 && event.getY() >= 97 && event.getY() <= 111)
+				try {
+					Desktop.getDesktop().browse(new URI("https://cran.r-project.org/"));
+				} catch (IOException | URISyntaxException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+
 	}
 
 }

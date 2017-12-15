@@ -80,36 +80,12 @@ public class Otimizacao {
 					@Override
 					public void run() {
 						try {
-							ProcessBuilder builder = new ProcessBuilder(new String[] { "Rscript", "./HV.Boxplot.R" });
+							ProcessBuilder builder = new ProcessBuilder(new String[] { "Rscript", "HV.Boxplot.R" });
 							builder.directory(new File("./experimentBaseDirectory/AntiSpamStudy/R/").getAbsoluteFile());
 							builder.start().waitFor();
-							File output = new File("./experimentBaseDirectory/AntiSpamStudy/R/HV.Boxplot.eps");
-							if (output.exists())
-								Desktop.getDesktop().open(output);
-							else
-								JOptionPane.showMessageDialog(progressFrame,
-										"Detetado um problema na visualização do documento HV.Boxplot.eps"
-												+ GuiUtils.newLine + GuiUtils.newLine + "Sugestão de resolução:"
-												+ GuiUtils.newLine
-												+ "Por favor, verifique se tem uma aplicação para visualização de documentos .eps instalada"
-												+ GuiUtils.newLine + GuiUtils.newLine
-												+ "(Poderá proceder ao download do EPS Viewer em: http://epsviewer.org/download.aspx)", // TODO
-																																		// Tornar
-																																		// site
-																																		// num
-																																		// link
-										"Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
-
+							Desktop.getDesktop().open(new File("./experimentBaseDirectory/AntiSpamStudy/R/HV.Boxplot.eps"));
 						} catch (IOException | InterruptedException e) {
-							JOptionPane.showMessageDialog(progressFrame,
-									"Ocorreu um problema ao compilar com o Rscript.exe" + GuiUtils.newLine
-											+ GuiUtils.newLine + "Sugestão de resolução:" + GuiUtils.newLine
-											+ "Por favor, verifique se tem uma aplicação para compilação de documentos .R instalada no seu computador e, caso"
-											+ GuiUtils.newLine
-											+ "tenha, verifique ainda que o path para o executável Rscript.exe se encontra incluído na variável de ambiente PATH"
-											+ GuiUtils.newLine + GuiUtils.newLine
-											+ "(Poderá proceder ao download do pacote de software R em: https://cran.r-project.org/)",
-									"Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
+							new GuiUtils.RException(progressFrame);
 						}
 						constructFrame();
 						readAlgorithmOutputs();
