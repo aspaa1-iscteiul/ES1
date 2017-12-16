@@ -83,9 +83,23 @@ public class Otimizacao {
 							ProcessBuilder builder = new ProcessBuilder(new String[] { "Rscript", "HV.Boxplot.R" });
 							builder.directory(new File("./experimentBaseDirectory/AntiSpamStudy/R/").getAbsoluteFile());
 							builder.start().waitFor();
-							Desktop.getDesktop().open(new File("./experimentBaseDirectory/AntiSpamStudy/R/HV.Boxplot.eps"));
+
+							Desktop.getDesktop()
+									.open(new File("./experimentBaseDirectory/AntiSpamStudy/R/HV.Boxplot.eps"));
 						} catch (IOException | InterruptedException e) {
 							new GuiUtils.RException(progressFrame);
+						}
+						try {
+							ProcessBuilder builder = new ProcessBuilder(
+									new String[] { "pdflatex", "AntiSpamStudy.tex" });
+							builder.directory(
+									new File("./experimentBaseDirectory/AntiSpamStudy/latex/").getAbsoluteFile());
+							builder.start().waitFor();
+
+							Desktop.getDesktop()
+									.open(new File("./experimentBaseDirectory/AntiSpamStudy/latex/AntiSpamStudy.pdf"));
+						} catch (InterruptedException | IOException e) {
+							new GuiUtils.LatexException(progressFrame);
 						}
 						constructFrame();
 						readAlgorithmOutputs();

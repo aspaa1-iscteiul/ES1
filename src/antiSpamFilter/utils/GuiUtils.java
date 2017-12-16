@@ -73,10 +73,7 @@ public class GuiUtils {
 		if (!optimize) {
 			JButton button = new JButton(new ImageIcon("src/antiSpamFilter/frames/icons/circle2.PNG"));
 			button.setMargin(new Insets(0, 0, 0, 0));
-			button.setBorderPainted(true);
-//			button.setContentAreaFilled(false);
 			button.setFocusPainted(false);
-//			button.setOpaque(false);
 			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -516,9 +513,37 @@ public class GuiUtils {
 		}
 
 		public void mousePressed(MouseEvent event) {
-			if (event.getX() >= 342 && event.getX() <= 486 && event.getY() >= 97 && event.getY() <= 111)
+			if (event.getX() >= 342 && event.getX() <= 486 && event.getY() >= 96 && event.getY() <= 111)
 				try {
 					Desktop.getDesktop().browse(new URI("https://cran.r-project.org/"));
+				} catch (IOException | URISyntaxException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+
+	}
+
+	public static class LatexException extends MouseAdapter {
+		private static final String NEW_LINE = "<br/>";
+		private JLabel label;
+
+		public LatexException(JFrame frame) {
+			label = new JLabel("<html>Ocorreu um problema ao compilar com o pdflatex.exe" + NEW_LINE + NEW_LINE
+					+ "Sugestão de resolução:" + NEW_LINE
+					+ "Por favor, verifique se tem uma aplicação para compilação de documentos .tex instalada no seu computador e, caso"
+					+ NEW_LINE
+					+ "tenha, verifique ainda que o path para o executável pdflatex.exe se encontra incluído na variável de ambiente PATH"
+					+ NEW_LINE + NEW_LINE
+					+ "(Poderá proceder ao download do pacote de software miktex em: <a href=\"\">https://miktex.org/download</a>)</html>");
+			label.addMouseListener(this);
+			JOptionPane.showMessageDialog(frame, label, "Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
+		}
+
+		public void mousePressed(MouseEvent event) {
+			if (event.getX() >= 373 && event.getX() <= 533 && event.getY() >= 96 && event.getY() <= 111)
+				try {
+					Desktop.getDesktop().browse(new URI("https://miktex.org/download"));
 				} catch (IOException | URISyntaxException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
