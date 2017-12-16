@@ -36,7 +36,7 @@ public class Afinacao {
 	 */
 	public Afinacao() {
 		afinacao = new JFrame();
-		afinacao.setTitle("Afinação automática do filtro anti-spam");
+		afinacao.setTitle("Afinação do filtro anti-spam");
 
 		Utils.readConfigFiles();
 

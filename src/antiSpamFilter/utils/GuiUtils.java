@@ -66,17 +66,17 @@ public class GuiUtils {
 
 		JPanel aux_panel = new JPanel();
 		aux_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		JLabel panelTitle = new JLabel("Configuração do vetor de pesos");
+		JLabel panelTitle = new JLabel("Configuração do vetor de pesos       ");
 		panelTitle.setFont(font_titles);
 		aux_panel.add(panelTitle);
 
 		if (!optimize) {
 			JButton button = new JButton(new ImageIcon("src/antiSpamFilter/frames/icons/circle2.PNG"));
 			button.setMargin(new Insets(0, 0, 0, 0));
-			button.setBorderPainted(false);
-			button.setContentAreaFilled(false);
+			button.setBorderPainted(true);
+//			button.setContentAreaFilled(false);
 			button.setFocusPainted(false);
-			button.setOpaque(false);
+//			button.setOpaque(false);
 			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
