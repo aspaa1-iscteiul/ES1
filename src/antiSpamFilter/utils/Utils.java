@@ -171,8 +171,7 @@ public class Utils {
 			w.close();
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(new JFrame(), "Não foi possível prosseguir! O ficheiro "
-					+ fileConfigs.getAbsolutePath() + " não pode ser aberto.", "Erro Fatal",
-					JOptionPane.ERROR_MESSAGE);
+					+ fileConfigs.getAbsolutePath() + " não pode ser aberto.", "Erro Fatal", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

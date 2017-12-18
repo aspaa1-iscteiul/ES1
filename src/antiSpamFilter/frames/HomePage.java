@@ -65,6 +65,7 @@ public class HomePage {
 		 */
 		homePage.setSize(450, 450);
 		homePage.setResizable(false);
+		homePage.addWindowListener(new GuiUtils.HomePageClose());
 		GuiUtils.frameAtCenter(homePage);
 	}
 
@@ -137,9 +138,20 @@ public class HomePage {
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
+		JPanel menuPanel = new JPanel();
+		menuPanel.setLayout(new BorderLayout());
 		JLabel menuLabel = new JLabel("Menu");
 		menuLabel.setFont(new Font("Arial", Font.BOLD, 28));
-		panel.add(menuLabel, BorderLayout.NORTH);
+		menuPanel.add(menuLabel, BorderLayout.CENTER);
+		JButton button = GuiUtils.formatHelpButton(-1);
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				checkConfigFiles(false);
+			}
+		});
+		menuPanel.add(button, BorderLayout.EAST);
+		panel.add(menuPanel, BorderLayout.NORTH);
 
 		// Adiciona as opções do menu
 		images = createImages();
@@ -169,10 +181,13 @@ public class HomePage {
 		JScrollPane scrollPanel = new JScrollPane(menuList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panel.add(scrollPanel, BorderLayout.CENTER);
+		panel.add(createButtonsPanel(), BorderLayout.SOUTH);
 
+		homePage.add(panel);
+	}
+
+	private JPanel createButtonsPanel() {
 		// Adiciona o botão de "Selecionar" uma opção do menu
-		JPanel buttons_panel = new JPanel();
-		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		JButton select = new JButton("Selecionar");
 		select.addActionListener(new ActionListener() {
 			@Override
@@ -192,12 +207,12 @@ public class HomePage {
 				homePage.dispose();
 			}
 		});
-		homePage.addWindowListener(new GuiUtils.HomePageClose());
+
+		JPanel buttons_panel = new JPanel();
+		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		buttons_panel.add(select);
 		buttons_panel.add(cancel);
-		panel.add(buttons_panel, BorderLayout.SOUTH);
-
-		homePage.add(panel);
+		return buttons_panel;
 	}
 
 	/**
@@ -229,7 +244,7 @@ public class HomePage {
 			Utils.config_files_path[index] = file_path;
 			Utils.readConfigFiles();
 
-		} else if (checkConfigFiles()) {
+		} else if (checkConfigFiles(true)) {
 			visible(false);
 			Utils.saveConfigFilesPath();
 			if (!Utils.readConfigFiles())
@@ -247,10 +262,11 @@ public class HomePage {
 	 * expressa os resultados numa janela JOptionPane.showMessageDialog para o
 	 * utilizador consultar.
 	 */
-	private boolean checkConfigFiles() {
+	private boolean checkConfigFiles(boolean beforeOperation) {
 		boolean noFile = false;
-		String message = "Antes de poder realizar esta operação, é necessário selecionar todos os ficheiros de configuração."
-				+ GuiUtils.newLine + GuiUtils.newLine;
+		String message = (beforeOperation
+				? "Antes de poder realizar esta operação, é necessário selecionar todos os ficheiros de configuração."
+				: "Os seguintes ficheiros encontram-se configurados:") + GuiUtils.newLine + GuiUtils.newLine;
 		for (int i = 0; i < Utils.config_files_path.length; i++) {
 			message += "O ficheiro " + config_files_names[i];
 			if (Utils.config_files_path[i] == "?") {
@@ -261,8 +277,8 @@ public class HomePage {
 			message += GuiUtils.newLine;
 		}
 
-		if (noFile)
-			JOptionPane.showMessageDialog(homePage, message, "Configuração dos ficheiros",
+		if (noFile || !beforeOperation)
+			JOptionPane.showMessageDialog(homePage, message + GuiUtils.newLine, "Configuração dos ficheiros",
 					JOptionPane.INFORMATION_MESSAGE);
 		return !noFile;
 	}

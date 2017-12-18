@@ -41,7 +41,7 @@
             accessors-accepted="false" constructors-accepted="false"/>
         <Communication destinationClassName="antiSpamFilter.frames.Otimizacao"/>
     </Class>
-    <Class name="antiSpamFilter.utils.GuiUtils" x="784" y="32">
+    <Class name="antiSpamFilter.utils.GuiUtils" x="750" y="32">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>

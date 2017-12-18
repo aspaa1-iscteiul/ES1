@@ -187,19 +187,20 @@ public class GuiUtils {
 	 *            Número do botão a formatar
 	 * @return botão de ajuda formatado
 	 */
-	private static JButton formatHelpButton(int number) {
+	public static JButton formatHelpButton(int number) {
 		JButton button = new JButton(new ImageIcon("./src/antiSpamFilter/frames/icons/help_button.png"));
 		button.setMargin(new Insets(0, 0, 0, 0));
 		button.setBorderPainted(false);
 		button.setContentAreaFilled(false);
 		button.setFocusPainted(false);
 		button.setOpaque(false);
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				appearText(number == 1 ? help_area_fp : help_area_fn);
-			}
-		});
+		if (number != -1)
+			button.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					appearText(number == 1 ? help_area_fp : help_area_fn);
+				}
+			});
 		return button;
 	}
 
@@ -499,6 +500,7 @@ public class GuiUtils {
 	public static class RException extends MouseAdapter {
 		private static final String NEW_LINE = "<br/>";
 		private JLabel label;
+		private JFrame frame;
 
 		public RException(JFrame frame) {
 			label = new JLabel("<html>Ocorreu um problema ao compilar com o Rscript.exe" + NEW_LINE + NEW_LINE
@@ -509,6 +511,7 @@ public class GuiUtils {
 					+ NEW_LINE + NEW_LINE
 					+ "(Poderá proceder ao download do pacote de software R em: <a href=\"\">https://cran.r-project.org/</a>)</html>");
 			label.addMouseListener(this);
+			this.frame = frame;
 			JOptionPane.showMessageDialog(frame, label, "Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
 		}
 
@@ -517,8 +520,7 @@ public class GuiUtils {
 				try {
 					Desktop.getDesktop().browse(new URI("https://cran.r-project.org/"));
 				} catch (IOException | URISyntaxException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(frame, "Por favor, verifique se tem um browser instalado");
 				}
 		}
 
@@ -526,6 +528,7 @@ public class GuiUtils {
 
 	public static class LatexException extends MouseAdapter {
 		private static final String NEW_LINE = "<br/>";
+		private JFrame frame;
 		private JLabel label;
 
 		public LatexException(JFrame frame) {
@@ -537,6 +540,7 @@ public class GuiUtils {
 					+ NEW_LINE + NEW_LINE
 					+ "(Poderá proceder ao download do pacote de software miktex em: <a href=\"\">https://miktex.org/download</a>)</html>");
 			label.addMouseListener(this);
+			this.frame = frame;
 			JOptionPane.showMessageDialog(frame, label, "Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
 		}
 
@@ -545,8 +549,7 @@ public class GuiUtils {
 				try {
 					Desktop.getDesktop().browse(new URI("https://miktex.org/download"));
 				} catch (IOException | URISyntaxException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(frame, "Por favor, verifique se tem um browser instalado");
 				}
 		}
 
