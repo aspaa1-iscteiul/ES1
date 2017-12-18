@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="antiSpamFilter.utils.GuiUtils.LatexException" x="591" y="388">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="antiSpamFilter.utils.GuiUtils.HomePageClose" x="53" y="164">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="antiSpamFilter.utils.Utils"/>
+    </Class>
+    <Class name="antiSpamFilter.frames.Afinacao" x="52" y="30">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="antiSpamFilter.utils.GuiUtils"/>
+        <Communication destinationClassName="antiSpamFilter.frames.HomePage"/>
+        <Communication destinationClassName="antiSpamFilter.utils.Utils"/>
+    </Class>
+    <Class name="antiSpamFilter.utils.GuiUtils.OtimizacaoClose" x="399" y="167">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="antiSpamFilter.frames.Otimizacao"/>
+    </Class>
+    <Class name="antiSpamFilter.utils.GuiUtils" x="784" y="32">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="antiSpamFilter.frames.Afinacao"/>
+        <Communication destinationClassName="antiSpamFilter.frames.Otimizacao"/>
+        <Communication destinationClassName="antiSpamFilter.utils.GuiUtils.JDoubleInputTextField"/>
+        <Communication destinationClassName="antiSpamFilter.utils.Utils"/>
+    </Class>
+    <Class name="antiSpamFilter.frames.Otimizacao" x="534" y="32">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="antiSpamFilter.utils.GuiUtils"/>
+        <Communication destinationClassName="antiSpamFilter.frames.HomePage"/>
+        <Communication destinationClassName="antiSpamFilter.utils.Utils"/>
+    </Class>
+    <Class name="antiSpamFilter.utils.GuiUtils.RException" x="324" y="387">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="antiSpamFilter.utils.GuiUtils.JDoubleInputTextField"
+        x="54" y="386">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="antiSpamFilter.frames.HomePage" x="259" y="32">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="antiSpamFilter.frames.Afinacao"/>
+        <Communication destinationClassName="antiSpamFilter.utils.GuiUtils"/>
+        <Communication destinationClassName="antiSpamFilter.frames.Otimizacao"/>
+        <Communication destinationClassName="antiSpamFilter.utils.Utils"/>
+    </Class>
+    <Class name="antiSpamFilter.utils.Utils" x="666" y="31">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="antiSpamFilter.utils.GuiUtils.ListRenderer" x="856" y="388">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="antiSpamFilter.utils.GuiUtils.AfinacaoAutomaticaClose"
+        x="722" y="171">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="antiSpamFilter.frames.Afinacao"/>
+    </Class>
+</ClassDiagram>

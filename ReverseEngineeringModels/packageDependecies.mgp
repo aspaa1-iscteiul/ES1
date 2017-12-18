@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PackageAnalysis>
+    <Package name="antiSpamFilter.utils" x="443" y="341">
+        <DependencyLink destination="antiSpamFilter.frames"/>
+    </Package>
+    <Package name="antiSpamFilter.tests" x="127" y="341">
+        <DependencyLink destination="antiSpamFilter.utils"/>
+    </Package>
+    <Package name="antiSpamFilter.frames" x="751" y="341">
+        <DependencyLink destination="antiSpamFilter.utils">
+            <Point x="839" y="395"/>
+            <Point x="752" y="395"/>
+            <Point x="522" y="395"/>
+        </DependencyLink>
+        <DependencyLink destination="antiSpamFilter">
+            <Point x="839" y="193"/>
+        </DependencyLink>
+    </Package>
+    <Package name="antiSpamFilter" x="458" y="181">
+        <DependencyLink destination="antiSpamFilter.utils"/>
+    </Package>
+</PackageAnalysis>
