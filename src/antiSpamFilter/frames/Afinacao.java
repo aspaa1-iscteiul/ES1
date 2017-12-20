@@ -8,13 +8,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import antiSpamFilter.utils.GuiUtils;
 import antiSpamFilter.utils.Utils;
 
@@ -22,7 +20,7 @@ import antiSpamFilter.utils.Utils;
  * Classe responsável por determinar o comportamento da aplicação no que
  * respeita à funcionalidade de afinação automática do filtro anti-spam,
  * incluindo suporte à contagem dos falsos positivos e falsos negativos e ao
- * display da configuração do vetor de pesos
+ * display editável da configuração do vetor de pesos
  * 
  * @author Ana Pestana, Diogo Reis, Guilherme Azevedo, Rafael Costa
  *
@@ -32,7 +30,7 @@ public class Afinacao {
 	private static JFrame afinacao;
 
 	/**
-	 * Construtor da página de Afinação Automática
+	 * Construtor da classe Afinação
 	 */
 	public Afinacao() {
 		afinacao = new JFrame();
@@ -52,7 +50,7 @@ public class Afinacao {
 	}
 
 	/**
-	 * Adiciona os conteúdos à janela de Afinação Automática
+	 * Adiciona os conteúdos à janela de Afinação
 	 */
 	private void addContents() {
 		JPanel panel = new JPanel();
@@ -63,18 +61,18 @@ public class Afinacao {
 	}
 
 	/**
-	 * Cria os botões generate, save e cancel num painel (buttons_panel)
+	 * Cria os botões confirm, save e cancel num painel (buttonsPanel)
 	 * 
 	 * @param center_panel
 	 *            Painel atualizado pela geração aleatória
-	 * @return Painel com os butões (buttons_panel)
+	 * @return Painel com os butões (buttonsPanel)
 	 */
 	private JPanel createButtons(JPanel center_panel) {
 		JPanel buttons_panel = new JPanel();
 		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-		JButton calculate = new JButton("Confirmar alterações");
-		calculate.addActionListener(new ActionListener() {
+		JButton confirm = new JButton("Confirmar alterações");
+		confirm.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (GuiUtils.checkValues()) {
@@ -88,7 +86,7 @@ public class Afinacao {
 				}
 			}
 		});
-		buttons_panel.add(calculate);
+		buttons_panel.add(confirm);
 
 		JButton save = new JButton("Guardar");
 		save.addActionListener(new ActionListener() {
@@ -168,21 +166,26 @@ public class Afinacao {
 	}
 
 	/**
-	 * Define a visibilidade da frame de Afinação Automática
+	 * Define a visibilidade da frame de Afinação
 	 * 
 	 * @param setVisible
+	 * 
+	 * @see JFrame#setVisible(boolean)
 	 */
 	public void visible(boolean setVisible) {
 		afinacao.setVisible(setVisible);
 	}
 
 	/**
-	 * Lança uma nova janela de Afinação Automática
+	 * Lança uma nova janela de Afinação
 	 */
 	public static void launch() {
 		new Afinacao().visible(true);
 	}
 
+	/**
+	 * Atualiza os conteúdos da janela de Afinação quando os pesos são alterados
+	 */
 	public static void update() {
 		afinacao.validate();
 		afinacao.repaint();

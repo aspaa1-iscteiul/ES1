@@ -46,17 +46,36 @@ public class GuiUtils {
 	public static JScrollPane scroll_rules_panel;
 	public static HashMap<String, JTextField> rules_values;
 	public static JLabel help_label_fp, help_label_fn;
-	public static String newLine = System.getProperty("line.separator");
-
 	private static Font font_titles = new Font("Helvetica", Font.PLAIN, 18),
 			font_labels = new Font("Helvetica", Font.PLAIN, 14), font_text = new Font("Helvetica", Font.PLAIN, 12);
 	private static JTextArea help_area_fp, help_area_fn;
+	/*
+	 * Garante a utilização do caractere de mudança de linha, independentemente
+	 * do Sistema Operativo em que a aplicação corre
+	 */
+	public static String newLine = System.getProperty("line.separator");
 
+	/**
+	 * Centra a frame passada como argumento no ecrã
+	 * 
+	 * @param frame
+	 *            JFrame que queremos centrar
+	 */
 	public static void frameAtCenter(JFrame frame) {
 		frame.setLocation(new Point((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth()) / 2,
 				(Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight()) / 2));
 	}
 
+	/**
+	 * Construtor do esqueleto da GUI utilizada pelas classes Otimizacao e
+	 * Afinacao
+	 * 
+	 * @param panel
+	 *            JPanel principal
+	 * @param optimize
+	 *            booleano que indica se estamos num cenário de Otimizacao
+	 * @return center_panel necessários para fazer a atualização dos pesos
+	 */
 	public static JPanel constructGUI(JPanel panel, boolean optimize) {
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -118,6 +137,12 @@ public class GuiUtils {
 		return center_panel;
 	}
 
+	/**
+	 * Cria o painel onde é realizado o display das regras e respetivos pesos
+	 * 
+	 * @param optimize
+	 *            booleano que indica se estamos num cenário de Otimizacao
+	 */
 	public static void createRulesPanel(boolean optimize) {
 		JPanel rules_panel = new JPanel();
 		rules_panel.setLayout(new GridLayout(0, 1));
@@ -137,6 +162,13 @@ public class GuiUtils {
 		scroll_rules_panel.setWheelScrollingEnabled(true);
 	}
 
+	/**
+	 * Cria o painel de ajuda onde podem ser consultados os FP e FN
+	 * 
+	 * @param fp
+	 *            Indica se estamos a tratar dos FP (true) ou dos FN (false)
+	 * @return painel de ajuda
+	 */
 	private static JPanel createHelpPanel(int number) {
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(20, 10, 10, 10));
@@ -184,7 +216,8 @@ public class GuiUtils {
 	 * Formatar os botões de ajuda
 	 * 
 	 * @param number
-	 *            Número do botão a formatar
+	 *            Número do botão a formatar (number=1 para FP; FN, caso
+	 *            contrário)
 	 * @return botão de ajuda formatado
 	 */
 	public static JButton formatHelpButton(int number) {
@@ -242,12 +275,19 @@ public class GuiUtils {
 
 	}
 
+	/**
+	 * Default
+	 *
+	 */
 	public static class HomePageClose implements WindowListener {
 
 		@Override
 		public void windowOpened(WindowEvent e) {
 		}
 
+		/**
+		 * Definição do fecho da HomePage
+		 */
 		@Override
 		public void windowClosing(WindowEvent e) {
 			Utils.saveConfigFilesPath();
@@ -276,12 +316,20 @@ public class GuiUtils {
 
 	}
 
+	/**
+	 * 
+	 * Default
+	 *
+	 */
 	public static class AfinacaoAutomaticaClose implements WindowListener {
 
 		@Override
 		public void windowOpened(WindowEvent e) {
 		}
 
+		/**
+		 * Definição do fecho da página de Afinação
+		 */
 		@Override
 		public void windowClosing(WindowEvent e) {
 			Afinacao.backHome();
@@ -309,12 +357,20 @@ public class GuiUtils {
 
 	}
 
+	/**
+	 * 
+	 * Default
+	 *
+	 */
 	public static class OtimizacaoClose implements WindowListener {
 
 		@Override
 		public void windowOpened(WindowEvent e) {
 		}
 
+		/**
+		 * Definição do fecho da página de Otimização
+		 */
 		@Override
 		public void windowClosing(WindowEvent e) {
 			Otimizacao.backHome();
@@ -353,19 +409,19 @@ public class GuiUtils {
 		private boolean editable;
 
 		/**
-		 * Creates a new JTextField that only allows double numbers with values
-		 * between <b>min</b> and <b>max</b>
+		 * Cria uma nova JTextField qua apenas permite doubles com valores entre
+		 * <b>min</b> e <b>max</b>
 		 * 
 		 * @param text
-		 *            like in {@link JTextField#JTextField(String, int)}
+		 *            como em {@link JTextField#JTextField(String, int)}
 		 * @param columns
-		 *            like in {@link JTextField#JTextField(String, int)}
+		 *            como em {@link JTextField#JTextField(String, int)}
 		 * @param min
-		 *            minimum value of the input (inclusive)
+		 *            valor mínimo (inclusivé) para o input
 		 * @param max
-		 *            maximum value of the input (inclusive)
+		 *            valor máximo (inclusivé) para o input
 		 * @param precision
-		 *            number of decimal cases
+		 *            número de casas decimais
 		 * 
 		 * @see JTextField#JTextField(String, int)
 		 */
@@ -374,22 +430,22 @@ public class GuiUtils {
 		}
 
 		/**
-		 * Creates a new JTextField that only allows double numbers with values
-		 * between {@code min} and {@code max}
+		 * Cria uma nova JTextField qua apenas permite doubles com valores entre
+		 * {@code min} e {@code max}
 		 * 
 		 * @param text
-		 *            like in {@link JTextField#JTextField(String, int)}
+		 *            como em {@link JTextField#JTextField(String, int)}
 		 * @param columns
-		 *            like in {@link JTextField#JTextField(String, int)}
+		 *            como em {@link JTextField#JTextField(String, int)}
 		 * @param min
-		 *            minimum value of the input (inclusive)
+		 *            valor mínimo (inclusivé) para o input
 		 * @param max
-		 *            maximum value of the input (inclusive)
+		 *            valor máximo (inclusivé) para o input
 		 * @param precision
-		 *            number of decimal cases
+		 *            número de casas decimais
 		 * @param editable
-		 *            if {@code true} this component is editable, otherwise
-		 *            isn't editable
+		 *            Este componente é editável caso {@code true}. Caso
+		 *            contrário, o componente não é editável
 		 * 
 		 * @see JTextField#JTextField(String, int)
 		 */
@@ -410,6 +466,9 @@ public class GuiUtils {
 				setText(null);
 		}
 
+		/**
+		 * Implementa proteções de escrita em campos editáveis
+		 */
 		@Override
 		public void processKeyEvent(KeyEvent key) {
 			String text_before_process = getText();
@@ -450,6 +509,12 @@ public class GuiUtils {
 				setText(text_before_process);
 		}
 
+		/**
+		 * Uniformiza o formato do input passado como argumento
+		 * 
+		 * @param var
+		 *            variável a uniformizar
+		 */
 		private void rearrange(String var) {
 			try {
 				if (Double.valueOf(var) >= 0 && !var.startsWith("+")) {
@@ -463,6 +528,13 @@ public class GuiUtils {
 			setText(var);
 		}
 
+		/**
+		 * Valida o formato e conteúdo do input
+		 * 
+		 * @param text
+		 *            Input a validar
+		 * @return válido
+		 */
 		private boolean isValidInput(String text) {
 			try {
 				double var = Double.valueOf(round(Double.valueOf(text), precision));
@@ -472,9 +544,20 @@ public class GuiUtils {
 			}
 		}
 
+		/**
+		 * Dado um double, a função retorna uma string com um valor resultante
+		 * do arrendondamento do double original, respeitando uma determinada
+		 * precisão
+		 * 
+		 * @param value
+		 *            Double a arredondar
+		 * @param precision
+		 *            Precisão do arredondamento
+		 * @return String com o número arredondado
+		 */
 		private String round(double value, int precision) {
 			if (precision < 0)
-				throw new IllegalArgumentException("precision must be equal or bigger then zero");
+				throw new IllegalArgumentException("Precision must be equal or higher then zero");
 
 			String number = new BigDecimal(value).setScale(precision, RoundingMode.HALF_UP).toString();
 			if (value >= 0)
@@ -484,6 +567,11 @@ public class GuiUtils {
 
 	}
 
+	/**
+	 * Preenche os campos vazios com +0.0 para garantir a uniformidade
+	 * 
+	 * @return tudoVálido
+	 */
 	public static boolean checkValues() {
 		for (Entry<String, JTextField> entry : GuiUtils.rules_values.entrySet()) {
 			try {
@@ -497,11 +585,23 @@ public class GuiUtils {
 		return true;
 	}
 
+	/**
+	 * Classe de tratamento de exceções decorrentes da compilação e abertura dos
+	 * ficheiros .R
+	 *
+	 */
 	public static class RException extends MouseAdapter {
 		private static final String NEW_LINE = "<br/>";
 		private JLabel label;
 		private JFrame frame;
 
+		/**
+		 * Lançamento de um JOptionPane quando se verifica um erro de compilação
+		 * com o pacote de software R
+		 * 
+		 * @param frame
+		 *            JFrame mãe
+		 */
 		public RException(JFrame frame) {
 			label = new JLabel("<html>Ocorreu um problema ao compilar com o Rscript.exe" + NEW_LINE + NEW_LINE
 					+ "Sugestão de resolução:" + NEW_LINE
@@ -515,22 +615,39 @@ public class GuiUtils {
 			JOptionPane.showMessageDialog(frame, label, "Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
 		}
 
+		/**
+		 * Lançamento de um JOptionPane quando se verifica um erro de abertura
+		 * do browser
+		 */
 		public void mousePressed(MouseEvent event) {
 			if (event.getX() >= 342 && event.getX() <= 486 && event.getY() >= 96 && event.getY() <= 111)
 				try {
 					Desktop.getDesktop().browse(new URI("https://cran.r-project.org/"));
 				} catch (IOException | URISyntaxException e) {
-					JOptionPane.showMessageDialog(frame, "Por favor, verifique se tem um browser instalado");
+					JOptionPane.showMessageDialog(frame, "Por favor, verifique se tem um browser instalado.",
+							"Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
 				}
 		}
 
 	}
 
+	/**
+	 * Classe de tratamento de exceções decorrentes da compilação e abertura dos
+	 * ficheiros .tex
+	 *
+	 */
 	public static class LatexException extends MouseAdapter {
 		private static final String NEW_LINE = "<br/>";
 		private JFrame frame;
 		private JLabel label;
 
+		/**
+		 * Lançamento de um JOptionPane quando se verifica um erro de compilação
+		 * com o pacote de software MiKTeX
+		 * 
+		 * @param frame
+		 *            JFrame mãe
+		 */
 		public LatexException(JFrame frame) {
 			label = new JLabel("<html>Ocorreu um problema ao compilar com o pdflatex.exe" + NEW_LINE + NEW_LINE
 					+ "Sugestão de resolução:" + NEW_LINE
@@ -538,18 +655,23 @@ public class GuiUtils {
 					+ NEW_LINE
 					+ "tenha, verifique ainda que o path para o executável pdflatex.exe se encontra incluído na variável de ambiente PATH"
 					+ NEW_LINE + NEW_LINE
-					+ "(Poderá proceder ao download do pacote de software miktex em: <a href=\"\">https://miktex.org/download</a>)</html>");
+					+ "(Poderá proceder ao download do pacote de software MiKTeX em: <a href=\"\">https://miktex.org/download</a>)</html>");
 			label.addMouseListener(this);
 			this.frame = frame;
 			JOptionPane.showMessageDialog(frame, label, "Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
 		}
 
+		/**
+		 * Lançamento de um JOptionPane quando se verifica um erro de abertura
+		 * do browser
+		 */
 		public void mousePressed(MouseEvent event) {
 			if (event.getX() >= 373 && event.getX() <= 533 && event.getY() >= 96 && event.getY() <= 111)
 				try {
 					Desktop.getDesktop().browse(new URI("https://miktex.org/download"));
 				} catch (IOException | URISyntaxException e) {
-					JOptionPane.showMessageDialog(frame, "Por favor, verifique se tem um browser instalado");
+					JOptionPane.showMessageDialog(frame, "Por favor, verifique se tem um browser instalado.",
+							"Indicador Hypervolume", JOptionPane.ERROR_MESSAGE);
 				}
 		}
 

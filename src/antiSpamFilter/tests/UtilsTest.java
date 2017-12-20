@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import org.junit.Test;
+
+import antiSpamFilter.frames.Afinacao;
+import antiSpamFilter.frames.HomePage;
 import antiSpamFilter.utils.GuiUtils;
 import antiSpamFilter.utils.Utils;
 
@@ -156,25 +159,10 @@ public class UtilsTest {
 	}
 
 	/**
-	 * Test method for {@link antiSpamFilter.utils.Utils#listsToMap()}.
-	 */
-	@Test
-	public void testListsToMap() {
-		ArrayList<String> var1 = new ArrayList<>();
-		ArrayList<Integer> var2 = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
-			var1.add("" + i);
-			var2.add(i);
-		}
-		Utils.listsToMap(var1, var2);
-	}
-
-	/**
 	 * Test method for {@link antiSpamFilter.utils.Utils#frameAtCenter()}.
 	 */
 	@Test
 	public void testFrameAtCenter() {
 		GuiUtils.frameAtCenter(new JFrame());
 	}
-
 }

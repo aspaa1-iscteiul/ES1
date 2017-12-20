@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -24,15 +23,30 @@ import antiSpamFilter.AntiSpamFilterAutomaticConfiguration;
 import antiSpamFilter.utils.GuiUtils;
 import antiSpamFilter.utils.Utils;
 
+/**
+ * Classe responsável por determinar o comportamento da aplicação no que
+ * respeita à funcionalidade de otimização do filtro anti-spam, incluindo
+ * suporte à contagem dos falsos positivos e falsos negativos e ao display da
+ * configuração ótima do vetor de pesos
+ * 
+ * @author Ana Pestana, Guilherme Azevedo
+ */
+
 public class Otimizacao {
 
 	private static JFrame frame, progressFrame;
 	private static final String algorithmOutputFilesPath = "./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.r";
 
+	/**
+	 * Construtor da classe Otimização
+	 */
 	public Otimizacao() {
 		optimize();
 	}
 
+	/**
+	 * Construtor da GUI da página de Afinação
+	 */
 	private void constructFrame() {
 		frame = new JFrame();
 		frame.setTitle("Otimização do filtro anti-spam");
@@ -46,6 +60,10 @@ public class Otimizacao {
 		visible(true);
 	}
 
+	/**
+	 * Display de uma progressBar enquanto aguarda pelo output do algoritmo
+	 * NSGAII
+	 */
 	private void optimize() {
 		JProgressBar progressBar = new JProgressBar();
 		progressBar.setString("A calcular...");
@@ -63,6 +81,15 @@ public class Otimizacao {
 		Executors.newSingleThreadExecutor().execute(executeAlgorithm());
 	}
 
+	/**
+	 * Invoca o procedimento runAlgoritm() da classe
+	 * AntiSpamFilterAutomaticConfiguration e compila e abre os ficheiros
+	 * HV.Boxplot e AntiSpamStudy
+	 * 
+	 * @return do runnable que invoca o procedimento runAlgoritm() da classe
+	 *         AntiSpamFilterAutomaticConfiguration e compila e abre os
+	 *         ficheiros HV.Boxplot e AntiSpamStudy
+	 */
 	private Runnable executeAlgorithm() {
 		return new Runnable() {
 			@Override
@@ -73,8 +100,7 @@ public class Otimizacao {
 					JOptionPane.showMessageDialog(progressFrame,
 							"Ocorreu um problema durante a execução da framework JMetal", "Erro",
 							JOptionPane.ERROR_MESSAGE);
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.exit(1);
 				}
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
@@ -110,6 +136,9 @@ public class Otimizacao {
 		};
 	}
 
+	/**
+	 * Recupera a melhor solução produzida pelo algoritmo genético NSGAII
+	 */
 	private void readAlgorithmOutputs() {
 		ArrayList<String> lines = Utils.lines(algorithmOutputFilesPath + "f");
 		int fp = Integer.MAX_VALUE, fn = Integer.MAX_VALUE;
@@ -197,10 +226,20 @@ public class Otimizacao {
 		HomePage.visible(true);
 	}
 
+	/**
+	 * Define a visibilidade da frame de Otimização
+	 * 
+	 * @param setVisible
+	 * 
+	 * @see JFrame#setVisible(boolean)
+	 */
 	private void visible(boolean visible) {
 		frame.setVisible(visible);
 	}
 
+	/**
+	 * Lança uma nova janela de Otimização
+	 */
 	public static void launch() {
 		new Otimizacao();
 	}
