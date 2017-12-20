@@ -50,7 +50,7 @@ public class HomePage {
 			config_files_names = { "rules.cf", "spam.log", "ham.log" };
 
 	/**
-	 * Construtor da Home Page
+	 * Construtor da classe Home Page
 	 */
 	public HomePage() {
 		homePage = new JFrame();
@@ -107,7 +107,9 @@ public class HomePage {
 							"Os seguintes ficheiros encontram-se configurados:" + GuiUtils.newLine + GuiUtils.newLine
 									+ message + GuiUtils.newLine + GuiUtils.newLine
 									+ "Quer manter estes ficheiros de configuração?" + GuiUtils.newLine
-									+ GuiUtils.newLine));
+									+ GuiUtils.newLine,
+							"Recuperar a última sessão", JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE));
 					// Escolher a opção 'No' resulta na perda das configurações
 					if (option == JOptionPane.NO_OPTION) {
 						for (int i = 0; i < Utils.configFilesPaths.length; i++)
@@ -187,6 +189,11 @@ public class HomePage {
 		homePage.add(panel);
 	}
 
+	/**
+	 * Cria os butões select e cancel num painel (buttonsPanel)
+	 * 
+	 * @return Painel com os butões (buttonsPanel)
+	 */
 	private JPanel createButtonsPanel() {
 		// Adiciona o botão de "Selecionar" uma opção do menu
 		JButton selectButton = new JButton("Selecionar");
@@ -331,6 +338,8 @@ public class HomePage {
 	 * Define a visibilidade da frame da HomePage
 	 * 
 	 * @param setVisible
+	 * 
+	 * @see JFrame#setVisible(boolean)
 	 */
 	public static void visible(boolean setVisible) {
 		homePage.setVisible(setVisible);

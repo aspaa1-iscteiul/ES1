@@ -7,11 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -89,7 +85,7 @@ public class Utils {
 			}
 			if (rulesWeights.isEmpty()) {
 				JOptionPane.showMessageDialog(new JFrame(),
-						"O ficheiro rules.cf selecionados está vazio. Por favor, reconfigure-o",
+						"O ficheiro rules.cf selecionado está vazio. Por favor, reconfigure-o",
 						"Conteúdo dos ficheiros", JOptionPane.ERROR_MESSAGE);
 				configFilesPaths[0] = "?";
 				return false;
@@ -188,8 +184,10 @@ public class Utils {
 	 */
 	public static int falses(boolean fp) {
 		if (hamLogRules.isEmpty() || spamLogRules.isEmpty()) {
-			JOptionPane.showMessageDialog(new JFrame(), "O ficheiro " + (hamLogRules.isEmpty() ? "ham" : "spam")
-					+ ".log não está configurado, não posso continuar...");
+			JOptionPane.showMessageDialog(new JFrame(),
+					"O ficheiro " + (hamLogRules.isEmpty() ? "ham" : "spam")
+							+ ".log selecionado está vazio. Por favor, reconfigure-o.",
+					"Conteúdo dos ficheiros", JOptionPane.ERROR_MESSAGE);
 			configFilesPaths[fp ? 2 : 1] = "?";
 			return 0;
 		}
@@ -206,10 +204,6 @@ public class Utils {
 				total++;
 		}
 		return total;
-	}
-
-	public static <K, V> Map<K, V> listsToMap(List<K> keys, List<V> values) {
-		return IntStream.range(0, keys.size()).boxed().collect(Collectors.toMap(keys::get, values::get));
 	}
 
 }
