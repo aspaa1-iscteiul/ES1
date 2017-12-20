@@ -11,44 +11,44 @@ import antiSpamFilter.utils.Utils;
 
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
-	/**
-	 * default
+    /**
+     * default
+     */
+    private static final long serialVersionUID = 1L;
+    private ArrayList<String> rules_list;
+
+    public AntiSpamFilterProblem() {
+	/*
+	 * Gera um vetor de pesos com tamanho igual ao número de regras
+	 * existentes
 	 */
-	private static final long serialVersionUID = 1L;
-	private ArrayList<String> rules_list;
+	this(Utils.lines(Utils.configFilesPaths[0]).size());
+	rules_list = new ArrayList<>(Utils.rulesWeights.keySet());
+	Collections.sort(rules_list);
+    }
 
-	public AntiSpamFilterProblem() {
-		/*
-		 * Gera um vetor de pesos com tamanho igual ao número de regras
-		 * existentes
-		 */
-		this(Utils.lines(Utils.configFilesPaths[0]).size());
-		rules_list = new ArrayList<>(Utils.rulesWeights.keySet());
-		Collections.sort(rules_list);
+    public AntiSpamFilterProblem(Integer numberOfVariables) {
+	setNumberOfVariables(numberOfVariables);
+	setNumberOfObjectives(2);
+	setName("AntiSpamFilterProblem");
+
+	List<Double> lowerLimit = new ArrayList<>(getNumberOfVariables());
+	List<Double> upperLimit = new ArrayList<>(getNumberOfVariables());
+
+	for (int i = 0; i < getNumberOfVariables(); i++) {
+	    lowerLimit.add(-5.0);
+	    upperLimit.add(5.0);
 	}
 
-	public AntiSpamFilterProblem(Integer numberOfVariables) {
-		setNumberOfVariables(numberOfVariables);
-		setNumberOfObjectives(2);
-		setName("AntiSpamFilterProblem");
+	setLowerLimit(lowerLimit);
+	setUpperLimit(upperLimit);
+    }
 
-		List<Double> lowerLimit = new ArrayList<>(getNumberOfVariables());
-		List<Double> upperLimit = new ArrayList<>(getNumberOfVariables());
+    public void evaluate(DoubleSolution solution) {
+	for (int i = 0; i < solution.getNumberOfVariables(); i++)
+	    Utils.rulesWeights.put(rules_list.get(i), solution.getVariableValue(i));
 
-		for (int i = 0; i < getNumberOfVariables(); i++) {
-			lowerLimit.add(-5.0);
-			upperLimit.add(5.0);
-		}
-
-		setLowerLimit(lowerLimit);
-		setUpperLimit(upperLimit);
-	}
-
-	public void evaluate(DoubleSolution solution) {		
-		for (int i = 0; i < solution.getNumberOfVariables(); i++)
-			Utils.rulesWeights.put(rules_list.get(i), solution.getVariableValue(i));
-
-		solution.setObjective(0, Utils.falses(true));
-		solution.setObjective(1, Utils.falses(false));
-	}
+	solution.setObjective(0, Utils.falses(true));
+	solution.setObjective(1, Utils.falses(false));
+    }
 }
