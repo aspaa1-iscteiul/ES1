@@ -6,16 +6,16 @@
     <Package name="antiSpamFilter.tests" x="34" y="182">
         <DependencyLink destination="antiSpamFilter.utils"/>
     </Package>
-    <Package name="antiSpamFilter.frames" x="658" y="182">
+    <Package name="antiSpamFilter.frames" x="652" y="182">
         <DependencyLink destination="antiSpamFilter.utils">
-            <Point x="746" y="250"/>
-            <Point x="429" y="250"/>
+            <Point x="725" y="250"/>
+            <Point x="416" y="250"/>
         </DependencyLink>
         <DependencyLink destination="antiSpamFilter">
-            <Point x="746" y="33"/>
+            <Point x="725" y="50"/>
         </DependencyLink>
     </Package>
-    <Package name="antiSpamFilter" x="365" y="22">
+    <Package name="antiSpamFilter" x="363" y="40">
         <DependencyLink destination="antiSpamFilter.utils"/>
     </Package>
 </PackageAnalysis>
