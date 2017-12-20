@@ -61,7 +61,8 @@ public class Afinacao {
 	}
 
 	/**
-	 * Cria os butões confirmButton, saveButton e cancelButton num painel (buttonsPanel)
+	 * Cria os butões confirmButton, saveButton e cancelButton num painel
+	 * (buttonsPanel)
 	 * 
 	 * @param centerPanel
 	 *            Painel atualizado pela geração aleatória
@@ -70,7 +71,6 @@ public class Afinacao {
 	private JPanel createButtons(JPanel centerPanel) {
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-
 		JButton confirmButton = new JButton("Confirmar alterações");
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
@@ -120,10 +120,6 @@ public class Afinacao {
 
 		JButton cancelButton = new JButton("Cancelar");
 		cancelButton.addActionListener(new ActionListener() {
-			/*
-			 * Sentinela no butão 'Cancelar' responsável por retornar à Home
-			 * Page quando o botão é pressionado
-			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				backHome();
