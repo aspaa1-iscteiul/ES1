@@ -121,10 +121,6 @@ public class Afinacao {
 
 	JButton cancelButton = new JButton("Cancelar");
 	cancelButton.addActionListener(new ActionListener() {
-	    /*
-	     * Sentinela no butão 'Cancelar' responsável por retornar à Home
-	     * Page quando o botão é pressionado
-	     */
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		backHome();
