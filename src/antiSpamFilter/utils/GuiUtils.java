@@ -40,6 +40,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import antiSpamFilter.frames.Afinacao;
+import antiSpamFilter.frames.HomePage;
 import antiSpamFilter.frames.Otimizacao;
 
 public class GuiUtils {
@@ -92,7 +93,7 @@ public class GuiUtils {
 		titlePanel.add(titleLabel);
 
 		if (!optimize) {
-			JButton button = new JButton(new ImageIcon("src/antiSpamFilter/frames/icons/circle2.PNG"));
+			JButton button = new JButton(new ImageIcon(HomePage.class.getResource("icons/circle2.PNG")));
 			button.setMargin(new Insets(0, 0, 0, 0));
 			button.setFocusPainted(false);
 			button.addActionListener(new ActionListener() {
@@ -222,7 +223,7 @@ public class GuiUtils {
 	 * @return botão de ajuda formatado
 	 */
 	public static JButton formatHelpButton(int number) {
-		JButton button = new JButton(new ImageIcon("./src/antiSpamFilter/frames/icons/help_button.png"));
+		JButton button = new JButton(new ImageIcon(HomePage.class.getResource("icons/help_button.png")));
 		button.setMargin(new Insets(0, 0, 0, 0));
 		button.setBorderPainted(false);
 		button.setContentAreaFilled(false);

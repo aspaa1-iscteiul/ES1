@@ -301,7 +301,7 @@ public class HomePage {
 	private String getFileChosen(String fileName) {
 		JFileChooser fileChooser = new JFileChooser();
 		// Inicia a GUI na diretoria do projeto
-		fileChooser.setCurrentDirectory(new java.io.File("."));
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")+ "/Desktop"));
 		// Inclui no título da janela o nome do ficheiro a selecionar
 		fileChooser.setDialogTitle("Selecionar ficheiro " + fileName);
 		// Impede a seleção de múltiplas opções
@@ -325,12 +325,12 @@ public class HomePage {
 		// Associa uma opção do menu ao respetivo icon, de acordo com os mockups
 		// desenhados
 		HashMap<String, ImageIcon> map = new HashMap<>();
-		map.put(menuOptions[0], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
-		map.put(menuOptions[1], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
-		map.put(menuOptions[2], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
-		map.put(menuOptions[3], new ImageIcon("src/antiSpamFilter/frames/icons/circle.PNG"));
-		map.put(menuOptions[4], new ImageIcon("src/antiSpamFilter/frames/icons/pencil.PNG"));
-		map.put(menuOptions[5], new ImageIcon("src/antiSpamFilter/frames/icons/magic_wand.PNG"));
+		map.put(menuOptions[0], new ImageIcon(getClass().getResource("icons/file.PNG")));
+		map.put(menuOptions[1], new ImageIcon(getClass().getResource("icons/file.PNG")));
+		map.put(menuOptions[2], new ImageIcon(getClass().getResource("icons/file.PNG")));
+		map.put(menuOptions[3], new ImageIcon(getClass().getResource("icons/circle.PNG")));
+		map.put(menuOptions[4], new ImageIcon(getClass().getResource("icons/pencil.PNG")));
+		map.put(menuOptions[5], new ImageIcon(getClass().getResource("icons/magic_wand.PNG")));
 		return map;
 	}
 
