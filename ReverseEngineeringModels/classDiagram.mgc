@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ClassDiagram>
-    <Class name="antiSpamFilter.utils.GuiUtils.LatexException" x="591" y="388">
+    <Class name="antiSpamFilter.utils.GuiUtils.LatexException" x="660" y="442">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -9,7 +9,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="antiSpamFilter.utils.GuiUtils.HomePageClose" x="53" y="164">
+    <Class name="antiSpamFilter.utils.GuiUtils.HomePageClose" x="122" y="218">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -19,7 +19,7 @@
             accessors-accepted="false" constructors-accepted="false"/>
         <Communication destinationClassName="antiSpamFilter.utils.Utils"/>
     </Class>
-    <Class name="antiSpamFilter.frames.Afinacao" x="52" y="30">
+    <Class name="antiSpamFilter.frames.Afinacao" x="126" y="74">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -31,7 +31,7 @@
         <Communication destinationClassName="antiSpamFilter.frames.HomePage"/>
         <Communication destinationClassName="antiSpamFilter.utils.Utils"/>
     </Class>
-    <Class name="antiSpamFilter.utils.GuiUtils.OtimizacaoClose" x="399" y="167">
+    <Class name="antiSpamFilter.utils.GuiUtils.OtimizacaoClose" x="468" y="221">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -41,7 +41,7 @@
             accessors-accepted="false" constructors-accepted="false"/>
         <Communication destinationClassName="antiSpamFilter.frames.Otimizacao"/>
     </Class>
-    <Class name="antiSpamFilter.utils.GuiUtils" x="750" y="32">
+    <Class name="antiSpamFilter.utils.GuiUtils" x="824" y="76">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -54,7 +54,7 @@
         <Communication destinationClassName="antiSpamFilter.utils.GuiUtils.JDoubleInputTextField"/>
         <Communication destinationClassName="antiSpamFilter.utils.Utils"/>
     </Class>
-    <Class name="antiSpamFilter.frames.Otimizacao" x="534" y="32">
+    <Class name="antiSpamFilter.frames.Otimizacao" x="608" y="76">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -66,7 +66,7 @@
         <Communication destinationClassName="antiSpamFilter.frames.HomePage"/>
         <Communication destinationClassName="antiSpamFilter.utils.Utils"/>
     </Class>
-    <Class name="antiSpamFilter.utils.GuiUtils.RException" x="324" y="387">
+    <Class name="antiSpamFilter.utils.GuiUtils.RException" x="393" y="441">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -76,7 +76,7 @@
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
     <Class name="antiSpamFilter.utils.GuiUtils.JDoubleInputTextField"
-        x="54" y="386">
+        x="123" y="440">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -85,7 +85,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="antiSpamFilter.frames.HomePage" x="259" y="32">
+    <Class name="antiSpamFilter.frames.HomePage" x="333" y="76">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -98,7 +98,7 @@
         <Communication destinationClassName="antiSpamFilter.frames.Otimizacao"/>
         <Communication destinationClassName="antiSpamFilter.utils.Utils"/>
     </Class>
-    <Class name="antiSpamFilter.utils.Utils" x="666" y="31">
+    <Class name="antiSpamFilter.utils.Utils" x="740" y="75">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -107,7 +107,7 @@
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
-    <Class name="antiSpamFilter.utils.GuiUtils.ListRenderer" x="856" y="388">
+    <Class name="antiSpamFilter.utils.GuiUtils.ListRenderer" x="925" y="442">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -117,7 +117,7 @@
             accessors-accepted="false" constructors-accepted="false"/>
     </Class>
     <Class name="antiSpamFilter.utils.GuiUtils.AfinacaoAutomaticaClose"
-        x="722" y="171">
+        x="791" y="225">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
