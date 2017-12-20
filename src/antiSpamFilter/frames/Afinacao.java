@@ -40,7 +40,7 @@ public class Afinacao {
 
 		addContents();
 
-		calculate_FP_FN();
+		calculateFpAndFn();
 
 		afinacao.pack();
 		afinacao.setSize(750, 600);
@@ -78,7 +78,7 @@ public class Afinacao {
 				if (GuiUtils.checkValues()) {
 					for (Entry<String, JTextField> entry : GuiUtils.rulesValues.entrySet())
 						Utils.rulesWeights.put(entry.getKey(), Double.valueOf(entry.getValue().getText()));
-					calculate_FP_FN();
+					calculateFpAndFn();
 				} else {
 					JOptionPane.showMessageDialog(afinacao,
 							"Os valores das rules não estão corretos, só são aceites valores entre -5 e 5",
@@ -141,14 +141,14 @@ public class Afinacao {
 	public static void changeWeights() {
 		for (HashMap.Entry<String, Double> entry : Utils.rulesWeights.entrySet())
 			entry.setValue((Math.random() * 10) - 5);
-		calculate_FP_FN();
+		calculateFpAndFn();
 	}
 
 	/**
 	 * Procede ao cálculo, por invocação, do número de Falsos Positivos e Falsos
 	 * Negativos
 	 */
-	private static void calculate_FP_FN() {
+	private static void calculateFpAndFn() {
 		int decimalPlaces = String.valueOf(Utils.hamLogRules.size()).length();
 		GuiUtils.helpLabelFp.setText("  Falsos Positivos (FP):  "
 				+ String.format("%0" + decimalPlaces + "d", Utils.falses(true)) + " / " + Utils.hamLogRules.size());

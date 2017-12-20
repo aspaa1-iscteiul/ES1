@@ -151,7 +151,7 @@ public class HomePage {
 		menuButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				checkConfigFiles(false);
+				checkConfigFilesPaths(false);
 			}
 		});
 		menuPanel.add(menuButton, BorderLayout.EAST);
@@ -252,7 +252,7 @@ public class HomePage {
 			Utils.configFilesPaths[index] = filePath;
 			Utils.readConfigFiles();
 
-		} else if (checkConfigFiles(true)) {
+		} else if (checkConfigFilesPaths(true)) {
 			visible(false);
 			Utils.saveConfigFilesPath();
 			if (!Utils.readConfigFiles())
@@ -269,7 +269,7 @@ public class HomePage {
 	 * expressa os resultados numa janela JOptionPane.showMessageDialog para o
 	 * utilizador consultar.
 	 */
-	private boolean checkConfigFiles(boolean beforeAnOperation) {
+	private boolean checkConfigFilesPaths(boolean beforeAnOperation) {
 		boolean noFile = false;
 		String message = (beforeAnOperation
 				? "Antes de poder realizar esta operação, é necessário selecionar todos os ficheiros de configuração."
