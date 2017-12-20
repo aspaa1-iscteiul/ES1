@@ -36,6 +36,8 @@ public class Otimizacao {
 
     private static JFrame otimização, progressFrame;
     private static final String algorithmOutputFilesPath = "./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.r";
+    private int fp;
+    private int fn;
 
     /**
      * Construtor da classe Otimização <br>
@@ -123,8 +125,8 @@ public class Otimizacao {
 			} catch (InterruptedException | IOException e) {
 			    new GuiUtils.LatexException(progressFrame);
 			}
-			constructFrame();
 			readAlgorithmOutputs();
+			constructFrame();
 			progressFrame.dispose();
 		    }
 		});
@@ -137,7 +139,8 @@ public class Otimizacao {
      */
     private void readAlgorithmOutputs() {
 	ArrayList<String> lines = Utils.lines(algorithmOutputFilesPath + "f");
-	int fp = Integer.MAX_VALUE, fn = Integer.MAX_VALUE;
+	fp = Integer.MAX_VALUE;
+	fn = Integer.MAX_VALUE;
 	int index = -1;
 	for (int i = 0; i < lines.size(); i++) {
 	    String[] values = lines.get(i).split(" ");
@@ -154,13 +157,6 @@ public class Otimizacao {
 	Collections.sort(rulesList);
 	for (int i = 0; i < values.length; i++)
 	    Utils.rulesWeights.put(rulesList.get(i), Double.valueOf(values[i]));
-
-	int decimalPlaces = String.valueOf(Utils.hamLogRules.size()).length();
-	GuiUtils.helpLabelFp.setText("  Falsos Positivos (FP):  " + String.format("%0" + decimalPlaces + "d", (int) fp)
-		+ " / " + Utils.hamLogRules.size());
-	decimalPlaces = String.valueOf(Utils.spamLogRules.size()).length();
-	GuiUtils.helpLabelFn.setText("  Falsos Negativos (FN):  " + String.format("%0" + decimalPlaces + "d", (int) fn)
-		+ " / " + Utils.spamLogRules.size());
     }
 
     /**
@@ -169,6 +165,13 @@ public class Otimizacao {
     private void addContents() {
 	JPanel panel = new JPanel();
 	GuiUtils.constructGUI(panel, true);
+
+	int decimalPlaces = String.valueOf(Utils.hamLogRules.size()).length();
+	GuiUtils.helpLabelFp.setText("  Falsos Positivos (FP):  " + String.format("%0" + decimalPlaces + "d", (int) fp)
+		+ " / " + Utils.hamLogRules.size());
+	decimalPlaces = String.valueOf(Utils.spamLogRules.size()).length();
+	GuiUtils.helpLabelFn.setText("  Falsos Negativos (FN):  " + String.format("%0" + decimalPlaces + "d", (int) fn)
+		+ " / " + Utils.spamLogRules.size());
 
 	JPanel buttonsPanel = new JPanel();
 	buttonsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
