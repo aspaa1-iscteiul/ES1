@@ -150,7 +150,7 @@ public class Utils {
      * Guarda o path dos ficheiros de configuração escolhidos num ficheiro.
      * Permite que sejam mantidas as configurações para sessões seguintes.
      */
-    public static void saveConfigFilesPath() {
+    public static void saveConfigFilesPaths() {
 	try {
 	    FileWriter writer = new FileWriter(configFilesPathsFile, false);
 	    for (int i = 0; i < configFilesPaths.length; i++) {

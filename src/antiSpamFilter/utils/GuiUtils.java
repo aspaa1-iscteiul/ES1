@@ -292,7 +292,7 @@ public class GuiUtils {
 	 */
 	@Override
 	public void windowClosing(WindowEvent e) {
-	    Utils.saveConfigFilesPath();
+	    Utils.saveConfigFilesPaths();
 	    System.exit(0);
 	}
 

@@ -127,7 +127,7 @@ public class HomePage {
 		 * criamo-lo com os valores por defeito para a falta de
 		 * configurações (i.e., "?")
 		 */
-		Utils.saveConfigFilesPath();
+		Utils.saveConfigFilesPaths();
 	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
@@ -212,6 +212,7 @@ public class HomePage {
 	cancelButton.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
+		Utils.saveConfigFilesPaths();
 		homePage.dispose();
 	    }
 	});
@@ -254,7 +255,7 @@ public class HomePage {
 
 	} else if (checkConfigFilesPaths(true)) {
 	    visible(false);
-	    Utils.saveConfigFilesPath();
+	    Utils.saveConfigFilesPaths();
 	    if (!Utils.readConfigFiles())
 		return;
 	    if (index == 3 || index == 4)

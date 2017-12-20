@@ -116,16 +116,16 @@ public class UtilsTest {
     }
 
     /**
-     * Test method for {@link antiSpamFilter.utils.Utils#saveConfigFilesPath()}.
+     * Test method for {@link antiSpamFilter.utils.Utils#saveConfigFilesPaths()}.
      */
     @Test
     public void testSaveConfigFilesPath() {
 	// Cenário 1 - Os ficheiros existem
-	Utils.saveConfigFilesPath();
+	Utils.saveConfigFilesPaths();
 
 	// Cenário 2 - Entra no Catch
 	Utils.configFilesPathsFile = new File("./src");
-	Utils.saveConfigFilesPath();
+	Utils.saveConfigFilesPaths();
     }
 
     /**
