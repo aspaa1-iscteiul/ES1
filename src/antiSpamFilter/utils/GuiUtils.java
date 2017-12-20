@@ -43,14 +43,19 @@ import antiSpamFilter.frames.Afinacao;
 import antiSpamFilter.frames.Otimizacao;
 
 public class GuiUtils {
-	public static JScrollPane scroll_rules_panel;
-	public static HashMap<String, JTextField> rules_values;
-	public static JLabel help_label_fp, help_label_fn;
+	public static JScrollPane scrollRulesPanel;
+	public static HashMap<String, JTextField> rulesValues;
+	public static JLabel helpLabelFp, helpLabelFn;
+
+	/*
+	 * Garante a utilização do caractere de mudança de linha, independentemente
+	 * do Sistema Operativo em que a aplicação corre
+	 */
 	public static String newLine = System.getProperty("line.separator");
 
-	private static Font font_titles = new Font("Helvetica", Font.PLAIN, 18),
-			font_labels = new Font("Helvetica", Font.PLAIN, 14), font_text = new Font("Helvetica", Font.PLAIN, 12);
-	private static JTextArea help_area_fp, help_area_fn;
+	private static Font fontTitles = new Font("Helvetica", Font.PLAIN, 18),
+			fontLabels = new Font("Helvetica", Font.PLAIN, 14), fontText = new Font("Helvetica", Font.PLAIN, 12);
+	private static JTextArea helpAreaFp, helpAreaFn;
 
 	public static void frameAtCenter(JFrame frame) {
 		frame.setLocation(new Point((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth()) / 2,
@@ -61,14 +66,14 @@ public class GuiUtils {
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-		JPanel center_panel = new JPanel();
-		center_panel.setLayout(new BorderLayout());
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new BorderLayout());
 
-		JPanel aux_panel = new JPanel();
-		aux_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		JLabel panelTitle = new JLabel("Configuração do vetor de pesos       ");
-		panelTitle.setFont(font_titles);
-		aux_panel.add(panelTitle);
+		JPanel titlePanel = new JPanel();
+		titlePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		JLabel titleLabel = new JLabel("Configuração do vetor de pesos       ");
+		titleLabel.setFont(fontTitles);
+		titlePanel.add(titleLabel);
 
 		if (!optimize) {
 			JButton button = new JButton(new ImageIcon("src/antiSpamFilter/frames/icons/circle2.PNG"));
@@ -78,87 +83,86 @@ public class GuiUtils {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					Afinacao.changeWeights();
-					center_panel.remove(GuiUtils.scroll_rules_panel);
+					centerPanel.remove(GuiUtils.scrollRulesPanel);
 					GuiUtils.createRulesPanel(false);
-					center_panel.add(GuiUtils.scroll_rules_panel, BorderLayout.CENTER);
+					centerPanel.add(GuiUtils.scrollRulesPanel, BorderLayout.CENTER);
 					Afinacao.update();
 				}
 			});
-			aux_panel.add(button);
+			titlePanel.add(button);
 		}
-		center_panel.add(aux_panel, BorderLayout.NORTH);
+		centerPanel.add(titlePanel, BorderLayout.NORTH);
 
 		createRulesPanel(optimize);
-		center_panel.add(scroll_rules_panel, BorderLayout.CENTER);
-		panel.add(center_panel, BorderLayout.CENTER);
+		centerPanel.add(scrollRulesPanel, BorderLayout.CENTER);
+		panel.add(centerPanel, BorderLayout.CENTER);
 
-		JPanel right_panel = new JPanel();
-		right_panel.setBorder(new EmptyBorder(20, 10, 10, 10));
-		right_panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		JPanel rightPanel = new JPanel();
+		rightPanel.setBorder(new EmptyBorder(20, 10, 10, 10));
+		rightPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		JPanel results_panel = new JPanel();
-		results_panel.setLayout(new BorderLayout());
+		JPanel resultsPanel = new JPanel();
+		resultsPanel.setLayout(new BorderLayout());
 
-		panelTitle = new JLabel("Para a configuração gerada, obtemos:");
-		panelTitle.setFont(font_titles);
-		results_panel.add(panelTitle, BorderLayout.NORTH);
+		titleLabel = new JLabel("Para a configuração gerada, obtemos:");
+		titleLabel.setFont(fontTitles);
+		resultsPanel.add(titleLabel, BorderLayout.NORTH);
 
-		JPanel help_panel = new JPanel();
-		help_panel.setBorder(new EmptyBorder(10, 10, 10, 10));
-		help_panel.setLayout(new GridLayout(0, 1));
-		help_panel.add(createHelpPanel(1));
-		help_panel.add(createHelpPanel(2));
+		JPanel helpPanel = new JPanel();
+		helpPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		helpPanel.setLayout(new GridLayout(0, 1));
+		helpPanel.add(createHelpPanel(true));
+		helpPanel.add(createHelpPanel(false));
 
-		results_panel.add(help_panel, BorderLayout.CENTER);
+		resultsPanel.add(helpPanel, BorderLayout.CENTER);
 
-		right_panel.add(results_panel);
+		rightPanel.add(resultsPanel);
 
-		panel.add(right_panel, BorderLayout.EAST);
+		panel.add(rightPanel, BorderLayout.EAST);
 
-		return center_panel;
+		return centerPanel;
 	}
 
 	public static void createRulesPanel(boolean optimize) {
-		JPanel rules_panel = new JPanel();
-		rules_panel.setLayout(new GridLayout(0, 1));
-		rules_values = new HashMap<>();
-		for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet()) {
+		JPanel rulesPanel = new JPanel();
+		rulesPanel.setLayout(new GridLayout(0, 1));
+		rulesValues = new HashMap<>();
+		for (HashMap.Entry<String, Double> entry : Utils.rulesWeights.entrySet()) {
 			JPanel panel = new JPanel();
 			panel.setLayout(new BorderLayout());
-			String key = entry.getKey();
 			JTextField value = new JDoubleInputTextField(entry.getValue().toString(), 8, -5, 5, 4, !optimize);
-			rules_values.put(key, value);
-			panel.add(new JLabel(key + "     "), BorderLayout.CENTER);
+			rulesValues.put(entry.getKey(), value);
+			panel.add(new JLabel(entry.getKey() + "     "), BorderLayout.CENTER);
 			panel.add(value, BorderLayout.EAST);
-			rules_panel.add(panel);
+			rulesPanel.add(panel);
 		}
-		scroll_rules_panel = new JScrollPane(rules_panel);
-		scroll_rules_panel.getVerticalScrollBar().setUnitIncrement(50);
-		scroll_rules_panel.setWheelScrollingEnabled(true);
+		scrollRulesPanel = new JScrollPane(rulesPanel);
+		scrollRulesPanel.getVerticalScrollBar().setUnitIncrement(50);
+		scrollRulesPanel.setWheelScrollingEnabled(true);
 	}
 
-	private static JPanel createHelpPanel(int number) {
+	private static JPanel createHelpPanel(boolean fp) {
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(20, 10, 10, 10));
 		panel.setLayout(new BorderLayout());
-		panel.add(formatHelpButton(number), BorderLayout.WEST);
+		panel.add(formatHelpButton(fp ? 1 : 2), BorderLayout.WEST);
 
-		if (number == 1) {
-			help_label_fp = new JLabel();
-			help_label_fp.setFont(font_labels);
-			panel.add(help_label_fp, BorderLayout.CENTER);
-			help_area_fp = formatTextArea(newLine
+		if (fp) {
+			helpLabelFp = new JLabel();
+			helpLabelFp.setFont(fontLabels);
+			panel.add(helpLabelFp, BorderLayout.CENTER);
+			helpAreaFp = formatTextArea(newLine
 					+ "Um Falso Positivo (FP) ocorre quando uma mensagem legítima é classificada como mensagem spam.");
-			help_area_fp.setFont(font_text);
-			panel.add(help_area_fp, BorderLayout.SOUTH);
+			helpAreaFp.setFont(fontText);
+			panel.add(helpAreaFp, BorderLayout.SOUTH);
 		} else {
-			help_label_fn = new JLabel();
-			help_label_fn.setFont(font_labels);
-			panel.add(help_label_fn, BorderLayout.CENTER);
-			help_area_fn = formatTextArea(newLine
+			helpLabelFn = new JLabel();
+			helpLabelFn.setFont(fontLabels);
+			panel.add(helpLabelFn, BorderLayout.CENTER);
+			helpAreaFn = formatTextArea(newLine
 					+ "Um Falso Negativo (FN) ocorre quando uma mensagem spam é classificada como mensagem legítima.");
-			help_area_fn.setFont(font_text);
-			panel.add(help_area_fn, BorderLayout.SOUTH);
+			helpAreaFn.setFont(fontText);
+			panel.add(helpAreaFn, BorderLayout.SOUTH);
 		}
 		return panel;
 	}
@@ -171,13 +175,13 @@ public class GuiUtils {
 	 * @return textArea formatada
 	 */
 	private static JTextArea formatTextArea(String info) {
-		JTextArea textarea = new JTextArea(info);
-		textarea.setForeground(new JPanel().getBackground());
-		textarea.setBackground(new JPanel().getBackground());
-		textarea.setLineWrap(true);
-		textarea.setWrapStyleWord(true);
-		textarea.setEditable(false);
-		return textarea;
+		JTextArea textArea = new JTextArea(info);
+		textArea.setForeground(new JPanel().getBackground());
+		textArea.setBackground(new JPanel().getBackground());
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setEditable(false);
+		return textArea;
 	}
 
 	/**
@@ -198,7 +202,7 @@ public class GuiUtils {
 			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					appearText(number == 1 ? help_area_fp : help_area_fn);
+					appearText(number == 1 ? helpAreaFp : helpAreaFn);
 				}
 			});
 		return button;
@@ -412,11 +416,10 @@ public class GuiUtils {
 
 		@Override
 		public void processKeyEvent(KeyEvent key) {
-			String text_before_process = getText();
-
 			if (!editable)
 				return;
-
+			
+			String textBeforeProcess = getText();
 			super.processKeyEvent(key);
 
 			if (key.getKeyCode() == KeyEvent.VK_RIGHT || key.getKeyCode() == KeyEvent.VK_LEFT)
@@ -425,7 +428,7 @@ public class GuiUtils {
 			if (key.getKeyCode() == KeyEvent.VK_BACK_SPACE || key.getKeyCode() == KeyEvent.VK_DELETE) {
 				if (key.getID() == KeyEvent.KEY_PRESSED)
 					try {
-						setText(text_before_process.substring(0, text_before_process.length() - 1));
+						setText(textBeforeProcess.substring(0, textBeforeProcess.length() - 1));
 					} catch (StringIndexOutOfBoundsException e) {
 					}
 				return;
@@ -434,39 +437,38 @@ public class GuiUtils {
 			if (key.getKeyChar() == ',')
 				key.setKeyChar('.');
 
-			if ((key.getKeyChar() == '+' || key.getKeyChar() == '-') && text_before_process.equals(""))
+			if ((key.getKeyChar() == '+' || key.getKeyChar() == '-') && textBeforeProcess.equals(""))
 				return;
 
-			int point_index = text_before_process.indexOf(".") + 1;
-			if (point_index > 0 && (text_before_process.length() - point_index) == precision) {
-				setText(text_before_process);
+			int pointIndex = textBeforeProcess.indexOf(".") + 1;
+			if (pointIndex > 0 && (textBeforeProcess.length() - pointIndex) == precision) {
+				setText(textBeforeProcess);
 				return;
 			}
 
-			String var = getText();
-			if (isValidInput(var))
-				rearrange(var);
+			if (isValidInput(getText()))
+				rearrange(getText());
 			else
-				setText(text_before_process);
+				setText(textBeforeProcess);
 		}
 
-		private void rearrange(String var) {
+		private void rearrange(String text) {
 			try {
-				if (Double.valueOf(var) >= 0 && !var.startsWith("+")) {
-					if (!(Double.valueOf(var) == 0 && var.startsWith("-")))
-						var = '+' + var;
+				if (Double.valueOf(text) >= 0 && !text.startsWith("+")) {
+					if (!(Double.valueOf(text) == 0 && text.startsWith("-")))
+						text = '+' + text;
 				}
-				while (var.length() > 2 && var.charAt(1) == '0' && var.charAt(2) != '.')
-					var = var.charAt(0) + var.substring(2);
+				while (text.length() > 2 && text.charAt(1) == '0' && text.charAt(2) != '.')
+					text = text.charAt(0) + text.substring(2);
 			} catch (NumberFormatException e) {
 			}
-			setText(var);
+			setText(text);
 		}
 
 		private boolean isValidInput(String text) {
 			try {
-				double var = Double.valueOf(round(Double.valueOf(text), precision));
-				return var >= min && var <= max && !(text.endsWith("d") || text.endsWith("f"));
+				double value = Double.valueOf(round(Double.valueOf(text), precision));
+				return value >= min && value <= max && !(text.endsWith("d") || text.endsWith("f"));
 			} catch (NumberFormatException e) {
 				return text.equals("") || text.equals("+") || text.equals("-");
 			}
@@ -485,7 +487,7 @@ public class GuiUtils {
 	}
 
 	public static boolean checkValues() {
-		for (Entry<String, JTextField> entry : GuiUtils.rules_values.entrySet()) {
+		for (Entry<String, JTextField> entry : GuiUtils.rulesValues.entrySet()) {
 			try {
 				double value = Double.valueOf(entry.getValue().getText());
 				if (value < -5 || value > 5)

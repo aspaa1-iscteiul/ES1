@@ -22,8 +22,8 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		 * Gera um vetor de pesos com tamanho igual ao número de regras
 		 * existentes
 		 */
-		this(Utils.lines(Utils.config_files_path[0]).size());
-		rules_list = new ArrayList<>(Utils.rules_weights.keySet());
+		this(Utils.lines(Utils.configFilesPaths[0]).size());
+		rules_list = new ArrayList<>(Utils.rulesWeights.keySet());
 		Collections.sort(rules_list);
 	}
 
@@ -46,7 +46,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 	public void evaluate(DoubleSolution solution) {		
 		for (int i = 0; i < solution.getNumberOfVariables(); i++)
-			Utils.rules_weights.put(rules_list.get(i), solution.getVariableValue(i));
+			Utils.rulesWeights.put(rules_list.get(i), solution.getVariableValue(i));
 
 		solution.setObjective(0, Utils.falses(true));
 		solution.setObjective(1, Utils.falses(false));

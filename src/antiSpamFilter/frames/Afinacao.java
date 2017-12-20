@@ -63,23 +63,23 @@ public class Afinacao {
 	}
 
 	/**
-	 * Cria os botões generate, save e cancel num painel (buttons_panel)
+	 * Cria os botões generate, save e cancel num painel (buttonsPanel)
 	 * 
-	 * @param center_panel
+	 * @param centerPanel
 	 *            Painel atualizado pela geração aleatória
-	 * @return Painel com os butões (buttons_panel)
+	 * @return Painel com os butões (buttonsPanel)
 	 */
-	private JPanel createButtons(JPanel center_panel) {
-		JPanel buttons_panel = new JPanel();
-		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+	private JPanel createButtons(JPanel centerPanel) {
+		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-		JButton calculate = new JButton("Confirmar alterações");
-		calculate.addActionListener(new ActionListener() {
+		JButton confirmButton = new JButton("Confirmar alterações");
+		confirmButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (GuiUtils.checkValues()) {
-					for (Entry<String, JTextField> entry : GuiUtils.rules_values.entrySet())
-						Utils.rules_weights.put(entry.getKey(), Double.valueOf(entry.getValue().getText()));
+					for (Entry<String, JTextField> entry : GuiUtils.rulesValues.entrySet())
+						Utils.rulesWeights.put(entry.getKey(), Double.valueOf(entry.getValue().getText()));
 					calculate_FP_FN();
 				} else {
 					JOptionPane.showMessageDialog(afinacao,
@@ -88,10 +88,10 @@ public class Afinacao {
 				}
 			}
 		});
-		buttons_panel.add(calculate);
+		buttonsPanel.add(confirmButton);
 
-		JButton save = new JButton("Guardar");
-		save.addActionListener(new ActionListener() {
+		JButton saveButton = new JButton("Guardar");
+		saveButton.addActionListener(new ActionListener() {
 			/*
 			 * Sentinela no butão 'Guardar' responsável por guardar a
 			 * configuração e retornar à Home Page
@@ -100,10 +100,10 @@ public class Afinacao {
 			public void actionPerformed(ActionEvent e) {
 				if (GuiUtils.checkValues()) {
 					try {
-						FileWriter w = new FileWriter(Utils.config_files_path[0], false);
-						for (Entry<String, JTextField> entry : GuiUtils.rules_values.entrySet())
-							w.write(entry.getKey() + " " + entry.getValue().getText() + GuiUtils.newLine);
-						w.close();
+						FileWriter writer = new FileWriter(Utils.configFilesPaths[0], false);
+						for (Entry<String, JTextField> entry : GuiUtils.rulesValues.entrySet())
+							writer.write(entry.getKey() + " " + entry.getValue().getText() + GuiUtils.newLine);
+						writer.close();
 					} catch (IOException e1) {
 						JOptionPane.showMessageDialog(afinacao,
 								"Não foi possível prosseguir! O ficheiro rules.cf está a ser editado.",
@@ -118,10 +118,10 @@ public class Afinacao {
 				}
 			}
 		});
-		buttons_panel.add(save);
+		buttonsPanel.add(saveButton);
 
-		JButton cancel = new JButton("Cancelar");
-		cancel.addActionListener(new ActionListener() {
+		JButton cancelButton = new JButton("Cancelar");
+		cancelButton.addActionListener(new ActionListener() {
 			/*
 			 * Sentinela no butão 'Cancelar' responsável por retornar à Home
 			 * Page quando o botão é pressionado
@@ -131,9 +131,9 @@ public class Afinacao {
 				backHome();
 			}
 		});
-		buttons_panel.add(cancel);
+		buttonsPanel.add(cancelButton);
 
-		return buttons_panel;
+		return buttonsPanel;
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class Afinacao {
 	 * mapeadas no HashMap
 	 */
 	public static void changeWeights() {
-		for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet())
+		for (HashMap.Entry<String, Double> entry : Utils.rulesWeights.entrySet())
 			entry.setValue((Math.random() * 10) - 5);
 		calculate_FP_FN();
 	}
@@ -151,12 +151,12 @@ public class Afinacao {
 	 * Negativos
 	 */
 	private static void calculate_FP_FN() {
-		int decimal_places = String.valueOf(Utils.hamLogRules.size()).length();
-		GuiUtils.help_label_fp.setText("  Falsos Positivos (FP):  "
-				+ String.format("%0" + decimal_places + "d", Utils.falses(true)) + " / " + Utils.hamLogRules.size());
-		decimal_places = String.valueOf(Utils.spamLogRules.size()).length();
-		GuiUtils.help_label_fn.setText("  Falsos Negativos (FN):  "
-				+ String.format("%0" + decimal_places + "d", Utils.falses(false)) + " / " + Utils.spamLogRules.size());
+		int decimalPlaces = String.valueOf(Utils.hamLogRules.size()).length();
+		GuiUtils.helpLabelFp.setText("  Falsos Positivos (FP):  "
+				+ String.format("%0" + decimalPlaces + "d", Utils.falses(true)) + " / " + Utils.hamLogRules.size());
+		decimalPlaces = String.valueOf(Utils.spamLogRules.size()).length();
+		GuiUtils.helpLabelFn.setText("  Falsos Negativos (FN):  "
+				+ String.format("%0" + decimalPlaces + "d", Utils.falses(false)) + " / " + Utils.spamLogRules.size());
 	}
 
 	/**

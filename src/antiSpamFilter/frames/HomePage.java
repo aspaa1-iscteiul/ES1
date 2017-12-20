@@ -80,8 +80,8 @@ public class HomePage {
 			 * O ficheiro onde são guardadas as configurações dos ficheiros já
 			 * existe
 			 */
-			if (!Utils.fileConfigs.createNewFile()) {
-				Scanner scn = new Scanner(Utils.fileConfigs);
+			if (!Utils.configFilesPathsFile.createNewFile()) {
+				Scanner scn = new Scanner(Utils.configFilesPathsFile);
 				String[] line = scn.nextLine().split("<");
 				String message = "";
 				boolean existsFileConfig = false;
@@ -91,7 +91,7 @@ public class HomePage {
 				 */
 				for (int i = 0; i < line.length; i++) {
 					if (line[i] != "?" && new File(line[i]).exists() && new File(line[i]).isFile()) {
-						Utils.config_files_path[i] = line[i];
+						Utils.configFilesPaths[i] = line[i];
 						message += config_files_names[i] + " - " + line[i] + GuiUtils.newLine;
 						existsFileConfig = true;
 					}
@@ -103,16 +103,18 @@ public class HomePage {
 				 * selecionados durante a última sessão ou descartá-los.
 				 */
 				if (existsFileConfig) {
-					int n = (JOptionPane.showConfirmDialog(homePage, "Os seguintes ficheiros encontram-se configurados:"
-							+ GuiUtils.newLine + GuiUtils.newLine + message + GuiUtils.newLine + GuiUtils.newLine
-							+ "Quer manter estes ficheiros de configuração?" + GuiUtils.newLine + GuiUtils.newLine));
+					int option = (JOptionPane.showConfirmDialog(homePage,
+							"Os seguintes ficheiros encontram-se configurados:" + GuiUtils.newLine + GuiUtils.newLine
+									+ message + GuiUtils.newLine + GuiUtils.newLine
+									+ "Quer manter estes ficheiros de configuração?" + GuiUtils.newLine
+									+ GuiUtils.newLine));
 					// Escolher a opção 'No' resulta na perda das configurações
-					if (n == JOptionPane.NO_OPTION) {
-						for (int i = 0; i < Utils.config_files_path.length; i++)
-							Utils.config_files_path[i] = "?";
+					if (option == JOptionPane.NO_OPTION) {
+						for (int i = 0; i < Utils.configFilesPaths.length; i++)
+							Utils.configFilesPaths[i] = "?";
 						// Escolher a opção 'Cancel' resulta no término do
 						// processo
-					} else if (n == JOptionPane.CANCEL_OPTION) {
+					} else if (option == JOptionPane.CANCEL_OPTION) {
 						System.exit(0);
 					}
 				}
@@ -143,14 +145,14 @@ public class HomePage {
 		JLabel menuLabel = new JLabel("Menu");
 		menuLabel.setFont(new Font("Arial", Font.BOLD, 28));
 		menuPanel.add(menuLabel, BorderLayout.CENTER);
-		JButton button = GuiUtils.formatHelpButton(-1);
-		button.addActionListener(new ActionListener() {
+		JButton menuButton = GuiUtils.formatHelpButton(-1);
+		menuButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				checkConfigFiles(false);
 			}
 		});
-		menuPanel.add(button, BorderLayout.EAST);
+		menuPanel.add(menuButton, BorderLayout.EAST);
 		panel.add(menuPanel, BorderLayout.NORTH);
 
 		// Adiciona as opções do menu
@@ -178,9 +180,8 @@ public class HomePage {
 			}
 		});
 
-		JScrollPane scrollPanel = new JScrollPane(menuList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		panel.add(scrollPanel, BorderLayout.CENTER);
+		panel.add(new JScrollPane(menuList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
 		panel.add(createButtonsPanel(), BorderLayout.SOUTH);
 
 		homePage.add(panel);
@@ -188,8 +189,8 @@ public class HomePage {
 
 	private JPanel createButtonsPanel() {
 		// Adiciona o botão de "Selecionar" uma opção do menu
-		JButton select = new JButton("Selecionar");
-		select.addActionListener(new ActionListener() {
+		JButton selectButton = new JButton("Selecionar");
+		selectButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				selectOptions();
@@ -200,19 +201,19 @@ public class HomePage {
 		 * Adiciona o botão de "Cancelar" e, caso o mesmo seja pressionado,
 		 * define a sentinela para o fecho da janela
 		 */
-		JButton cancel = new JButton("Cancelar");
-		cancel.addActionListener(new ActionListener() {
+		JButton cancelButton = new JButton("Cancelar");
+		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				homePage.dispose();
 			}
 		});
 
-		JPanel buttons_panel = new JPanel();
-		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		buttons_panel.add(select);
-		buttons_panel.add(cancel);
-		return buttons_panel;
+		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		buttonsPanel.add(selectButton);
+		buttonsPanel.add(cancelButton);
+		return buttonsPanel;
 	}
 
 	/**
@@ -224,8 +225,8 @@ public class HomePage {
 		if (index == -1) // não foi selecionada nenhuma opção
 			return;
 		if (index >= 0 && index <= 2) {
-			String file_path = getFileChosen(config_files_names[index]);
-			if (file_path == null)
+			String filePath = getFileChosen(config_files_names[index]);
+			if (filePath == null)
 				return;
 			/*
 			 * Verifica se o ficheiro escolhido tinha sido previamente
@@ -234,14 +235,14 @@ public class HomePage {
 			 * simultaneamente.
 			 */
 			for (int i = 0; i < config_files_names.length; i++)
-				if (i != index && Utils.config_files_path[i].equals(file_path)) {
+				if (i != index && Utils.configFilesPaths[i].equals(filePath)) {
 					JOptionPane.showMessageDialog(homePage,
 							"O ficheiro selecionado já foi configurado para " + config_files_names[i],
 							"Selecionar ficheiro " + config_files_names[index], JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 			// Guarda o ficheiro escolhido
-			Utils.config_files_path[index] = file_path;
+			Utils.configFilesPaths[index] = filePath;
 			Utils.readConfigFiles();
 
 		} else if (checkConfigFiles(true)) {
@@ -249,11 +250,10 @@ public class HomePage {
 			Utils.saveConfigFilesPath();
 			if (!Utils.readConfigFiles())
 				return;
-			if (index == 3 || index == 4) {
+			if (index == 3 || index == 4)
 				Afinacao.launch();
-			} else if (index == 5) {
+			else if (index == 5)
 				Otimizacao.launch();
-			}
 		}
 	}
 
@@ -262,22 +262,22 @@ public class HomePage {
 	 * expressa os resultados numa janela JOptionPane.showMessageDialog para o
 	 * utilizador consultar.
 	 */
-	private boolean checkConfigFiles(boolean beforeOperation) {
+	private boolean checkConfigFiles(boolean beforeAnOperation) {
 		boolean noFile = false;
-		String message = (beforeOperation
+		String message = (beforeAnOperation
 				? "Antes de poder realizar esta operação, é necessário selecionar todos os ficheiros de configuração."
 				: "Os seguintes ficheiros encontram-se configurados:") + GuiUtils.newLine + GuiUtils.newLine;
-		for (int i = 0; i < Utils.config_files_path.length; i++) {
+		for (int i = 0; i < Utils.configFilesPaths.length; i++) {
 			message += "O ficheiro " + config_files_names[i];
-			if (Utils.config_files_path[i] == "?") {
+			if (Utils.configFilesPaths[i] == "?") {
 				message += " não está configurado";
 				noFile = true;
 			} else
-				message += " está configurado em " + Utils.config_files_path[i];
+				message += " está configurado em " + Utils.configFilesPaths[i];
 			message += GuiUtils.newLine;
 		}
 
-		if (noFile || !beforeOperation)
+		if (noFile || !beforeAnOperation)
 			JOptionPane.showMessageDialog(homePage, message + GuiUtils.newLine, "Configuração dos ficheiros",
 					JOptionPane.INFORMATION_MESSAGE);
 		return !noFile;
@@ -292,20 +292,20 @@ public class HomePage {
 	 * @return Path do ficheiro selecionado
 	 */
 	private String getFileChosen(String fileName) {
-		JFileChooser fc = new JFileChooser();
+		JFileChooser fileChooser = new JFileChooser();
 		// Inicia a GUI na diretoria do projeto
-		fc.setCurrentDirectory(new java.io.File("."));
+		fileChooser.setCurrentDirectory(new java.io.File("."));
 		// Inclui no título da janela o nome do ficheiro a selecionar
-		fc.setDialogTitle("Selecionar ficheiro " + fileName);
+		fileChooser.setDialogTitle("Selecionar ficheiro " + fileName);
 		// Impede a seleção de múltiplas opções
-		fc.setMultiSelectionEnabled(false);
+		fileChooser.setMultiSelectionEnabled(false);
 		// Apenas os ficheiros com extensão correta são visíveis
 		String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-		fc.setFileFilter(new FileNameExtensionFilter(extension.toUpperCase() + " File", extension));
-		fc.setAcceptAllFileFilterUsed(false);
+		fileChooser.setFileFilter(new FileNameExtensionFilter(extension.toUpperCase() + " File", extension));
+		fileChooser.setAcceptAllFileFilterUsed(false);
 		// Retorna o path do ficheiro selecionado
-		if (fc.showOpenDialog(homePage) == JFileChooser.APPROVE_OPTION)
-			return fc.getSelectedFile().getAbsolutePath();
+		if (fileChooser.showOpenDialog(homePage) == JFileChooser.APPROVE_OPTION)
+			return fileChooser.getSelectedFile().getAbsolutePath();
 		return null;
 	}
 
@@ -317,14 +317,14 @@ public class HomePage {
 	private HashMap<String, ImageIcon> createImages() {
 		// Associa uma opção do menu ao respetivo icon, de acordo com os mockups
 		// desenhados
-		HashMap<String, ImageIcon> m = new HashMap<>();
-		m.put(menuOptions[0], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
-		m.put(menuOptions[1], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
-		m.put(menuOptions[2], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
-		m.put(menuOptions[3], new ImageIcon("src/antiSpamFilter/frames/icons/circle.PNG"));
-		m.put(menuOptions[4], new ImageIcon("src/antiSpamFilter/frames/icons/pencil.PNG"));
-		m.put(menuOptions[5], new ImageIcon("src/antiSpamFilter/frames/icons/magic_wand.PNG"));
-		return m;
+		HashMap<String, ImageIcon> map = new HashMap<>();
+		map.put(menuOptions[0], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
+		map.put(menuOptions[1], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
+		map.put(menuOptions[2], new ImageIcon("src/antiSpamFilter/frames/icons/file.PNG"));
+		map.put(menuOptions[3], new ImageIcon("src/antiSpamFilter/frames/icons/circle.PNG"));
+		map.put(menuOptions[4], new ImageIcon("src/antiSpamFilter/frames/icons/pencil.PNG"));
+		map.put(menuOptions[5], new ImageIcon("src/antiSpamFilter/frames/icons/magic_wand.PNG"));
+		return map;
 	}
 
 	/**
@@ -338,8 +338,8 @@ public class HomePage {
 
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
-		HomePage h = new HomePage();
-		h.visible(true);
+		HomePage homePage = new HomePage();
+		homePage.visible(true);
 	}
 
 }

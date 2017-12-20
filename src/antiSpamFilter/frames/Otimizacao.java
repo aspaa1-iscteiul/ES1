@@ -26,27 +26,10 @@ import antiSpamFilter.utils.Utils;
 
 public class Otimizacao {
 
-	private static JFrame frame, progressFrame;
+	private static JFrame otimização, progressFrame;
 	private static final String algorithmOutputFilesPath = "./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.r";
 
 	public Otimizacao() {
-		optimize();
-	}
-
-	private void constructFrame() {
-		frame = new JFrame();
-		frame.setTitle("Otimização do filtro anti-spam");
-
-		addContents();
-
-		frame.setSize(750, 600);
-		frame.setResizable(false);
-		frame.addWindowListener(new GuiUtils.OtimizacaoClose());
-		GuiUtils.frameAtCenter(frame);
-		visible(true);
-	}
-
-	private void optimize() {
 		JProgressBar progressBar = new JProgressBar();
 		progressBar.setString("A calcular...");
 		progressBar.setStringPainted(true);
@@ -63,6 +46,19 @@ public class Otimizacao {
 		Executors.newSingleThreadExecutor().execute(executeAlgorithm());
 	}
 
+	private void constructFrame() {
+		otimização = new JFrame();
+		otimização.setTitle("Otimização do filtro anti-spam");
+
+		addContents();
+
+		otimização.setSize(750, 600);
+		otimização.setResizable(false);
+		otimização.addWindowListener(new GuiUtils.OtimizacaoClose());
+		GuiUtils.frameAtCenter(otimização);
+		otimização.setVisible(true);
+	}
+
 	private Runnable executeAlgorithm() {
 		return new Runnable() {
 			@Override
@@ -73,16 +69,15 @@ public class Otimizacao {
 					JOptionPane.showMessageDialog(progressFrame,
 							"Ocorreu um problema durante a execução da framework JMetal", "Erro",
 							JOptionPane.ERROR_MESSAGE);
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.exit(1);
 				}
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
 						try {
-							ProcessBuilder builder = new ProcessBuilder(new String[] { "Rscript", "HV.Boxplot.R" });
-							builder.directory(new File("./experimentBaseDirectory/AntiSpamStudy/R/").getAbsoluteFile());
-							builder.start().waitFor();
+							ProcessBuilder processBuilder = new ProcessBuilder(new String[] { "Rscript", "HV.Boxplot.R" });
+							processBuilder.directory(new File("./experimentBaseDirectory/AntiSpamStudy/R/").getAbsoluteFile());
+							processBuilder.start().waitFor();
 
 							Desktop.getDesktop()
 									.open(new File("./experimentBaseDirectory/AntiSpamStudy/R/HV.Boxplot.eps"));
@@ -90,11 +85,11 @@ public class Otimizacao {
 							new GuiUtils.RException(progressFrame);
 						}
 						try {
-							ProcessBuilder builder = new ProcessBuilder(
+							ProcessBuilder processBuilder = new ProcessBuilder(
 									new String[] { "pdflatex", "AntiSpamStudy.tex" });
-							builder.directory(
+							processBuilder.directory(
 									new File("./experimentBaseDirectory/AntiSpamStudy/latex/").getAbsoluteFile());
-							builder.start().waitFor();
+							processBuilder.start().waitFor();
 
 							Desktop.getDesktop()
 									.open(new File("./experimentBaseDirectory/AntiSpamStudy/latex/AntiSpamStudy.pdf"));
@@ -125,17 +120,17 @@ public class Otimizacao {
 		}
 		lines = Utils.lines(algorithmOutputFilesPath + "s");
 		String[] values = lines.get(index).split(" ");
-		ArrayList<String> rulesList = new ArrayList<>(Utils.rules_weights.keySet());
+		ArrayList<String> rulesList = new ArrayList<>(Utils.rulesWeights.keySet());
 		Collections.sort(rulesList);
 		for (int i = 0; i < values.length; i++)
-			Utils.rules_weights.put(rulesList.get(i), Double.valueOf(values[i]));
+			Utils.rulesWeights.put(rulesList.get(i), Double.valueOf(values[i]));
 
-		int decimal_places = String.valueOf(Utils.hamLogRules.size()).length();
-		GuiUtils.help_label_fp.setText("  Falsos Positivos (FP):  "
-				+ String.format("%0" + decimal_places + "d", (int) fp) + " / " + Utils.hamLogRules.size());
-		decimal_places = String.valueOf(Utils.spamLogRules.size()).length();
-		GuiUtils.help_label_fn.setText("  Falsos Negativos (FN):  "
-				+ String.format("%0" + decimal_places + "d", (int) fn) + " / " + Utils.spamLogRules.size());
+		int decimalPlaces = String.valueOf(Utils.hamLogRules.size()).length();
+		GuiUtils.helpLabelFp.setText("  Falsos Positivos (FP):  "
+				+ String.format("%0" + decimalPlaces + "d", (int) fp) + " / " + Utils.hamLogRules.size());
+		decimalPlaces = String.valueOf(Utils.spamLogRules.size()).length();
+		GuiUtils.helpLabelFn.setText("  Falsos Negativos (FN):  "
+				+ String.format("%0" + decimalPlaces + "d", (int) fn) + " / " + Utils.spamLogRules.size());
 	}
 
 	/**
@@ -145,10 +140,10 @@ public class Otimizacao {
 		JPanel panel = new JPanel();
 		GuiUtils.constructGUI(panel, true);
 
-		JPanel buttons_panel = new JPanel();
-		buttons_panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		JButton save = new JButton("Guardar");
-		save.addActionListener(new ActionListener() {
+		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		JButton saveButton = new JButton("Guardar");
+		saveButton.addActionListener(new ActionListener() {
 			/*
 			 * Sentinela no butão 'Guardar' responsável por guardar a
 			 * configuração e retornar à Home Page
@@ -156,12 +151,12 @@ public class Otimizacao {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					FileWriter w = new FileWriter(Utils.config_files_path[0], false);
-					for (HashMap.Entry<String, Double> entry : Utils.rules_weights.entrySet())
-						w.write(entry.getKey() + " " + entry.getValue().toString() + GuiUtils.newLine);
-					w.close();
+					FileWriter writer = new FileWriter(Utils.configFilesPaths[0], false);
+					for (HashMap.Entry<String, Double> entry : Utils.rulesWeights.entrySet())
+						writer.write(entry.getKey() + " " + entry.getValue().toString() + GuiUtils.newLine);
+					writer.close();
 				} catch (IOException e1) {
-					JOptionPane.showMessageDialog(frame,
+					JOptionPane.showMessageDialog(otimização,
 							"Não foi possível prosseguir! O ficheiro rules.cf está a ser editado.",
 							"Configuração dos ficheiros", JOptionPane.WARNING_MESSAGE);
 					System.exit(1);
@@ -170,8 +165,8 @@ public class Otimizacao {
 			}
 		});
 
-		JButton cancel = new JButton("Cancelar");
-		cancel.addActionListener(new ActionListener() {
+		JButton cancelButton = new JButton("Cancelar");
+		cancelButton.addActionListener(new ActionListener() {
 			/*
 			 * Sentinela no butão 'Cancelar' responsável por retornar à Home
 			 * Page quando o botão é pressionado
@@ -182,23 +177,19 @@ public class Otimizacao {
 			}
 		});
 
-		buttons_panel.add(save);
-		buttons_panel.add(cancel);
-		panel.add(buttons_panel, BorderLayout.SOUTH);
+		buttonsPanel.add(saveButton);
+		buttonsPanel.add(cancelButton);
+		panel.add(buttonsPanel, BorderLayout.SOUTH);
 
-		frame.add(panel);
+		otimização.add(panel);
 	}
 
 	/**
 	 * Descarta a GUI atual e retorna à Home Page
 	 */
 	public static void backHome() {
-		frame.dispose();
+		otimização.dispose();
 		HomePage.visible(true);
-	}
-
-	private void visible(boolean visible) {
-		frame.setVisible(visible);
 	}
 
 	public static void launch() {
