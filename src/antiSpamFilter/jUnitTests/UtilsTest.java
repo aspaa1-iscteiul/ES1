@@ -61,7 +61,7 @@ public class UtilsTest {
     }
 
     /**
-     * Test method for {@link antiSpamFilter.utils.Utils#log()}.
+     * Test method for {@link antiSpamFilter.utils.Utils#log(boolean)}.
      */
     @Test
     public void testLog() {
@@ -129,7 +129,7 @@ public class UtilsTest {
     }
 
     /**
-     * Test method for {@link antiSpamFilter.utils.Utils#falses()}.
+     * Test method for {@link antiSpamFilter.utils.Utils#falses(boolean)}.
      */
     @Test
     public void testFalses() {

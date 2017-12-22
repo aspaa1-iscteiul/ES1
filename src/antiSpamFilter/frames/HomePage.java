@@ -190,9 +190,9 @@ public class HomePage {
     }
 
     /**
-     * Cria os butões select e cancel num painel (buttonsPanel)
+     * Cria os botões select e cancel num painel (buttonsPanel)
      * 
-     * @return Painel com os butões (buttonsPanel)
+     * @return Painel com os botões (buttonsPanel)
      */
     private JPanel createButtonsPanel() {
 	// Adiciona o botão de "Selecionar" uma opção do menu
@@ -336,9 +336,12 @@ public class HomePage {
     }
 
     /**
-     * Define a visibilidade da frame da HomePage
+     * Define a visibilidade da frame da HomePage consoante o parâmetro
+     * setVisible
      * 
      * @param setVisible
+     *            Caso True, a janela ficará visível; caso False, a janela será
+     *            ocultada
      * 
      * @see JFrame#setVisible(boolean)
      */

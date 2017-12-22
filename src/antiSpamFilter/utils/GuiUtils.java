@@ -76,7 +76,8 @@ public class GuiUtils {
      * @param panel
      *            JPanel principal
      * @param optimize
-     *            booleano que indica se estamos num cenário de Otimizacao
+     *            Caso True, estamos num cenário de Otimizacao; caso False,
+     *            estamos num cenário de Afinacao
      * @return center_panel necessários para fazer a atualização dos pesos
      */
     public static JPanel constructGUI(JPanel panel, boolean optimize) {
@@ -144,7 +145,8 @@ public class GuiUtils {
      * Cria o painel onde é realizado o display das regras e respetivos pesos
      * 
      * @param optimize
-     *            booleano que indica se estamos num cenário de Otimizacao
+     *            Caso True, estamos num cenário de Otimizacao; caso False,
+     *            estamos num cenário de Afinacao
      */
     public static void createRulesPanel(boolean optimize) {
 	JPanel rulesPanel = new JPanel();
@@ -168,7 +170,8 @@ public class GuiUtils {
      * Cria o painel de ajuda onde podem ser consultados os FP e FN
      * 
      * @param fp
-     *            Indica se estamos a tratar dos FP (true) ou dos FN (false)
+     *            Caso True, estamos a tratar os FP; caso Falso, estamos a
+     *            tratar os FN
      * @return painel de ajuda
      */
     private static JPanel createHelpPanel(boolean fp) {

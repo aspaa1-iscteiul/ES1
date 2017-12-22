@@ -178,7 +178,7 @@ public class Otimizacao {
 	JButton saveButton = new JButton("Guardar");
 	saveButton.addActionListener(new ActionListener() {
 	    /*
-	     * Sentinela no butão 'Guardar' responsável por guardar a
+	     * Sentinela no botão 'Guardar' responsável por guardar a
 	     * configuração e retornar à Home Page
 	     */
 	    @Override
@@ -201,7 +201,7 @@ public class Otimizacao {
 	JButton cancelButton = new JButton("Cancelar");
 	cancelButton.addActionListener(new ActionListener() {
 	    /*
-	     * Sentinela no butão 'Cancelar' responsável por retornar à Home
+	     * Sentinela no botão 'Cancelar' responsável por retornar à Home
 	     * Page quando o botão é pressionado
 	     */
 	    @Override

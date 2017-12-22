@@ -56,8 +56,8 @@ public class Utils {
 
     /**
      * Mapeia as regras e pesos (presentes no ficheiro rules.cf configurado) num
-     * HashMap<String, Double>. Retorna 'true' caso o ficheiro rules.cf esteja
-     * configurado e não esteja vazio e 'false' caso contrário.
+     * HashMap (Key: String, Value: Double). Retorna 'true' caso o ficheiro rules.cf
+     * esteja configurado e não esteja vazio e 'false' caso contrário.
      * 
      * @return correuTudoBem
      */

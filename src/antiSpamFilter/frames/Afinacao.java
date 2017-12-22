@@ -61,12 +61,12 @@ public class Afinacao {
     }
 
     /**
-     * Cria os butões confirmButton, saveButton e cancelButton num painel
+     * Cria os botões confirmButton, saveButton e cancelButton num painel
      * (buttonsPanel)
      * 
      * @param centerPanel
      *            Painel atualizado pela geração aleatória
-     * @return Painel com os butões (buttonsPanel)
+     * @return Painel com os botões (buttonsPanel)
      */
     private JPanel createButtons(JPanel centerPanel) {
 	JPanel buttonsPanel = new JPanel();
@@ -92,7 +92,7 @@ public class Afinacao {
 	JButton saveButton = new JButton("Guardar");
 	saveButton.addActionListener(new ActionListener() {
 	    /*
-	     * Sentinela no butão 'Guardar' responsável por guardar a
+	     * Sentinela no botão 'Guardar' responsável por guardar a
 	     * configuração e retornar à Home Page
 	     */
 	    @Override
@@ -163,9 +163,12 @@ public class Afinacao {
     }
 
     /**
-     * Define a visibilidade da frame de Afinação
+     * Define a visibilidade da frame de Afinacao consoante o parâmetro
+     * setVisible
      * 
      * @param setVisible
+     *            Caso True, a janela ficará visível; caso False, a janela será
+     *            ocultada
      * 
      * @see JFrame#setVisible(boolean)
      */
