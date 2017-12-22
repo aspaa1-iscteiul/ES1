@@ -11,7 +11,7 @@ implementação do incremento. Através destes testes
 identificámos e corrigimos defeitos da funcionalidade.
 --> As funcionalidades a desenvolver foram bem
 estimadas para o tempo que os elementos do grupo
-tinham disponível durante este último sprint.
+tinham disponível durante este sprint.
 --> Passámos a detalhar com maior pormenor as 
 tarefas do Sprint na plataforma de trabalho 
 colaborativo Trello, o que possibilitou que tivéssemos

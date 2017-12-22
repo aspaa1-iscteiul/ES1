@@ -1,10 +1,9 @@
-3º Sprint - De 26 de Novembro a 09 de Dezembro (2 semanas)
+4º Sprint - De 10 de Dezembro a 22 de Dezembro (2 semanas)
 
 O que correu bem?
 
---> De uma forma geral, foram respeitados os 
-prazos estabelecidos para as atividades do 
-Sprint assim como para a entrega da funcionalidade.
+--> Foram respeitados os prazos estabelecidos para as atividades 
+do Sprint, assim como para a entrega da funcionalidade.
 --> As funcionalidades a desenvolver foram bem
 estimadas para o tempo que os elementos do grupo
 tinham disponível durante este sprint.
@@ -13,6 +12,8 @@ tarefas do Sprint na plataforma de trabalho
 colaborativo Trello, o que possibilitou que tivéssemos
 uma visão muito clara do trabalho a desenvolver
 desde o início do sprint.
+--> A integração das diferentes componentes
+desenvolvidas decorreu sem quaisquer problemas.
 
 O que correu menos bem?
 
@@ -24,23 +25,10 @@ irregularidade foi devidamente registada na plataforma
 de trabalho colaborativo Trello através da alocação
 dos referidos membros a nenhuma tarefa do Sprint Backlog.
 
-O que deve começar a ser feito?
-
---> Devemos passar a atentar à estruturação das mensagens
-que são publicadas com os commits para o GitHub, 
-assegurando a sua coerência e compreensibilidade.
-
-O que deve continuar a ser feito?
+Em projetos futuros:
 
 --> Devemos continuar a procurar satisfazer os
 requisitos apresentados pelo cliente (professor).
---> Devemos continuar a incorporar comentários
-no código durante a fase de desenvolvimento de
-forma a facilitar a elaboração da documentação 
-em fases posteriores.
-
-O que deve parar de ser feito?
-
 --> Devemos passar a procurar garantir a cooperação
 de todos os elementos de forma mais equilibrada, por
 forma a obtermos uma carga de trabalho mais distribuida e justa.
