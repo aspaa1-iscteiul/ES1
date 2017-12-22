@@ -14,3 +14,4 @@ Demonstração da apresentação em: https://www.youtube.com/watch?v=PI9oxSEazr8&fea
 
 Notas relevantes:
 A cobertura dos testes unitários para a classe Utils é superior ao mínimo estabelecido de 75% em todas as métricas de cobertura. As classes HomePage, Afinacao, Otimizacao e GuiUtils, por serem classes de modelação de interfaces gráficas, não era conveniente que fossem alvo de testes JUnit.
+
